@@ -44,30 +44,24 @@ jobs:
 
       - name: Record candidate identity
         run: |
-          cat > candidate-identity.json <<'EOF_JSON'
-          {
-            "format": "if07c-candidate-identity/v1",
-            "candidate_commit": "CANDIDATE_SHA_PLACEHOLDER",
-            "tree_sha": "TREE_SHA_PLACEHOLDER",
-            "intended_tag": "INTENDED_TAG_PLACEHOLDER",
-            "node": "NODE_PLACEHOLDER",
-            "npm": "NPM_PLACEHOLDER",
-            "os": "OS_PLACEHOLDER"
+          python3 - <<'PYEOF'
+          import json, subprocess, platform
+          import os
+          d = {
+            'format': 'if07c-candidate-identity/v1',
+            'candidate_commit': os.environ['CANDIDATE_SHA'],
+            'tree_sha': subprocess.check_output(['git','rev-parse','HEAD^{tree}']).decode().strip(),
+            'intended_tag': os.environ['INTENDED_TAG'],
+            'node': subprocess.check_output(['node','--version']).decode().strip(),
+            'npm': subprocess.check_output(['npm','--version']).decode().strip(),
+            'os': platform.platform(),
           }
-          EOF_JSON
-          # overwrite with real values
-          python3 -c "
-import json, subprocess, platform
-d = json.load(open('candidate-identity.json'))
-d['candidate_commit'] = '${{ github.event.inputs.candidate_sha }}'
-d['tree_sha'] = subprocess.check_output(['git','rev-parse','HEAD^{tree}']).decode().strip()
-d['intended_tag'] = '${{ github.event.inputs.intended_tag }}'
-d['node'] = subprocess.check_output(['node','--version']).decode().strip()
-d['npm'] = subprocess.check_output(['npm','--version']).decode().strip()
-d['os'] = platform.platform()
-json.dump(d, open('candidate-identity.json','w'), indent=2)
-"
-          cat candidate-identity.json
+          json.dump(d, open('candidate-identity.json','w'), indent=2)
+          print(json.dumps(d, indent=2))
+          PYEOF
+        env:
+          CANDIDATE_SHA: ${{ github.event.inputs.candidate_sha }}
+          INTENDED_TAG: ${{ github.event.inputs.intended_tag }}
 
       - name: Run prepublish audit
         id: prepublish_audit
@@ -88,26 +82,91 @@ json.dump(d, open('candidate-identity.json','w'), indent=2)
             2>&1 | tee outsider-rehearsal-output.txt
 
       - name: Produce release-candidate verdict
+        env:
+          AUDIT_OUTCOME: ${{ steps.prepublish_audit.outcome }}
+          REHEARSAL_OUTCOME: ${{ steps.outsider_rehearsal.outcome }}
+          CANDIDATE_SHA: ${{ github.event.inputs.candidate_sha }}
+          INTENDED_TAG: ${{ github.event.inputs.intended_tag }}
         run: |
-          AUDIT="${{ steps.prepublish_audit.outcome }}"
-          REHEARSAL="${{ steps.outsider_rehearsal.outcome }}"
-          AUDIT_PASS="$([ "$AUDIT" = "success" ] && echo PASS || echo FAIL)"
-          REHEARSAL_PASS="$([ "$REHEARSAL" = "success" ] && echo PASS || echo FAIL)"
-          python3 -c "
-import json
-d = {
-  'format': 'if07c-release-candidate-verdict/v1',
-  'candidate_sha': '${{ github.event.inputs.candidate_sha }}',
-  'intended_tag': '${{ github.event.inputs.intended_tag }}',
-  'prepublish_audit': '$AUDIT_PASS',
-  'outsider_rehearsal': '$REHEARSAL_PASS',
-}
-json.dump(d, open('release-candidate-verdict.json','w'), indent=2)
-"
-          cat release-candidate-verdict.json
-          if [[ "$AUDIT" != "success" || "$REHEARSAL" != "success" ]]; then
+          python3 - <<'PYEOF'
+          import json, re, os
+
+          def parse_section(text, sec_id):
+              m = re.search(r'\[' + re.escape(sec_id) + r'\].*?(?=\n\[[A-Z]\]|\Z)', text, re.DOTALL)
+              if not m:
+                  return 'FAIL'
+              section = m.group(0)
+              if 'SKIPPED' in section and '  FAIL  ' not in section and '  PASS  ' not in section:
+                  return 'SKIPPED'
+              return 'FAIL' if '  FAIL  ' in section else 'PASS'
+
+          def parse_registry(text):
+              m = re.search(r'\[C\].*?(?=\n\[[A-Z]\]|\Z)', text, re.DOTALL)
+              if not m:
+                  return 'FAIL'
+              c_text = m.group(0)
+              if 'SKIPPED' in c_text and '  PASS  ' not in c_text:
+                  return 'SKIPPED'
+              lines = [l for l in c_text.split('\n') if 'registry integrity:' in l and 'fetch:' not in l]
+              if not lines:
+                  return 'FAIL'
+              return 'FAIL' if any('  FAIL  ' in l for l in lines) else 'PASS'
+
+          def parse_tarball(text):
+              m = re.search(r'\[C\].*?(?=\n\[[A-Z]\]|\Z)', text, re.DOTALL)
+              if not m:
+                  return 'FAIL'
+              c_text = m.group(0)
+              if 'SKIPPED' in c_text and '  PASS  ' not in c_text:
+                  return 'SKIPPED'
+              lines = [l for l in c_text.split('\n') if 'tarball sha256:' in l]
+              if not lines:
+                  return 'FAIL'
+              return 'FAIL' if any('  FAIL  ' in l for l in lines) else 'PASS'
+
+          def parse_claim(text, claim_id, expected):
+              return expected if f'  PASS  verdict: {claim_id} {expected}' in text else 'FAIL'
+
+          try:
+              audit = open('audit-output.txt').read()
+          except Exception:
+              audit = ''
+          try:
+              rehearsal = open('outsider-rehearsal-output.txt').read()
+          except Exception:
+              rehearsal = ''
+
+          audit_ok = os.environ.get('AUDIT_OUTCOME') == 'success'
+          rehearsal_ok = os.environ.get('REHEARSAL_OUTCOME') == 'success'
+
+          d = {
+              'format': 'if07c-release-candidate-verdict/v1',
+              'candidate_sha': os.environ.get('CANDIDATE_SHA', ''),
+              'intended_tag': os.environ.get('INTENDED_TAG', ''),
+              'prepublish_audit': 'PASS' if audit_ok else 'FAIL',
+              'outsider_rehearsal': 'PASS' if rehearsal_ok else 'FAIL',
+              'manifest_closure': parse_section(audit, 'A'),
+              'dependency_closure': parse_section(audit, 'B'),
+              'registry_refetch': parse_registry(audit),
+              'tarball_hashes': parse_tarball(audit),
+              'runner_claims': {
+                  'C1': parse_claim(audit, 'C1', 'PASS'),
+                  'C2': parse_claim(audit, 'C2', 'PASS'),
+                  'C3': parse_claim(audit, 'C3', 'PASS'),
+                  'N1': parse_claim(audit, 'N1', 'BOUNDARY-HELD'),
+                  'N2': parse_claim(audit, 'N2', 'BOUNDARY-HELD'),
+                  'N3': parse_claim(audit, 'N3', 'BOUNDARY-HELD'),
+                  'N4': parse_claim(audit, 'N4', 'BOUNDARY-HELD'),
+              },
+              'negative_controls': parse_section(audit, 'G'),
+          }
+          json.dump(d, open('release-candidate-verdict.json', 'w'), indent=2)
+          print(json.dumps(d, indent=2))
+          PYEOF
+
+          if [[ "$AUDIT_OUTCOME" != "success" || "$REHEARSAL_OUTCOME" != "success" ]]; then
             echo ""
-            echo "GATE FAILED — prepublish_audit=$AUDIT_PASS  outsider_rehearsal=$REHEARSAL_PASS"
+            echo "GATE FAILED — prepublish_audit=$AUDIT_OUTCOME  outsider_rehearsal=$REHEARSAL_OUTCOME"
             echo "Not authorized to tag ${{ github.event.inputs.intended_tag }}"
             exit 1
           fi
