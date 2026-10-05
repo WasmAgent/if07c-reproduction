@@ -30,11 +30,11 @@
 | v1.0.1 outsider rehearsal | FAILED — see docs/V1.0.1-PREPUBLISH-GATE-FAILURE.md |
 | v1.0.1 publication closure | NOT ESTABLISHED — rehearsal failed; release sequencing defect |
 | v1.0.1 independent reproduction | NOT YET ESTABLISHED |
-| v1.0.2 manifest closure | PENDING |
-| v1.0.2 dependency closure | PENDING |
-| v1.0.2 outsider rehearsal | PENDING |
-| v1.0.2 pre-tag release gate | PENDING |
-| v1.0.2 publication closure | PENDING |
+| v1.0.2 manifest closure | ESTABLISHED |
+| v1.0.2 dependency closure | ESTABLISHED |
+| v1.0.2 maintainer outsider rehearsal | ESTABLISHED |
+| v1.0.2 pre-tag release gate | ESTABLISHED |
+| v1.0.2 publication closure | ESTABLISHED |
 | v1.0.2 independent reproduction | NOT YET ESTABLISHED |
 
 ## Assurance limits
