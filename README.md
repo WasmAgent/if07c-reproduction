@@ -81,3 +81,13 @@ repro-run/              first archived run record (2026-10-04, v0 runner)
 Run-scoped ledger only (N3); opt-in wiring only (N1); no DLP (N2, N4);
 CodeAgent loop out of scope; no production false-positive data; independent
 security certification is not established by this or any pack.
+
+## Frozen set vs governance files
+
+`ARTIFACTS.json` freezes the pack **as of tag `v1.0.0`**. Governance files
+added on `main` afterwards (e.g. this repository's `LICENSE`) are NOT part
+of the frozen input set — their presence alongside a v1.0.0 pack copy does
+not invalidate a run, and their content is protected by this repository's
+git history rather than by the manifest. They will be folded into the
+frozen set at the next content version (v1.0.1). When in doubt, verify a
+run against the `v1.0.0` tag.
