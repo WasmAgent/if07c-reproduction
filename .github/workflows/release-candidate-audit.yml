@@ -1,0 +1,128 @@
+name: Release Candidate Audit (Pre-Tag Gate)
+
+# This workflow is the ONLY authorized path to tag a release.
+# Run it manually with the candidate SHA before creating any tag.
+# Success means the candidate MAY be tagged — it does NOT create the tag.
+# The human maintainer must review artifacts and create the tag manually.
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_sha:
+        description: 'Exact commit SHA of the release candidate'
+        required: true
+      intended_tag:
+        description: 'Intended tag (e.g., v1.0.2) — informational only, no tag is created'
+        required: true
+
+jobs:
+  release-candidate-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout exact candidate SHA
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.candidate_sha }}
+          fetch-depth: 0
+
+      - name: Verify HEAD matches candidate SHA
+        run: |
+          ACTUAL_HEAD="$(git rev-parse HEAD)"
+          EXPECTED="${{ github.event.inputs.candidate_sha }}"
+          if [[ "$ACTUAL_HEAD" != "$EXPECTED" ]]; then
+            echo "FATAL: HEAD $ACTUAL_HEAD does not match candidate_sha $EXPECTED"
+            exit 1
+          fi
+          echo "HEAD verified: $ACTUAL_HEAD"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Record candidate identity
+        run: |
+          cat > candidate-identity.json <<'EOF_JSON'
+          {
+            "format": "if07c-candidate-identity/v1",
+            "candidate_commit": "CANDIDATE_SHA_PLACEHOLDER",
+            "tree_sha": "TREE_SHA_PLACEHOLDER",
+            "intended_tag": "INTENDED_TAG_PLACEHOLDER",
+            "node": "NODE_PLACEHOLDER",
+            "npm": "NPM_PLACEHOLDER",
+            "os": "OS_PLACEHOLDER"
+          }
+          EOF_JSON
+          # overwrite with real values
+          python3 -c "
+import json, subprocess, platform
+d = json.load(open('candidate-identity.json'))
+d['candidate_commit'] = '${{ github.event.inputs.candidate_sha }}'
+d['tree_sha'] = subprocess.check_output(['git','rev-parse','HEAD^{tree}']).decode().strip()
+d['intended_tag'] = '${{ github.event.inputs.intended_tag }}'
+d['node'] = subprocess.check_output(['node','--version']).decode().strip()
+d['npm'] = subprocess.check_output(['npm','--version']).decode().strip()
+d['os'] = platform.platform()
+json.dump(d, open('candidate-identity.json','w'), indent=2)
+"
+          cat candidate-identity.json
+
+      - name: Run prepublish audit
+        id: prepublish_audit
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/prepublish-audit.mjs \
+            --git-ref ${{ github.event.inputs.candidate_sha }} \
+            2>&1 | tee audit-output.txt
+
+      - name: Run outsider rehearsal
+        id: outsider_rehearsal
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          bash scripts/outsider-repro.sh \
+            --commit-only ${{ github.event.inputs.candidate_sha }} \
+            2>&1 | tee outsider-rehearsal-output.txt
+
+      - name: Produce release-candidate verdict
+        run: |
+          AUDIT="${{ steps.prepublish_audit.outcome }}"
+          REHEARSAL="${{ steps.outsider_rehearsal.outcome }}"
+          AUDIT_PASS="$([ "$AUDIT" = "success" ] && echo PASS || echo FAIL)"
+          REHEARSAL_PASS="$([ "$REHEARSAL" = "success" ] && echo PASS || echo FAIL)"
+          python3 -c "
+import json
+d = {
+  'format': 'if07c-release-candidate-verdict/v1',
+  'candidate_sha': '${{ github.event.inputs.candidate_sha }}',
+  'intended_tag': '${{ github.event.inputs.intended_tag }}',
+  'prepublish_audit': '$AUDIT_PASS',
+  'outsider_rehearsal': '$REHEARSAL_PASS',
+}
+json.dump(d, open('release-candidate-verdict.json','w'), indent=2)
+"
+          cat release-candidate-verdict.json
+          if [[ "$AUDIT" != "success" || "$REHEARSAL" != "success" ]]; then
+            echo ""
+            echo "GATE FAILED — prepublish_audit=$AUDIT_PASS  outsider_rehearsal=$REHEARSAL_PASS"
+            echo "Not authorized to tag ${{ github.event.inputs.intended_tag }}"
+            exit 1
+          fi
+          echo ""
+          echo "GATE PASSED — candidate ${{ github.event.inputs.candidate_sha }} authorized for tag ${{ github.event.inputs.intended_tag }}"
+          echo "Next step: human review of artifacts, then manually create the tag"
+
+      - name: Upload audit artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-candidate-audit-${{ github.event.inputs.intended_tag }}
+          retention-days: 90
+          path: |
+            candidate-identity.json
+            release-candidate-verdict.json
+            audit-output.txt
+            outsider-rehearsal-output.txt

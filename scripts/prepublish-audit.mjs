@@ -21,17 +21,18 @@ import { execFileSync, execSync, spawnSync } from "node:child_process";
 import {
   copyFileSync,
   existsSync,
+  lstatSync,
   mkdtempSync,
   mkdirSync,
   readdirSync,
   readFileSync,
   renameSync,
   rmSync,
-  statSync,
+  symlinkSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join, relative, resolve } from "node:path";
+import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 
 const PACK_ROOT = new URL("..", import.meta.url).pathname;
 
@@ -103,6 +104,7 @@ function checkManifestClosure(root, artifacts) {
     "scripts/outsider-repro.sh",
     "scripts/prepublish-audit.mjs",
     "docs/V1.0.0-EXTERNAL-FINDINGS.md",
+    "docs/V1.0.1-PREPUBLISH-GATE-FAILURE.md",
   ]);
   // add fixtures dynamically
   const fixtureDir = join(root, "fixtures");
@@ -114,12 +116,16 @@ function checkManifestClosure(root, artifacts) {
 
   const manifestFiles = artifacts.files ?? {};
   const seenNormalized = new Set();
+  const rootResolved = resolve(root);
 
   for (const [relPath, expectedHash] of Object.entries(manifestFiles)) {
-    // path traversal check
+    // safe path-containment check using relative() instead of startsWith()
+    // startsWith() is vulnerable to sibling-prefix attacks (e.g., /tmp/root vs /tmp/rootextra)
     const abs = resolve(join(root, relPath));
-    if (!abs.startsWith(resolve(root))) {
-      check(`path traversal: ${relPath}`, false);
+    const relToRoot = relative(rootResolved, abs);
+    const isOutside = relToRoot === ".." || relToRoot.startsWith(`..${sep}`) || isAbsolute(relToRoot);
+    if (isOutside) {
+      check(`path containment: ${relPath}`, false, "resolves outside pack root");
       ok = false;
       continue;
     }
@@ -131,14 +137,11 @@ function checkManifestClosure(root, artifacts) {
       continue;
     }
     seenNormalized.add(norm);
-    // symlink check
-    try {
-      const st = statSync(abs, { throwIfNoEntry: true });
-      if (st.isSymbolicLink?.()) { check(`symlink: ${relPath}`, false); ok = false; continue; }
-    } catch { /* handled below */ }
-    // file exists
-    if (!existsSync(abs)) { check(`exists: ${relPath}`, false, "missing"); ok = false; continue; }
-    if (!statSync(abs).isFile()) { check(`regular file: ${relPath}`, false); ok = false; continue; }
+    // lstatSync does NOT follow symlinks — correctly detects symlinks as defects
+    const lst = lstatSync(abs, { throwIfNoEntry: false });
+    if (!lst) { check(`exists: ${relPath}`, false, "missing"); ok = false; continue; }
+    if (lst.isSymbolicLink()) { check(`symlink: ${relPath}`, false, "symlinks not permitted"); ok = false; continue; }
+    if (!lst.isFile()) { check(`regular file: ${relPath}`, false); ok = false; continue; }
     // hash
     const actual = sha256File(abs);
     const hashOk = actual === expectedHash;
@@ -356,15 +359,11 @@ function checkRunnerExecution(artifacts) {
 
 function injectAndExpectFail(label, tmpBase, artifacts, mutate) {
   const tmp = mkdtempSync(join(tmpBase, "neg-"));
-  const pkgs = artifacts.packages ?? {};
-  const installArgs = Object.entries(pkgs).map(([name, p]) => `${name}@${p.version}`).filter(Boolean);
   try {
-    // write a minimal ARTIFACTS copy with mutations applied
     const mutatedArtifacts = JSON.parse(JSON.stringify(artifacts));
     mutate(tmp, mutatedArtifacts);
     writeFileSync(join(tmp, "ARTIFACTS.json"), JSON.stringify(mutatedArtifacts, null, 2));
 
-    // run manifest closure check on the mutated copy using a sub-process
     const auditSelf = join(PACK_ROOT, "scripts", "prepublish-audit.mjs");
     const result = spawnSync(
       "node",
@@ -376,10 +375,32 @@ function injectAndExpectFail(label, tmpBase, artifacts, mutate) {
         env: { ...process.env, PREPUBLISH_AUDIT_PACK_ROOT: tmp },
       }
     );
-    // We expect the audit to FAIL (nonzero exit) when the pack is corrupted
     const auditFailed = result.status !== 0;
     check(label, auditFailed, auditFailed ? "audit correctly rejected" : "audit should have failed but passed");
     return auditFailed;
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+}
+
+// Tests section F detection logic with a mock runner (no npm install needed).
+// Verifies that exit-nonzero or missing verdicts are correctly detected.
+function runnerOutputNegativeControl(label, mockRunnerContent) {
+  const tmp = mkdtempSync(join(tmpdir(), "repro-neg-runner-"));
+  try {
+    mkdirSync(join(tmp, "runner"), { recursive: true });
+    writeFileSync(join(tmp, "runner/run.mjs"), mockRunnerContent);
+    const result = spawnSync("node", ["runner/run.mjs"], { cwd: tmp, encoding: "utf8", timeout: 10000 });
+    const exitOk = result.status === 0;
+    const output = result.stdout ?? "";
+    const ALL_VERDICTS = ["C1: PASS", "C2: PASS", "C3: PASS",
+      "N1: BOUNDARY-HELD", "N2: BOUNDARY-HELD", "N3: BOUNDARY-HELD", "N4: BOUNDARY-HELD"];
+    const verdictsOk = ALL_VERDICTS.every((v) => output.includes(v));
+    // section F passes only if exit=0 AND all verdicts present; we expect it to fail
+    const controlOk = !(exitOk && verdictsOk);
+    check(label, controlOk,
+      controlOk ? "section F correctly detects issue" : "section F should have failed here");
+    return controlOk;
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }
@@ -395,11 +416,9 @@ function checkNegativeControls(artifacts) {
       "G1: deleted manifest file → audit fails",
       tmpBase, artifacts,
       (tmp, art) => {
-        // copy a real file then delete it
         const first = Object.keys(art.files ?? {})[0];
         const dest = join(tmp, first);
         mkdirSync(dirname(dest), { recursive: true });
-        // write then delete so the manifest entry is still there
         writeFileSync(dest, "dummy");
         rmSync(dest);
       }
@@ -415,10 +434,8 @@ function checkNegativeControls(artifacts) {
         const dest = join(tmp, fixtureKey);
         mkdirSync(dirname(dest), { recursive: true });
         const orig = readFileSync(join(PACK_ROOT, fixtureKey));
-        // flip one byte
         orig[0] ^= 0x01;
         writeFileSync(dest, orig);
-        // hash in manifest still points to old content → mismatch
       }
     ) && allFailed;
 
@@ -431,7 +448,7 @@ function checkNegativeControls(artifacts) {
         const dest = join(tmp, first);
         mkdirSync(dirname(dest), { recursive: true });
         writeFileSync(dest, readFileSync(join(PACK_ROOT, first)));
-        art.files[first] = "0".repeat(64); // wrong hash
+        art.files[first] = "0".repeat(64);
       }
     ) && allFailed;
 
@@ -460,13 +477,84 @@ function checkNegativeControls(artifacts) {
       "G6: undeclared frozen input → audit fails",
       tmpBase, artifacts,
       (tmp, _art) => {
-        // write a file that is in the frozen allowlist path but NOT in manifest
         const dest = join(tmp, "runner", "extra.mjs");
         mkdirSync(dirname(dest), { recursive: true });
         writeFileSync(dest, "// extra");
-        // do not add to art.files so manifest is incomplete
       }
     ) && allFailed;
+
+    // G7: symlink replaces frozen file → audit must fail (requires lstatSync to detect)
+    allFailed = injectAndExpectFail(
+      "G7: symlink frozen input → audit fails",
+      tmpBase, artifacts,
+      (tmp, art) => {
+        // copy all manifest files so the path and hash checks have something to examine
+        for (const relPath of Object.keys(art.files ?? {})) {
+          const src = join(PACK_ROOT, relPath);
+          const dest = join(tmp, relPath);
+          mkdirSync(dirname(dest), { recursive: true });
+          if (existsSync(src)) copyFileSync(src, dest);
+        }
+        // replace first file with a symlink — symlink is the defect, not hash mismatch
+        const firstKey = Object.keys(art.files ?? {})[0];
+        const linkDest = join(tmp, firstKey);
+        rmSync(linkDest, { force: true });
+        symlinkSync(join(PACK_ROOT, "README.md"), linkDest);
+      }
+    ) && allFailed;
+
+    // G8: ../escape path traversal → audit must fail
+    allFailed = injectAndExpectFail(
+      "G8: ../escape path traversal → audit fails",
+      tmpBase, artifacts,
+      (_tmp, art) => {
+        art.files["../../../tmp/escape.txt"] = "a".repeat(64);
+      }
+    ) && allFailed;
+
+    // G9: sibling-prefix containment attack
+    // startsWith("/tmp/root") incorrectly accepts "/tmp/rootextra/file";
+    // relative() correctly rejects it
+    allFailed = (() => {
+      const g9root = mkdtempSync(join(tmpBase, "g9-root-"));
+      const g9sibling = g9root + "extra"; // shares string prefix with g9root
+      try {
+        mkdirSync(g9sibling, { recursive: true });
+        writeFileSync(join(g9sibling, "outside.txt"), "not in pack");
+        const mutatedArtifacts = JSON.parse(JSON.stringify(artifacts));
+        // relative path from g9root to sibling file (e.g., "../g9-root-XYZextra/outside.txt")
+        const siblingRel = relative(g9root, join(g9sibling, "outside.txt"));
+        mutatedArtifacts.files[siblingRel] = "a".repeat(64);
+        writeFileSync(join(g9root, "ARTIFACTS.json"), JSON.stringify(mutatedArtifacts, null, 2));
+        const auditSelf = join(PACK_ROOT, "scripts", "prepublish-audit.mjs");
+        const result = spawnSync("node", [auditSelf, "--skip-network", "--negative-control-mode"], {
+          cwd: g9root, encoding: "utf8", timeout: 30000,
+          env: { ...process.env, PREPUBLISH_AUDIT_PACK_ROOT: g9root },
+        });
+        const auditFailed = result.status !== 0;
+        check("G9: sibling-prefix path → audit fails", auditFailed,
+          auditFailed ? "correctly rejected sibling-prefix path" : "should have rejected outside-root path");
+        return auditFailed;
+      } finally {
+        rmSync(g9root, { recursive: true, force: true });
+        try { rmSync(g9sibling, { recursive: true, force: true }); } catch {}
+      }
+    })() && allFailed;
+
+    // G10: runner exits nonzero → section F must detect and fail
+    allFailed = runnerOutputNegativeControl(
+      "G10: runner exits nonzero → audit fails",
+      // correct verdicts in output, but process exits 1
+      `console.log("C1: PASS\\nC2: PASS\\nC3: PASS\\nN1: BOUNDARY-HELD\\nN2: BOUNDARY-HELD\\nN3: BOUNDARY-HELD\\nN4: BOUNDARY-HELD");process.exit(1);`
+    ) && allFailed;
+
+    // G11: runner output missing a verdict → section F must detect and fail
+    allFailed = runnerOutputNegativeControl(
+      "G11: verdict missing from runner output → audit fails",
+      // C1 absent, exits 0
+      `console.log("C2: PASS\\nC3: PASS\\nN1: BOUNDARY-HELD\\nN2: BOUNDARY-HELD\\nN3: BOUNDARY-HELD\\nN4: BOUNDARY-HELD");process.exit(0);`
+    ) && allFailed;
+
   } finally {
     rmSync(tmpBase, { recursive: true, force: true });
   }
@@ -476,7 +564,7 @@ function checkNegativeControls(artifacts) {
 // ── Main ───────────────────────────────────────────────────────────────────────────
 
 async function main() {
-  // Support negative-control-mode invocation (subset-only, manifest closure)
+  // Support negative-control-mode invocation (manifest closure + dep closure only)
   const negMode = process.argv.includes("--negative-control-mode");
   const packRoot = process.env.PREPUBLISH_AUDIT_PACK_ROOT ?? PACK_ROOT;
 

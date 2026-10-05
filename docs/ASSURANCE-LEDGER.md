@@ -25,9 +25,17 @@
 |---|---|
 | v1.0.0 manifest completeness | FAILED / 14-of-15 verifiable (smoke.mjs listed, absent) |
 | v1.0.0 dependency closure | PARTIAL / zod unpinned in install procedure |
-| v1.0.1 publication closure | ESTABLISHED — prepublish audit and outsider rehearsal gate added |
-| v1.0.1 maintainer clean-room rehearsal | PENDING — maintainer must run and record to runs/ |
+| v1.0.1 manifest closure | ESTABLISHED — prepublish-audit.mjs sections A–G passed |
+| v1.0.1 dependency closure | ESTABLISHED — zod@4.6.5 pinned, all packages declared |
+| v1.0.1 outsider rehearsal | FAILED — see docs/V1.0.1-PREPUBLISH-GATE-FAILURE.md |
+| v1.0.1 publication closure | NOT ESTABLISHED — rehearsal failed; release sequencing defect |
 | v1.0.1 independent reproduction | NOT YET ESTABLISHED |
+| v1.0.2 manifest closure | PENDING |
+| v1.0.2 dependency closure | PENDING |
+| v1.0.2 outsider rehearsal | PENDING |
+| v1.0.2 pre-tag release gate | PENDING |
+| v1.0.2 publication closure | PENDING |
+| v1.0.2 independent reproduction | NOT YET ESTABLISHED |
 
 ## Assurance limits
 

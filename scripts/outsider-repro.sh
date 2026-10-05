@@ -9,27 +9,35 @@
 # This is NOT independent reproduction; it does not replace external runs.
 #
 # Usage:
-#   ./scripts/outsider-repro.sh [--tag v1.0.1] [--commit <sha>]
-#   ./scripts/outsider-repro.sh --local  # skip git clone, use current tree
+#   ./scripts/outsider-repro.sh [--tag v1.0.2] [--commit <sha>]
+#   ./scripts/outsider-repro.sh --commit-only <sha>   # verify candidate before tag exists
+#   ./scripts/outsider-repro.sh --local               # skip git clone, use current tree
 #
 # Requires: git, node, npm, curl, shasum (or sha256sum), jq
 
 set -euo pipefail
 
 REPO_URL="https://github.com/WasmAgent/if07c-reproduction"
-DEFAULT_TAG="v1.0.1"
+DEFAULT_TAG="v1.0.2"
 TAG="$DEFAULT_TAG"
 COMMIT_SHA=""
+COMMIT_ONLY=false
 LOCAL_MODE=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --tag) TAG="$2"; shift 2;;
     --commit) COMMIT_SHA="$2"; shift 2;;
+    --commit-only) COMMIT_SHA="$2"; COMMIT_ONLY=true; shift 2;;
     --local) LOCAL_MODE=true; shift;;
     *) echo "Unknown argument: $1" >&2; exit 2;;
   esac
 done
+
+if $COMMIT_ONLY && [[ -z "$COMMIT_SHA" ]]; then
+  echo "--commit-only requires a SHA argument" >&2
+  exit 2
+fi
 
 # ── Platform helpers ────────────────────────────────────────────────────────────
 
@@ -74,6 +82,12 @@ if $LOCAL_MODE; then
   PACK_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
   CLONE_DIR="$PACK_ROOT"
   result "local mode" ok "using $PACK_ROOT"
+elif $COMMIT_ONLY; then
+  # Clone without --branch to verify a candidate SHA before a tag exists
+  echo "  Cloning $REPO_URL at candidate $COMMIT_SHA (no tag required) …"
+  git clone "$REPO_URL" "$CLONE_DIR" 2>&1 | sed 's/^/  /'
+  git -C "$CLONE_DIR" checkout "$COMMIT_SHA" 2>&1 | sed 's/^/  /'
+  result "git clone + checkout" ok "$COMMIT_SHA"
 else
   echo "  Cloning $REPO_URL …"
   git clone --depth 1 --branch "$TAG" "$REPO_URL" "$CLONE_DIR" 2>&1 | sed 's/^/  /'
@@ -183,7 +197,7 @@ mkdir -p "$TARBALL_TMP"
 node - "$TARBALL_TMP" <<'JS'
 const [,,tarDir] = process.argv;
 const a = JSON.parse(require("fs").readFileSync("ARTIFACTS.json","utf8"));
-const {execFileSync,spawnSync} = require("child_process");
+const {spawnSync} = require("child_process");
 const {createHash} = require("crypto");
 const {readFileSync,readdirSync,rmSync} = require("fs");
 const {join} = require("path");
@@ -247,7 +261,7 @@ for (const [name,p] of Object.entries(a.packages??{})) {
 }
 JS
 
-# ── 7. Run the runner ────────────────────────────────────────────────────────────────
+# ── 7. Execute runner ────────────────────────────────────────────────────────────────
 
 echo ""
 echo "[7] Execute runner"
@@ -258,11 +272,25 @@ cp -r fixtures runner "$RUN_TMP/"
 cp profile.json expected-results.json CLAIM-BOUNDARY.md "$RUN_TMP/" 2>/dev/null || true
 cp -r "$INSTALL_TMP/node_modules" "$RUN_TMP/"
 
-echo "  Executing node runner/run.mjs …"
-RUN_OUT="$(node runner/run.mjs 2>&1 || true)"
-RUN_EXIT="${PIPESTATUS[0]:-0}"
+# Clean-room assertions: runner and node_modules must resolve inside the clean temp directory.
+# The runner must NOT be executed from the repository root where no node_modules exists.
+echo "  Clean-room assertions:"
+echo "    RUN_TMP:      $RUN_TMP"
+echo "    runner path:  $RUN_TMP/runner/run.mjs"
+echo "    node_modules: $RUN_TMP/node_modules"
+[[ -f "$RUN_TMP/runner/run.mjs" ]] || { echo "  FATAL: runner/run.mjs not found in RUN_TMP"; exit 1; }
+[[ -d "$RUN_TMP/node_modules" ]] || { echo "  FATAL: node_modules not found in RUN_TMP"; exit 1; }
+RUNNER_REAL="$(realpath "$RUN_TMP/runner/run.mjs")"
+RUNTMP_REAL="$(realpath "$RUN_TMP")"
+[[ "$RUNNER_REAL" == "$RUNTMP_REAL/"* ]] || { echo "  FATAL: runner resolves outside RUN_TMP ($RUNNER_REAL)"; exit 1; }
+result "runner inside clean temp dir" ok "$RUN_TMP"
+
+echo "  Executing node runner/run.mjs from clean directory …"
 set +e
-node runner/run.mjs > "$WORK/runner-output.txt" 2>&1
+(
+  cd "$RUN_TMP"
+  node runner/run.mjs
+) > "$WORK/runner-output.txt" 2>&1
 RUN_EXIT=$?
 set -e
 
