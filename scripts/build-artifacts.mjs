@@ -5,31 +5,34 @@
 //   - the exact published npm versions installed in the verification
 //     directory (default: ./pack-verify), with registry integrity and the
 //     SHA256 of the downloaded tarball;
-//   - the SHA256 of every pack file (runner, fixtures, profile,
-//     expected-results, docs, this script);
+//   - the SHA256 of every frozen pack file;
 //   - the node/npm versions used.
 //
-// Usage:
-//   npm install zod @wasmagent/core@X @wasmagent/mcp-firewall@Y @wasmagent/mcp-gateway@Z
-//   node runner/run.mjs          # in a copy of the pack, per README
+// Usage (normal — hashes working tree):
+//   npm install zod@4.6.5 @wasmagent/core@X @wasmagent/mcp-firewall@Y @wasmagent/mcp-gateway@Z
+//   node runner/run.mjs
 //   node scripts/build-artifacts.mjs --prefix ./pack-verify
+//
+// Usage (release mode — hashes the exact committed tree, recommended before tagging):
+//   node scripts/build-artifacts.mjs --prefix ./pack-verify --git-ref <sha-or-tag>
 //
 // Re-running is deterministic apart from generatedAtUtc.
 
-import { execFileSync } from "node:child_process";
+import { execFileSync, execSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, join, relative } from "node:path";
 
 const PACK_ROOT = new URL("..", import.meta.url).pathname;
-const PACKAGES = ["@wasmagent/core", "@wasmagent/mcp-firewall", "@wasmagent/mcp-gateway"];
-const SKIP_DIRS = new Set(["node_modules", "pack-verify", "repro-run", "runs", ".git"]);
+const PACKAGES = ["zod", "@wasmagent/core", "@wasmagent/mcp-firewall", "@wasmagent/mcp-gateway"];
+const SKIP_DIRS = new Set(["node_modules", "pack-verify", "repro-run", "runs", ".git", ".github"]);
 
 function parseArgs(argv) {
-  const out = { prefix: join(PACK_ROOT, "pack-verify") };
+  const out = { prefix: join(PACK_ROOT, "pack-verify"), gitRef: null };
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === "--prefix") out.prefix = argv[++i];
+    else if (argv[i] === "--git-ref") out.gitRef = argv[++i];
     else {
       console.error(`unknown argument ${argv[i]}`);
       process.exit(2);
@@ -46,13 +49,25 @@ function sha256File(path) {
   return createHash("sha256").update(readFileSync(path)).digest("hex");
 }
 
-/** Every pack file under PACK_ROOT except generated/verification dirs. */
-function packFiles() {
+function sha256Buf(buf) {
+  return createHash("sha256").update(buf).digest("hex");
+}
+
+/** Extract the committed tree at gitRef into a temp dir and return its path. */
+function materializeGitArchive(gitRef, tmpBase) {
+  const archiveDir = join(tmpBase, "archive");
+  execSync(`mkdir -p ${archiveDir}`, { stdio: "inherit" });
+  execSync(`git -C "${PACK_ROOT}" archive "${gitRef}" | tar -x -C "${archiveDir}"`, { stdio: "inherit" });
+  return archiveDir;
+}
+
+/** Every pack file under root except generated/verification dirs. */
+function packFiles(root) {
   const out = [];
   const walk = (dir) => {
     for (const entry of readdirSync(dir).sort()) {
       const full = join(dir, entry);
-      const rel = relative(PACK_ROOT, full);
+      const rel = relative(root, full);
       if (statSync(full).isDirectory()) {
         if (SKIP_DIRS.has(entry)) continue;
         walk(full);
@@ -61,12 +76,12 @@ function packFiles() {
       }
     }
   };
-  walk(PACK_ROOT);
+  walk(root);
   return out;
 }
 
 function main() {
-  const { prefix } = parseArgs(process.argv.slice(2));
+  const { prefix, gitRef } = parseArgs(process.argv.slice(2));
   if (!existsSync(join(prefix, "node_modules"))) {
     console.error(`error: ${prefix}/node_modules not found — install the pinned packages first (see README)`);
     return 2;
@@ -79,27 +94,44 @@ function main() {
       const pkgJson = JSON.parse(readFileSync(join(prefix, "node_modules", name, "package.json"), "utf8"));
       const version = pkgJson.version;
       const integrity = sh("npm", ["view", `${name}@${version}`, "dist.integrity"]);
-      const tarballPath = join(tmp, `${name.replace("@", "").replace("/", "-")}-${version}.tgz`);
+      // npm pack names the file based on the package, handling scoped names
+      const tmpTgz = join(tmp, `${name.replace(/@/g, "").replace(/\//g, "-")}-${version}.tgz`);
       sh("npm", ["pack", `${name}@${version}`, "--pack-destination", tmp]);
-      // npm pack names the file scope-name-version.tgz
       const files = readdirSync(tmp).filter((f) => f.endsWith(".tgz") && f.includes(version));
-      const tgz = files.find((f) => f.startsWith(name.replace("@", "").replace("/", "-"))) ?? files[0];
+      const basename_ = name.replace(/@/g, "").replace(/\//g, "-");
+      const tgz = files.find((f) => f.startsWith(basename_)) ?? files[0];
       if (!tgz) throw new Error(`npm pack produced no tarball for ${name}@${version}`);
-      execFileSync("mv", [join(tmp, tgz), tarballPath]);
+      execFileSync("mv", [join(tmp, tgz), tmpTgz]);
       packages[name] = {
         version,
         integrity,
-        tarballSha256: sha256File(tarballPath),
+        tarballSha256: sha256File(tmpTgz),
       };
       console.log(`  ${name}@${version}  integrity ${integrity.slice(0, 20)}…  tarball sha256 recorded`);
+      // clean up tgz before next package to avoid stale matches
+      rmSync(tmpTgz, { force: true });
     }
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }
 
+  // Determine the root to hash files from
+  let hashRoot = PACK_ROOT;
+  let archiveTmp = null;
+  if (gitRef) {
+    console.log(`  materializing git archive at ${gitRef} …`);
+    archiveTmp = mkdtempSync(join(tmpdir(), "repro-gitarchive-"));
+    hashRoot = materializeGitArchive(gitRef, archiveTmp);
+    console.log(`  archive extracted to ${hashRoot}`);
+  }
+
   const files = {};
-  for (const rel of packFiles()) {
-    files[rel] = sha256File(join(PACK_ROOT, rel));
+  try {
+    for (const rel of packFiles(hashRoot)) {
+      files[rel] = sha256File(join(hashRoot, rel));
+    }
+  } finally {
+    if (archiveTmp) rmSync(archiveTmp, { recursive: true, force: true });
   }
 
   const doc = {
@@ -109,6 +141,7 @@ function main() {
       node: process.versions.node,
       npm: sh("npm", ["--version"]),
     },
+    ...(gitRef ? { gitRef } : {}),
     packages,
     files,
     verification: {

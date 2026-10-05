@@ -1,0 +1,123 @@
+name: Reproduction Pack Prepublish Audit
+
+on:
+  push:
+    paths:
+      - 'fixtures/**'
+      - 'runner/**'
+      - 'expected-results.json'
+      - 'profile.json'
+      - 'ARTIFACTS.json'
+      - 'scripts/build-artifacts.mjs'
+      - 'scripts/prepublish-audit.mjs'
+      - 'README.md'
+      - 'INVITATION.md'
+      - 'CLAIM-BOUNDARY.md'
+  pull_request:
+    paths:
+      - 'fixtures/**'
+      - 'runner/**'
+      - 'expected-results.json'
+      - 'profile.json'
+      - 'ARTIFACTS.json'
+      - 'scripts/build-artifacts.mjs'
+      - 'scripts/prepublish-audit.mjs'
+      - 'README.md'
+      - 'INVITATION.md'
+      - 'CLAIM-BOUNDARY.md'
+  workflow_dispatch:
+    inputs:
+      git_ref:
+        description: 'Git ref (SHA or tag) to audit against archive'
+        required: false
+        default: ''
+
+jobs:
+  prepublish-audit:
+    name: Prepublish Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Print environment
+        run: |
+          node --version
+          npm --version
+          uname -a
+
+      - name: Determine audit ref
+        id: audit-ref
+        run: |
+          REF="${{ github.event.inputs.git_ref }}"
+          if [ -z "$REF" ]; then
+            REF="${{ github.sha }}"
+          fi
+          echo "ref=$REF" >> "$GITHUB_OUTPUT"
+          echo "Auditing commit: $REF"
+
+      - name: Run prepublish audit (sections A-G)
+        id: audit
+        run: |
+          node scripts/prepublish-audit.mjs --git-ref "${{ steps.audit-ref.outputs.ref }}" \
+            2>&1 | tee audit-output.txt
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+        continue-on-error: true
+
+      - name: Run outsider rehearsal
+        id: rehearsal
+        run: |
+          bash scripts/outsider-repro.sh --local \
+            --commit "${{ steps.audit-ref.outputs.ref }}" \
+            2>&1 | tee rehearsal-output.txt
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+        continue-on-error: true
+
+      - name: Produce audit summary JSON
+        run: |
+          node - <<'JS'
+          const fs = require("fs");
+          const auditOut = fs.readFileSync("audit-output.txt","utf8");
+          const rehearsalOut = fs.readFileSync("rehearsal-output.txt","utf8");
+          const countPASS = (t) => (t.match(/\bPASS\b/g)||[]).length;
+          const countFAIL = (t) => (t.match(/\bFAIL\b/g)||[]).length;
+          const summary = {
+            commit: process.env.AUDIT_REF,
+            audit: { passed: countPASS(auditOut), failed: countFAIL(auditOut) },
+            rehearsal: { passed: countPASS(rehearsalOut), failed: countFAIL(rehearsalOut) },
+          };
+          fs.writeFileSync("audit-summary.json", JSON.stringify(summary, null, 2));
+          console.log(JSON.stringify(summary, null, 2));
+          JS
+        env:
+          AUDIT_REF: ${{ steps.audit-ref.outputs.ref }}
+
+      - name: Upload audit artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prepublish-audit-${{ steps.audit-ref.outputs.ref }}
+          retention-days: 90
+          path: |
+            audit-output.txt
+            rehearsal-output.txt
+            audit-summary.json
+
+      - name: Fail if audit did not pass
+        run: |
+          AUDIT_EXIT="${{ steps.audit.outputs.exit_code }}"
+          REHEARSAL_EXIT="${{ steps.rehearsal.outputs.exit_code }}"
+          if [[ "$AUDIT_EXIT" != "0" || "$REHEARSAL_EXIT" != "0" ]]; then
+            echo "::error::Prepublish audit failed (audit=$AUDIT_EXIT rehearsal=$REHEARSAL_EXIT) — review uploaded artifacts"
+            exit 1
+          fi
+          echo "All checks passed."
