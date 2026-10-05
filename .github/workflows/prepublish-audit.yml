@@ -10,7 +10,7 @@ on:
       - 'ARTIFACTS.json'
       - 'scripts/build-artifacts.mjs'
       - 'scripts/prepublish-audit.mjs'
-      - 'README.md'
+      - 'scripts/outsider-repro.sh'
       - 'INVITATION.md'
       - 'CLAIM-BOUNDARY.md'
   pull_request:
@@ -22,6 +22,7 @@ on:
       - 'ARTIFACTS.json'
       - 'scripts/build-artifacts.mjs'
       - 'scripts/prepublish-audit.mjs'
+      - 'scripts/outsider-repro.sh'
       - 'README.md'
       - 'INVITATION.md'
       - 'CLAIM-BOUNDARY.md'
