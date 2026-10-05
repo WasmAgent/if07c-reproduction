@@ -1,7 +1,7 @@
 {
   "format": "if07c-independent-reproduction/artifacts/v1",
   "version": "1.0.1",
-  "generatedAtUtc": "2026-10-05T05:57:08.000Z",
+  "generatedAtUtc": "2026-10-05T06:30:00.000Z",
   "toolchain": {
     "node": "20+",
     "note": "Generated for v1.0.1 release — hashes from committed tree"
@@ -45,8 +45,8 @@
     "profile.json": "72d66b0aff46a8b01d2f7191c9c10bfe55422ac8da4ea2b2da79bf90450aae63",
     "runner/run.mjs": "598a2602f149ed052e0894e99bd86f563c02f7090a2f4c30db2a2e3a7b096ae2",
     "scripts/build-artifacts.mjs": "1f0285264ab2dd44e462d31c64f9e431c49a6419f121217a34b458fa0358a80c",
-    "scripts/outsider-repro.sh": "c43498bf053cb8403400c580a04742e9cd0d5fc9dec97bdbe008b26948c7978a",
-    "scripts/prepublish-audit.mjs": "b1f3326630ccc025a9021518af721c22c728687fe059c86fbf3a1b592de4b900"
+    "scripts/outsider-repro.sh": "a826aa7063a3cfea36d4bf98bae140607cbcda52892a9f805bdd11e8be12560d",
+    "scripts/prepublish-audit.mjs": "bb06045610789bdde86685a6e39acaca258d37753db49161740f68fefdddc3b1"
   },
   "verification": {
     "installDirectory": "pack-verify",
