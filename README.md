@@ -23,7 +23,11 @@ N4  model-side transform → identity rule does not fire
 ```bash
 # 1. clean project, pinned artifact versions
 mkdir if07c-repro && cd if07c-repro && npm init -y
-npm install zod @wasmagent/core@3.9.0 @wasmagent/mcp-firewall@2.3.0 @wasmagent/mcp-gateway@0.2.0
+npm install \
+  zod@4.6.5 \
+  @wasmagent/core@3.9.0 \
+  @wasmagent/mcp-firewall@2.3.0 \
+  @wasmagent/mcp-gateway@0.2.0
 
 # 2. copy the pack in (fixtures/, runner/, scripts/, profile.json,
 #    expected-results.json, CLAIM-BOUNDARY.md)
@@ -66,14 +70,17 @@ false-positive rate, independent certification) lives in
 ## Layout
 
 ```text
-runner/run.mjs          single-file runner (mechanism + verdicts)
-fixtures/*.json         inputs only (call scripts; no expectations inside)
-expected-results.json   the single source of assertions
-profile.json            operator-authoritative labels/sinks declarations
-CLAIM-BOUNDARY.md       proves / does-not-prove / verdict vocabulary
-scripts/build-artifacts.mjs  regenerates ARTIFACTS.json (hashes, tarballs)
-ARTIFACTS.json          frozen artifact + file hash record
-repro-run/              first archived run record (2026-10-04, v0 runner)
+runner/run.mjs                single-file runner (mechanism + verdicts)
+fixtures/*.json               inputs only (call scripts; no expectations inside)
+expected-results.json         the single source of assertions
+profile.json                  operator-authoritative labels/sinks declarations
+CLAIM-BOUNDARY.md             proves / does-not-prove / verdict vocabulary
+scripts/build-artifacts.mjs   regenerates ARTIFACTS.json (hashes, tarballs)
+scripts/prepublish-audit.mjs  maintainer pre-release closure audit
+scripts/outsider-repro.sh     maintainer clean-room outsider rehearsal
+docs/V1.0.0-EXTERNAL-FINDINGS.md  frozen record of v1.0.0 external findings
+ARTIFACTS.json                frozen artifact + file hash record
+runs/                         archived run records
 ```
 
 ## Scope ceilings (unchanged)
@@ -84,10 +91,13 @@ security certification is not established by this or any pack.
 
 ## Frozen set vs governance files
 
-`ARTIFACTS.json` freezes the pack **as of tag `v1.0.0`**. Governance files
-added on `main` afterwards (e.g. this repository's `LICENSE`) are NOT part
-of the frozen input set — their presence alongside a v1.0.0 pack copy does
-not invalidate a run, and their content is protected by this repository's
-git history rather than by the manifest. They will be folded into the
-frozen set at the next content version (v1.0.1). When in doubt, verify a
-run against the `v1.0.0` tag.
+`ARTIFACTS.json` freezes the pack **as of tag `v1.0.1`**. All files listed
+under Layout above are part of the frozen input set.
+
+## v1.0.0 defect record
+
+`v1.0.0` had two publication-layer defects found by an outside operator:
+`smoke.mjs` was listed in `ARTIFACTS.json` but absent from the tagged tree,
+and `zod` was not pinned in the install command or the packages record.
+The per-claim results (C1–C3 PASS, N1–N4 BOUNDARY-HELD) were not affected.
+Full record: `docs/V1.0.0-EXTERNAL-FINDINGS.md`.

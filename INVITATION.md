@@ -1,13 +1,13 @@
 # Independent reproduction ask — IF-07c provenance gate v1
 
-You are invited to independently run the **IF-07c reproduction pack v1** on
+You are invited to independently run the **IF-07c reproduction pack** on
 the pinned published npm artifacts. This is a narrow ask: please do **not**
 review WasmAgent security generally, and do not audit the implementation.
 Only run the fixed pack and report what you observe.
 
 ## What you run
 
-The pack in this repository at tag `v1.0.0` (see `ARTIFACTS.json` and the
+The pack in this repository at tag `v1.0.1` (see `ARTIFACTS.json` and the
 release notes for the frozen hashes). It drives three positive claims and
 four negative boundary claims through a scripted agent loop built entirely
 on published `@wasmagent/core`, `@wasmagent/mcp-firewall`, and
@@ -19,9 +19,14 @@ on published `@wasmagent/core`, `@wasmagent/mcp-firewall`, and
    `ARTIFACTS.json` → `files{}` and compare. **Do not trust `ARTIFACTS.json`
    alone** — independently fetch npm metadata (`npm view <pkg>@<version>
    dist.integrity`) and the tarballs, and compare against `packages{}`.
-2. In a clean directory: `npm install zod @wasmagent/core@3.9.0
-   @wasmagent/mcp-firewall@2.3.0 @wasmagent/mcp-gateway@0.2.0` (or the
-   versions recorded in `ARTIFACTS.json`).
+2. In a clean directory, install exact pinned versions:
+   ```bash
+   npm install \
+     zod@4.6.5 \
+     @wasmagent/core@3.9.0 \
+     @wasmagent/mcp-firewall@2.3.0 \
+     @wasmagent/mcp-gateway@0.2.0
+   ```
 3. Run `node runner/run.mjs`.
 4. Record everything listed under "Report format" below.
 
