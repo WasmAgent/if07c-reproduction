@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "description": "Operator-authoritative security declarations for the reproduction harness. resultTaintLabels are DECLARED facts about a tool's outputs (no DLP, no heuristic secret scanning anywhere in this pack); sinks are declared facts about where a tool writes. The gateway treats a trusted profile as authoritative for both classification and the IF-07a gate's sink resolution.",
+  "serverId": "repro-srv",
+  "principal": "external-repro",
+  "tools": {
+    "search_docs": {
+      "description": "search documents",
+      "inputSchema": {
+        "type": "object",
+        "properties": { "key": { "type": "string" } },
+        "required": ["key"]
+      },
+      "profile": {
+        "effects": [],
+        "sinks": [],
+        "capabilitiesRequired": [],
+        "resultTaintLabels": ["secret"]
+      }
+    },
+    "transform_text": {
+      "description": "applies a text transform",
+      "inputSchema": {
+        "type": "object",
+        "properties": { "data": { "type": "string" } },
+        "required": ["data"]
+      },
+      "profile": {
+        "effects": [],
+        "sinks": [],
+        "capabilitiesRequired": [],
+        "resultTaintLabels": ["secret"]
+      }
+    },
+    "send_report": {
+      "description": "send report",
+      "inputSchema": {
+        "type": "object",
+        "properties": { "body": { "type": "string" } },
+        "required": ["body"]
+      },
+      "profile": {
+        "effects": ["network"],
+        "sinks": ["network_send"],
+        "capabilitiesRequired": []
+      }
+    },
+    "plain_echo": {
+      "description": "echo text",
+      "inputSchema": {
+        "type": "object",
+        "properties": { "text": { "type": "string" } },
+        "required": ["text"]
+      },
+      "profile": {
+        "effects": [],
+        "sinks": [],
+        "capabilitiesRequired": []
+      }
+    }
+  },
+  "profileSets": {
+    "full": ["search_docs", "transform_text", "send_report", "plain_echo"],
+    "no-labels": ["search_docs", "transform_text", "send_report", "plain_echo"]
+  },
+  "profileSetSemantics": {
+    "full": "as declared above (search_docs and transform_text outputs carry the operator-declared 'secret' label)",
+    "no-labels": "identical tool set, but resultTaintLabels is STRIPPED from every profile at load time — used by fixture N2 to prove the runtime never invents labels"
+  }
+}

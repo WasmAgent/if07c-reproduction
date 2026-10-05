@@ -1,0 +1,12 @@
+# IF-07c independent reproduction runner (v1)
+# artifacts: @wasmagent/core@3.9.0 | @wasmagent/mcp-firewall@2.3.0 | @wasmagent/mcp-gateway@0.2.0
+# Per-claim verdicts only — this runner intentionally prints NO
+# aggregate secure/insecure conclusion.
+C1: PASS — unlabeled benign flow → no interference
+C2: PASS — labeled read → later deny-sink call → denied automatically (label rule, plus identity rule on the verbatim reuse)
+C3: PASS — labeled result transformed inside a labeled tool → renamed forward → still denied via provenance/identity
+N1: BOUNDARY-HELD — unwired agent → provenance gate does not auto-fire
+N2: BOUNDARY-HELD — no resultTaintLabels profile → runtime does not invent secret labels
+N3: BOUNDARY-HELD — cross-run reuse → previous run's ledger does not survive
+N4: BOUNDARY-HELD — model-side transform of an in-context secret → the IDENTITY rule does not fire (that detection is NOT_ESTABLISHED); the call is still blocked by the label rule because whole-run threading denies every later deny-sink call in the run
+# claims executed: C1: PASS | C2: PASS | C3: PASS | N1: BOUNDARY-HELD | N2: BOUNDARY-HELD | N3: BOUNDARY-HELD | N4: BOUNDARY-HELD

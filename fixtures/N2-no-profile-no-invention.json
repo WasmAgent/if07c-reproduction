@@ -1,0 +1,17 @@
+{
+  "id": "N2",
+  "title": "Without resultTaintLabels in the profile, the runtime does not invent secret labels",
+  "kind": "negative",
+  "wiring": "wired",
+  "profileSet": "no-labels",
+  "runs": [
+    {
+      "steps": [
+        { "calls": [{ "id": "c1", "name": "search_docs", "input": { "key": "k" } }] },
+        { "calls": [{ "id": "c2", "name": "send_report", "input": { "body": { "__derive__": { "from": "SECRET", "transform": "identity" } } } }] },
+        { "text": "done" }
+      ]
+    }
+  ],
+  "note": "Same call script as C2, but the operator profile set strips resultTaintLabels from every tool (no DLP, no heuristic secret scanning). The gateway still evaluates; the send EXECUTES because no operator ever declared the output sensitive."
+}

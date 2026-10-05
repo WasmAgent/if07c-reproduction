@@ -1,0 +1,18 @@
+{
+  "id": "C3",
+  "title": "A labeled result transformed INSIDE a labeled tool, then renamed and forwarded to a deny-sink call, is still denied via provenance/identity",
+  "kind": "positive",
+  "wiring": "wired",
+  "profileSet": "full",
+  "runs": [
+    {
+      "steps": [
+        { "calls": [{ "id": "c1", "name": "search_docs", "input": { "key": "k" } }] },
+        { "calls": [{ "id": "c2", "name": "transform_text", "input": { "data": { "__derive__": { "from": "SECRET", "transform": "identity" } } } }] },
+        { "calls": [{ "id": "c3", "name": "send_report", "input": { "payload": { "__derive__": { "from": "SECRET", "transform": "base64" } } } }] },
+        { "text": "done" }
+      ]
+    }
+  ],
+  "note": "The base64 transform happens inside transform_text's forward() (a tool whose trusted profile declares resultTaintLabels), so the encoded form IS observed by the runtime. The sender arg then hash-matches the observed content — the identity rule fires regardless of the argument name."
+}

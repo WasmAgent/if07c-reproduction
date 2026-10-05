@@ -1,0 +1,16 @@
+{
+  "id": "C1",
+  "title": "An unlabeled benign flow is not interfered with",
+  "kind": "positive",
+  "wiring": "wired",
+  "profileSet": "full",
+  "runs": [
+    {
+      "steps": [
+        { "calls": [{ "id": "c1", "name": "plain_echo", "input": { "text": "hello" } }] },
+        { "calls": [{ "id": "c2", "name": "send_report", "input": { "body": "public news" } }] },
+        { "text": "done" }
+      ]
+    }
+  ]
+}

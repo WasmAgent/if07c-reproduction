@@ -1,0 +1,17 @@
+{
+  "id": "N4",
+  "title": "A model-side transform of an in-context secret (never observed as labeled tool output) does NOT trigger the identity rule — documented NOT_ESTABLISHED boundary",
+  "kind": "negative",
+  "wiring": "wired",
+  "profileSet": "full",
+  "runs": [
+    {
+      "steps": [
+        { "calls": [{ "id": "c1", "name": "search_docs", "input": { "key": "k" } }] },
+        { "calls": [{ "id": "c2", "name": "send_report", "input": { "payload": { "__derive__": { "from": "SECRET", "transform": "reverse" } } } }] },
+        { "text": "done" }
+      ]
+    }
+  ],
+  "note": "The runner reverses the secret when building the sender args, simulating a model that transforms content it saw in its own context WITHOUT an intervening labeled tool result. Identity matching is byte-exact over runtime-observed strings, so the reversed form never matches and the identity rule must NOT fire. The call is still blocked in this fixture — by the LABEL rule, because whole-run threading gates every later deny-sink call in the same run — so the assertion pins the ABSENCE of sink-tainted-identity-deny, not the execution of the send. Content scanning (DLP) remains not-implemented by design; a standalone-DLP claim would be a different (rejected) product."
+}

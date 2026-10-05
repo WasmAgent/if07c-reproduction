@@ -1,0 +1,17 @@
+{
+  "id": "N1",
+  "title": "An UNWIRED ToolCallingAgent does not auto-fire the provenance gate (opt-in boundary)",
+  "kind": "negative",
+  "wiring": "unwired",
+  "profileSet": "full",
+  "runs": [
+    {
+      "steps": [
+        { "calls": [{ "id": "c1", "name": "search_docs", "input": { "key": "k" } }] },
+        { "calls": [{ "id": "c2", "name": "send_report", "input": { "body": { "__derive__": { "from": "SECRET", "transform": "identity" } } } }] },
+        { "text": "done" }
+      ]
+    }
+  ],
+  "note": "Same call script as C2, but no policyGateway is wired. Unwired = zero behavior change: the sink call EXECUTES. A deny here would mean the runtime enforces policy nobody asked for."
+}

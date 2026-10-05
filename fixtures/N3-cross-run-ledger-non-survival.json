@@ -1,0 +1,22 @@
+{
+  "id": "N3",
+  "title": "The provenance ledger is run-scoped: a previous run's observations do not survive into the next run",
+  "kind": "negative",
+  "wiring": "wired",
+  "profileSet": "full",
+  "runs": [
+    {
+      "steps": [
+        { "calls": [{ "id": "c1", "name": "search_docs", "input": { "key": "k" } }] },
+        { "text": "run one finished" }
+      ]
+    },
+    {
+      "steps": [
+        { "calls": [{ "id": "c2", "name": "send_report", "input": { "body": { "__derive__": { "from": "SECRET", "transform": "identity" } } } }] },
+        { "text": "run two finished" }
+      ]
+    }
+  ],
+  "note": "Two runs share the SAME agent composition (same factory), but each run() gets a fresh run-scoped ledger (fresh traceId). The secret was observed only in run one; run two's sink call EXECUTES because there is no process-wide or cross-run taint ledger. A deny in run two would falsify the documented ceiling."
+}
