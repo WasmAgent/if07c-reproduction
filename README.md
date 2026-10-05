@@ -91,7 +91,7 @@ security certification is not established by this or any pack.
 
 ## Frozen set vs governance files
 
-`ARTIFACTS.json` freezes the pack **as of tag `v1.0.1`**. All files listed
+`ARTIFACTS.json` freezes the pack **as of tag `v1.0.2`**. All files listed
 under Layout above are part of the frozen input set.
 
 ## v1.0.0 defect record
