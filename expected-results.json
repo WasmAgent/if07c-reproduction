@@ -1,9 +1,9 @@
 {
-  "version": 2,
+  "version": 3,
   "description": "Expected outcomes for every fixture in fixtures/. The runner compares observed behavior against THESE assertions only; fixtures carry inputs, expected-results carries the assertions. kind=positive PASS means the security property held; kind=negative BOUNDARY-HELD means the gate behaved exactly as the documented claim ceiling says (it does not do things it never claimed). v2 extends the v1 set (C1–C3, N1–N4, unchanged) with consent/descriptor fail-closed cases (D*), scheduler-mode cases (S*), a legal-negative case (L1), eviction-boundary probes (E1/E2), and a nested-identity case (C4).",
   "caseSet": {
-    "id": "if07c-repro-case-set/2026-10-08-v1.2",
-    "note": "Stable identifier for this exact fixture set. Any change to fixtures/ or to these expectations is a new case set and a new content version of the pack. v1.2 adds the permission-model pairs P1-P4b (family id 2026-10-08-v1.2); the 18-case v1.1 set is frozen at tag v1.1.0.",
+    "id": "if07c-repro-case-set/2026-10-08-v1.3",
+    "note": "Stable identifier for this exact fixture set. Any change to fixtures/ or to these expectations is a new case set and a new content version of the pack. v1.2 adds the permission-model pairs P1-P4b (family id 2026-10-08-v1.2); the 18-case v1.1 set is frozen at tag v1.1.0. v1.3 adds S4 (object-accepting same-batch $ref leak, pinned from measurement).",
     "mappingToActionPlan": {
       "R01": "C1",
       "R02": "C2",
@@ -16,7 +16,8 @@
       "R09": "L1",
       "ledgerCapacityAndEviction": "E1 + E2",
       "optInAndNoInventionCeilings": "N1 + N2",
-      "permissionPairsOWASP44": "P1 + P2 + P2b + P3 + P3b + P4"
+      "permissionPairsOWASP44": "P1 + P2 + P2b + P3 + P3b + P4",
+      "sameBatchObjectSinkLeak": "S4"
     }
   },
   "claims": {
@@ -449,6 +450,24 @@
           "sink-tainted-provenance-deny"
         ],
         "finalAnswerEmitted": true
+      }
+    },
+    "S4": {
+      "fixture": "fixtures/S4-same-batch-ref-object-sink.json",
+      "claim": "same-batch $ref into an object-accepting network sink: no provenance rule fires and the sink executes with the labeled secret inside the substituted result object (measured leak; must flip to provenance deny once the RFC #505 fix ships)",
+      "expect": {
+        "executions": {
+          "search_docs": 1,
+          "send_report": 0,
+          "transform_text": 0,
+          "plain_echo": 0,
+          "structured_sink": 1
+        },
+        "denyRuleIds": [],
+        "finalAnswerEmitted": true,
+        "receivedArgsContains": {
+          "structured_sink": true
+        }
       }
     }
   }

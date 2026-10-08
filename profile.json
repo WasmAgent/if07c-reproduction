@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "description": "Operator-authoritative security declarations for the reproduction harness. resultTaintLabels are DECLARED facts about a tool's outputs (no DLP, no heuristic secret scanning anywhere in this pack); sinks are declared facts about where a tool writes; capabilitiesRequired is DECLARED permission intent supplied by the fixture author (never inferred from detection signals). The gateway treats a trusted profile as authoritative for classification and sink resolution. v3 additions power the permission-model pairs (P1-P4): read_tenant_doc / read_workspace / publish_file (profiled tools exercising capability grants, tenant isolation, and consent) and get_status_page (descriptor-only, used under an operator-supplied custom rule that expresses the route policy).",
   "serverId": "repro-srv",
   "principal": "external-repro",
@@ -212,6 +212,29 @@
       },
       "descriptorOnly": true,
       "profile": null
+    },
+    "structured_sink": {
+      "description": "ingest a structured payload to the external archive",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "body"
+        ]
+      },
+      "profile": {
+        "effects": [
+          "network"
+        ],
+        "sinks": [
+          "network_send"
+        ],
+        "capabilitiesRequired": []
+      }
     }
   },
   "profileSets": {
@@ -219,13 +242,15 @@
       "search_docs",
       "transform_text",
       "send_report",
-      "plain_echo"
+      "plain_echo",
+      "structured_sink"
     ],
     "no-labels": [
       "search_docs",
       "transform_text",
       "send_report",
-      "plain_echo"
+      "plain_echo",
+      "structured_sink"
     ],
     "full-unprofiled": [
       "search_docs",
@@ -249,7 +274,7 @@
     ]
   },
   "profileSetSemantics": {
-    "full": "as declared above (search_docs and transform_text outputs carry the operator-declared 'secret' label)",
+    "full": "as declared above (search_docs and transform_text outputs carry the operator-declared 'secret' label); structured_sink (v1.3.0) is the object-accepting deny-sink used by S4",
     "no-labels": "identical tool set, but resultTaintLabels is STRIPPED from every profile at load time — used by fixture N2 to prove the runtime never invents labels",
     "full-unprofiled": "the full set plus unprofiled_echo, whose descriptor is registered but whose security profile is deliberately absent — the hardened gateway escalates it to ask_user; used by D2/D3",
     "probe": "gateway-probe set for the ledger-eviction fixtures E1/E2: a secret-labeled source, an internal-labeled (non-sensitive) source, and the deny-sink",

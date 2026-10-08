@@ -34,6 +34,7 @@
 | v1.2.1 delivery completeness | package.json + package-lock.json + SHA256SUMS added to the frozen set; install procedure unified on `npm ci` |
 | v1.2.1 release-candidate verdicts | derived from the case set with exact-coverage assertion (no missing, no duplicates, nothing extra) |
 | v1.2.1 | PENDING RELEASE GATE — this revision; tag only after the release-candidate-audit workflow passes on the candidate |
+| v1.3.0 S4 object-sink same-batch leak | PINNED AS EXECUTABLE DEFECT — measured on 2026-10-08 (secret reached a declared network_send sink, no policy events); fix tracked by wasmagent-js RFC #505; assertion MUST flip to deny when a fixed version ships |
 | premature tags (pre-gate v1.1.0/v1.2.0) | REMOVED with maintainer bypass — re-tagging only after the release-candidate gate |
 | v1.0.1 publication closure | NOT ESTABLISHED — rehearsal failed; release sequencing defect |
 | v1.0.1 independent reproduction | NOT YET ESTABLISHED |

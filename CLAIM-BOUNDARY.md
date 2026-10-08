@@ -1,6 +1,6 @@
 # Claim boundary — what a green run of this pack proves, and what it does not
 
-This pack executes seventeen POSITIVE claims and seven NEGATIVE boundary claims
+This pack executes seventeen POSITIVE claims and eight NEGATIVE boundary claims
 against published npm artifacts. Read this file before citing any result.
 
 ## Proves (on the pinned fixtures, with the pinned artifact versions)
@@ -104,10 +104,10 @@ process-wide or cross-run taint tracking (N3 asserts the opposite);
 default-on behavior (N1 asserts the opposite: opt-in only);
 CodeAgent coverage (the second agent loop is unwired territory);
 DLP / model-side transform detection (N4 asserts the opposite);
-protection of same-batch $ref dataflow by TAINT POLICY (S3 pins that no
-  provenance rule fires there; the observed no-effect comes from input
-  typing, and sinks with object-accepting schemas are outside this pack's
-  coverage);
+protection of same-batch $ref dataflow by TAINT POLICY (S3/S4 pin that no
+  provenance rule fires there; S4 additionally MEASURES that an
+  object-accepting sink executes with the labeled secret — an open defect
+  tracked by wasmagent-js RFC #505);
 unbounded-run taint integrity (E1/E2 pin bounded-memory eviction
   semantics: identity tracking degrades for evicted entries);
 production false-positive rate (no real workload is exercised here; L1 and

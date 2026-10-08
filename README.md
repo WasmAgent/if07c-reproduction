@@ -1,8 +1,8 @@
-# IF-07c independent reproduction pack (v1.2.1)
+# IF-07c independent reproduction pack (v1.3.0)
 
 Anyone can run this pack against **published npm artifacts** — no wasmagent-js
 monorepo code, no test helpers, no internal assertion implementation. It
-executes seventeen POSITIVE security claims and seven NEGATIVE boundary claims,
+executes seventeen POSITIVE security claims and eight NEGATIVE boundary claims,
 and prints one verdict per claim (deliberately **no** aggregate
 "secure/insecure" conclusion — see `CLAIM-BOUNDARY.md`).
 
@@ -56,6 +56,10 @@ E1  ledger overflow (default cap 512): oldest sensitive entry
     persists                                                     (eviction)
 E2  eviction prefers non-sensitive entries before any sensitive
     one                                                          (eviction)
+S4  MEASURED LEAK (not a safe ceiling): same-batch $ref into an
+    object-accepting network sink — no provenance rule fires and
+    the sink executes with the labeled secret inside; must flip
+    to deny when the RFC #505 fix ships                      (#503/#505)
 ```
 
 The `R0x` tags map this set onto the 2026-10-08 action-plan case table
@@ -154,6 +158,11 @@ permission intent at the published-gateway decision level; the derived
 expectations for P2/P2b and P3b were refuted during development (grants are
 fixture-scoped; the unprofiled-tool rule adjudicates only read-classified
 tools) and re-frozen from observed behavior plus the published dist.
+v1.3.0 adds S4: the #503 review action measured the same-batch `$ref`
+dataflow into an OBJECT-accepting network sink on the published artifacts —
+no provenance rule fires and the secret reaches the sink. The case is pinned
+as an executable leak with its expected flip condition (wasmagent-js RFC
+#505); the fix must turn it into a provenance deny in a future version.
 
 ## Frozen set vs governance files
 

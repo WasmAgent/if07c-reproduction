@@ -1,7 +1,7 @@
 {
   "format": "if07c-independent-reproduction/artifacts/v2",
   "version": "1.2.0",
-  "generatedAtUtc": "2026-10-08T07:37:57.767Z",
+  "generatedAtUtc": "2026-10-08T07:54:50.992Z",
   "toolchain": {
     "node": "24.16.0",
     "npm": "11.16.0"
@@ -44,7 +44,7 @@
     "note": "The npm tarballs are the root identity (packages{} above); this block records which source commit they correspond to."
   },
   "caseSet": {
-    "id": "if07c-repro-case-set/2026-10-08-v1.2",
+    "id": "if07c-repro-case-set/2026-10-08-v1.3",
     "caseIds": [
       "C1",
       "C2",
@@ -69,21 +69,22 @@
       "P4",
       "S1",
       "S2",
-      "S3"
+      "S3",
+      "S4"
     ],
-    "caseCount": 24,
+    "caseCount": 25,
     "note": "Authoritative case-set identity; per-case kinds live in fixtures/*.json, assertions in expected-results.json."
   },
   "files": {
-    "CLAIM-BOUNDARY.md": "3ce2e20fb2d3803f28ead35f82e26bfe42535fa00fc3e6c1e8456cc120b6b4ad",
-    "INVITATION.md": "3802b140b5d98697e03a33355fd056524b8054bce77bb06a7e6e539a7285b5e8",
+    "CLAIM-BOUNDARY.md": "7cf7db9a8103c83b5f189e05c17fce96a9a79868af18093fec0ff4eba1970a10",
+    "INVITATION.md": "6519ec7bce9e291e29b1c6f3dc21121ba7ebe99b3efb3c38b2a8c137d0ce2a4c",
     "LICENSE": "d091846ca33eacf24c5b87fbaef8b90b5da08e35221ecfee77eee628bbe910f0",
-    "README.md": "112113384cc677b394398abdf8f89f8ea6e69402d7e74dd73346abbe578e0536",
-    "docs/ASSURANCE-LEDGER.md": "b015a40ce398b36f41ad6d5ceb49c30bbe44687ba4428fa622bd8544d6534d47",
+    "README.md": "5392cf7fe55ea03b3027c3b47dc5cb04429fd830501a99a102b1d31f020f4c69",
+    "docs/ASSURANCE-LEDGER.md": "c1bb041f2d8a22939782c701a2f3879095e31d24297c4c396f5d965d2ae6b476",
     "docs/V1.0.0-EXTERNAL-FINDINGS.md": "9a0f173ac285ff9e86bb4dabc818218c60180bf8a889a7b5434b139f5169ea34",
     "docs/V1.0.1-PREPUBLISH-GATE-FAILURE.md": "b0d5ac9f8b2a489bc9dbc4ba59eb52137c0b38ae8859d4c391675e41b628990c",
     "docs/V1.0.2-METADATA-CORRECTIONS.md": "55ac362df4186426fbef2a87a578fb9573b32510faf633233967e5db0ba8dfd3",
-    "expected-results.json": "aaa3510ebfe2d8d6f1987c3bb8e88ff5322ccb0302464d200c626a89cb42d8b5",
+    "expected-results.json": "6beb695be6e6f8627d10b17e52797b8e4deb1cec609e5e9443ab596376dcf12a",
     "fixtures/C1-benign-unlabeled.json": "44e491045a5fd4fd5983fa53e6a343cb03743a0e3a15cce77fd164ffee5f9cba",
     "fixtures/C2-labeled-read-to-sink.json": "fd295e751e340211ae05d9aac1b2242841801a982aa9d3c331945ea4250f4ff1",
     "fixtures/C3-labeled-transform-rename-to-sink.json": "b3cec863a7f86a5d5703822b3626b4b336f254ad4e1152a232a7375ad2e4c5a1",
@@ -108,16 +109,17 @@
     "fixtures/S1-dag-later-step-sink.json": "f1fd54864f907814bf3cca8641e10f16df56c2a53b4c9d52976236d8cbc8248e",
     "fixtures/S2-parallel-later-step-sink.json": "d10196a66ffe559c734dcd4bc303d23891f4f123bde90485404b682ac54cc6d7",
     "fixtures/S3-same-batch-ref-boundary.json": "8a4a9b907a84379db3b1fddac63029a1989a8234db9bab3dffa036f32ce015b2",
+    "fixtures/S4-same-batch-ref-object-sink.json": "3a37c025db1020fab2bc3609a3f7d31c6b72283d67662a9ee7f20996f1070fd6",
     "package-lock.json": "a30336b56a95303c282ed2a27fdbe866cced74353cb180a2cc8a3c991eeb396c",
     "package.json": "0ced9f94dcffd8d258ab2a3619ad686f47ca24a62214d88b4b2299cd72519bc2",
-    "profile.json": "b651517ed6ea0a72b7fb5628af050a1348dc3f10946e7c4b1ccad53932766424",
-    "runner/run.mjs": "180b0998c8e3e159bed87de78fd77a7e24144543e507fa4f37d2071141b842ad",
+    "profile.json": "fc7c586bbbf317c5726f8c6b5fff70b97fd6bcabcec61630b1d3bfef514a6151",
+    "runner/run.mjs": "852faaaf82eea146906ce7b12cf123c23469a2804b1e34826ddba36e6bf646a1",
     "scripts/build-artifacts.mjs": "8fdf8f18cab7a112dd6f273a67fee40e7533b15d5db5fe86a628b84d3552839b",
     "scripts/outsider-repro.sh": "31c7a6123874525a4898375e075814078084db1ca06f82a35d9c43366545e150",
     "scripts/prepublish-audit.mjs": "4c6b5fa118b53260d52caacfc3b7aa32c177a6d50cd5711c77cddcd83e4f4ea4"
   },
   "verification": {
-    "installDirectory": "../../../tmp/if07c-ci",
+    "installDirectory": "../../../tmp/if07c-v13",
     "runnerCommand": "node runner/run.mjs",
     "note": "A third party re-running this pack must compare the files{} hashes against their copy, then re-verify packages{} against the registry (npm view dist.integrity / tarball sha256) before trusting a run record."
   }
