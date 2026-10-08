@@ -99,6 +99,8 @@ function checkManifestClosure(root, artifacts) {
     "LICENSE",
     "expected-results.json",
     "profile.json",
+    "package.json",
+    "package-lock.json",
     "runner/run.mjs",
     "scripts/build-artifacts.mjs",
     "scripts/outsider-repro.sh",

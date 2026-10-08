@@ -29,8 +29,12 @@
 | v1.0.1 dependency closure | ESTABLISHED — zod@4.6.5 pinned, all packages declared |
 | v1.0.1 outsider rehearsal | FAILED — see docs/V1.0.1-PREPUBLISH-GATE-FAILURE.md |
 | v1.1.0 integrated 18-case set (2026-10-08) | PENDING RELEASE GATE — prepublish-audit A–G passed on the integration commit (120/120, local); release-candidate-audit workflow + maintainer pre-tag approval outstanding |
-| v1.2.0 24-case set with permission pairs (2026-10-08) | PENDING RELEASE GATE — clean-install 24/24 green (zod 4.6.5); formal gate outstanding |
-| v1.1.0/v1.2.0 premature tags | REMOVED — tags were pushed before the release-candidate gate existed in this line; re-tagging only after the gate (see runs/EXTERNAL-RECORD-TEMPLATE.md intake rules) |
+| v1.2.0 24-case set with permission pairs | RELEASED — release-candidate-audit run 37740151346 passed; maintainer tagged v1.2.0 at bde67ed (tree == audited candidate) |
+| v1.2.0 outsider rehearsal failure propagation | FIXED in v1.2.1 — embedded check blocks now exit nonzero on any failed item; negative controls added (wrong integrity / download failure / version mismatch) |
+| v1.2.1 delivery completeness | package.json + package-lock.json + SHA256SUMS added to the frozen set; install procedure unified on `npm ci` |
+| v1.2.1 release-candidate verdicts | derived from the case set with exact-coverage assertion (no missing, no duplicates, nothing extra) |
+| v1.2.1 | PENDING RELEASE GATE — this revision; tag only after the release-candidate-audit workflow passes on the candidate |
+| premature tags (pre-gate v1.1.0/v1.2.0) | REMOVED with maintainer bypass — re-tagging only after the release-candidate gate |
 | v1.0.1 publication closure | NOT ESTABLISHED — rehearsal failed; release sequencing defect |
 | v1.0.1 independent reproduction | NOT YET ESTABLISHED |
 | v1.0.2 manifest closure | ESTABLISHED |

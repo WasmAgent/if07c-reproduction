@@ -94,7 +94,7 @@ function packFiles(root) {
       if (statSync(full).isDirectory()) {
         if (SKIP_DIRS.has(entry)) continue;
         walk(full);
-      } else if (entry !== "ARTIFACTS.json" && entry !== "package.json" && entry !== "package-lock.json" && entry !== "results.json" && entry !== "SHA256SUMS") {
+      } else if (entry !== "ARTIFACTS.json" && entry !== "results.json" && entry !== "SHA256SUMS") {
         out.push(rel);
       }
     }
@@ -163,6 +163,7 @@ function main() {
 
   const doc = {
     format: "if07c-independent-reproduction/artifacts/v2",
+    version: PACK_IDENTITY.contentTag.replace(/^v/, ""),
     generatedAtUtc: new Date().toISOString(),
     toolchain: {
       node: process.versions.node,
@@ -188,6 +189,17 @@ function main() {
 
   const out = join(PACK_ROOT, "ARTIFACTS.json");
   writeFileSync(out, `${JSON.stringify(doc, null, 2)}\n`);
+
+  // SHA256SUMS: flat index of every declared frozen file PLUS ARTIFACTS.json
+  // itself. Present in the pack tree but NOT declared in ARTIFACTS.json
+  // files{} (and it never lists itself), so the pair is not circular and
+  // regenerating one never invalidates the other.
+  const sumsEntries = [
+    ...Object.entries(files).map(([rel, hash]) => `${hash}  ${rel}`),
+    `${sha256File(out)}  ARTIFACTS.json`,
+  ];
+  sumsEntries.sort((a, b) => a.split("  ")[1].localeCompare(b.split("  ")[1]));
+  writeFileSync(join(PACK_ROOT, "SHA256SUMS"), `${sumsEntries.join("\n")}\n`);
   console.log(`wrote ${out} (${Object.keys(files).length} files, ${Object.keys(packages).length} packages)`);
   return 0;
 }

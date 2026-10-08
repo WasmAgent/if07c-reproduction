@@ -9,20 +9,30 @@
 # This is NOT independent reproduction; it does not replace external runs.
 #
 # Usage:
-#   ./scripts/outsider-repro.sh [--tag v1.0.2] [--commit <sha>]
+#   ./scripts/outsider-repro.sh [--tag v1.2.0] [--commit <sha>]
 #   ./scripts/outsider-repro.sh --commit-only <sha>   # verify candidate before tag exists
 #   ./scripts/outsider-repro.sh --local               # skip git clone, use current tree
+#   ./scripts/outsider-repro.sh --self-test           # run only the negative controls
+#
+# Failure propagation (v1.2.1): every embedded verification block (registry
+# integrity, tarball sha256, resolved versions) exits nonzero on ANY failed
+# item, and the shell counts that into FAIL — a FAIL line can no longer hide
+# behind exit 0. The expected runner-verdict list is derived from
+# expected-results.json + fixture kinds, with an exact-coverage assertion
+# (no missing, no extra). Negative controls cover wrong integrity, download
+# failure, and version mismatch.
 #
 # Requires: git, node, npm, curl, shasum (or sha256sum), jq
 
 set -euo pipefail
 
 REPO_URL="https://github.com/WasmAgent/if07c-reproduction"
-DEFAULT_TAG="v1.0.2"
+DEFAULT_TAG="v1.2.0"
 TAG="$DEFAULT_TAG"
 COMMIT_SHA=""
 COMMIT_ONLY=false
 LOCAL_MODE=false
+SELF_TEST=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -30,6 +40,7 @@ while [[ $# -gt 0 ]]; do
     --commit) COMMIT_SHA="$2"; shift 2;;
     --commit-only) COMMIT_SHA="$2"; COMMIT_ONLY=true; shift 2;;
     --local) LOCAL_MODE=true; shift;;
+    --self-test) SELF_TEST=true; shift;;
     *) echo "Unknown argument: $1" >&2; exit 2;;
   esac
 done
@@ -70,13 +81,111 @@ echo "# IF-07c outsider reproduction rehearsal"
 echo "# Work directory: $WORK"
 echo ""
 
+# ── 0. Verification block helpers (parameterised by manifest path so the
+#       negative controls can run the SAME logic against mutated manifests) ────
+
+cat > "$WORK/registry-check.cjs" <<'JS'
+// Registry integrity check. Usage: node registry-check.cjs <manifest>
+// Exits nonzero when any package's live registry integrity differs from the
+// manifest or cannot be fetched.
+const a = JSON.parse(require("fs").readFileSync(process.argv[2], "utf8"));
+const { execFileSync } = require("child_process");
+let fails = 0, passes = 0;
+for (const [name, p] of Object.entries(a.packages ?? {})) {
+  if (!p.version) { console.log(`  SKIP  ${name}: no version`); continue; }
+  let live;
+  try {
+    live = execFileSync("npm", ["view", `${name}@${p.version}`, "dist.integrity"], { encoding: "utf8" }).trim();
+  } catch (e) {
+    console.log(`  FAIL  registry integrity fetch: ${name}: ${e.message.split("\n")[0]}`);
+    fails++; continue;
+  }
+  if (live === p.integrity) {
+    console.log(`  PASS  registry integrity: ${name}@${p.version}`);
+    passes++;
+  } else {
+    console.log(`  FAIL  registry integrity: ${name}@${p.version}  expected ${p.integrity.slice(0, 20)}… got ${live.slice(0, 20)}…`);
+    fails++;
+  }
+}
+console.log(`  Registry check: ${passes} passed, ${fails} failed`);
+process.exit(fails > 0 ? 1 : 0);
+JS
+
+cat > "$WORK/tarball-check.cjs" <<'JS'
+// Tarball SHA256 check. Usage: node tarball-check.cjs <manifest> <tarDir>
+// Exits nonzero when any tarball cannot be produced or its SHA256 differs.
+const [,, manifestPath, tarDir] = process.argv; // <manifest> <tarDir>
+const a = JSON.parse(require("fs").readFileSync(manifestPath, "utf8"));
+const { spawnSync } = require("child_process");
+const { createHash } = require("crypto");
+const { readFileSync, readdirSync, rmSync } = require("fs");
+const { join } = require("path");
+let fails = 0, passes = 0;
+for (const [name, p] of Object.entries(a.packages ?? {})) {
+  if (!p.version) continue;
+  try {
+    spawnSync("npm", ["pack", `${name}@${p.version}`, "--pack-destination", tarDir], { stdio: "pipe" });
+    const prefix = name.replace(/@/g, "").replace(/\//g, "-") + "-";
+    const files = readdirSync(tarDir).filter((f) => f.endsWith(".tgz") && f.startsWith(prefix));
+    if (!files.length) { console.log(`  FAIL  tarball pack: ${name}: no file produced`); fails++; continue; }
+    const tgz = files[0];
+    const hash = createHash("sha256").update(readFileSync(join(tarDir, tgz))).digest("hex");
+    rmSync(join(tarDir, tgz), { force: true });
+    if (hash === p.tarballSha256) {
+      console.log(`  PASS  tarball sha256: ${name}@${p.version}`);
+      passes++;
+    } else {
+      console.log(`  FAIL  tarball sha256: ${name}@${p.version}  expected ${p.tarballSha256.slice(0, 12)}… got ${hash.slice(0, 12)}…`);
+      fails++;
+    }
+  } catch (e) {
+    console.log(`  FAIL  tarball sha256: ${name}: ${e.message}`);
+    fails++;
+  }
+}
+console.log(`  Tarball check: ${passes} passed, ${fails} failed`);
+process.exit(fails > 0 ? 1 : 0);
+JS
+
+cat > "$WORK/resolved-check.cjs" <<'JS'
+// Resolved-version check. Usage: node resolved-check.cjs <manifest> <installDir>
+// Exits nonzero when any installed version differs from the manifest.
+const [,, manifestPath, instDir] = process.argv; // <manifest> <installDir>
+const a = JSON.parse(require("fs").readFileSync(manifestPath, "utf8"));
+const { readFileSync, existsSync } = require("fs");
+const { join } = require("path");
+let fails = 0, passes = 0;
+for (const [name, p] of Object.entries(a.packages ?? {})) {
+  if (!p.version) continue;
+  const pkgPath = join(instDir, "node_modules", name, "package.json");
+  if (!existsSync(pkgPath)) { console.log(`  FAIL  installed: ${name}: package.json missing`); fails++; continue; }
+  const resolved = JSON.parse(readFileSync(pkgPath, "utf8")).version;
+  if (resolved === p.version) {
+    console.log(`  PASS  resolved version: ${name}@${resolved}`);
+    passes++;
+  } else {
+    console.log(`  FAIL  resolved version: ${name}: expected ${p.version} got ${resolved}`);
+    fails++;
+  }
+}
+console.log(`  Resolved-version check: ${passes} passed, ${fails} failed`);
+process.exit(fails > 0 ? 1 : 0);
+JS
+
 # ── 1. Obtain release archive ──────────────────────────────────────────────────────
 
 echo "[1] Obtain release archive"
 
 CLONE_DIR="$WORK/pack"
 
-if $LOCAL_MODE; then
+if $SELF_TEST; then
+  echo "  self-test mode: verifying against the CURRENT tree only"
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  PACK_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+  CLONE_DIR="$PACK_ROOT"
+  result "self-test local tree" ok "using $PACK_ROOT"
+elif $LOCAL_MODE; then
   # Use the current repo (for CI or when already cloned)
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   PACK_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -101,7 +210,7 @@ cd "$CLONE_DIR"
 echo ""
 echo "[2] Verify tag/commit identity"
 
-if ! $LOCAL_MODE; then
+if ! $LOCAL_MODE && ! $SELF_TEST; then
   ACTUAL_COMMIT="$(git rev-parse HEAD)"
   echo "  HEAD commit: $ACTUAL_COMMIT"
   if [[ -n "$COMMIT_SHA" ]]; then
@@ -131,8 +240,6 @@ if [[ ! -f ARTIFACTS.json ]]; then
   echo "  FATAL: ARTIFACTS.json not found"
   exit 1
 fi
-
-ARTIFACTS="$(cat ARTIFACTS.json)"
 
 FILES_COUNT=0
 HASH_PASS=0
@@ -166,25 +273,15 @@ echo "  Files checked: $FILES_COUNT  passed: $HASH_PASS  failed: $HASH_FAIL"
 echo ""
 echo "[4] Registry metadata verification"
 
-node - <<'JS'
-const a = JSON.parse(require("fs").readFileSync("ARTIFACTS.json","utf8"));
-const {execFileSync} = require("child_process");
-for (const [name, p] of Object.entries(a.packages??{})) {
-  if (!p.version) { console.log(`  SKIP  ${name}: no version`); continue; }
-  let live;
-  try {
-    live = execFileSync("npm",["view",`${name}@${p.version}`,"dist.integrity"],{encoding:"utf8"}).trim();
-  } catch(e) {
-    console.log(`  FAIL  registry integrity fetch: ${name}: ${e.message}`);
-    continue;
-  }
-  if (live === p.integrity) {
-    console.log(`  PASS  registry integrity: ${name}@${p.version}`);
-  } else {
-    console.log(`  FAIL  registry integrity: ${name}@${p.version}  expected ${p.integrity.slice(0,20)}… got ${live.slice(0,20)}…`);
-  }
-}
-JS
+set +e
+node "$WORK/registry-check.cjs" "ARTIFACTS.json"
+REGISTRY_RC=$?
+set -e
+if [[ $REGISTRY_RC -ne 0 ]]; then
+  result "registry integrity verification" fail "exit $REGISTRY_RC (FAIL lines above)"
+else
+  result "registry integrity verification" ok
+fi
 
 # ── 5. Independently download and verify tarballs ─────────────────────────────────
 
@@ -194,32 +291,15 @@ echo "[5] Tarball SHA256 verification"
 TARBALL_TMP="$WORK/tarballs"
 mkdir -p "$TARBALL_TMP"
 
-node - "$TARBALL_TMP" <<'JS'
-const [,,tarDir] = process.argv;
-const a = JSON.parse(require("fs").readFileSync("ARTIFACTS.json","utf8"));
-const {spawnSync} = require("child_process");
-const {createHash} = require("crypto");
-const {readFileSync,readdirSync,rmSync} = require("fs");
-const {join} = require("path");
-for (const [name,p] of Object.entries(a.packages??{})) {
-  if (!p.version) continue;
-  try {
-    spawnSync("npm",["pack",`${name}@${p.version}`,"--pack-destination",tarDir],{stdio:"pipe"});
-    const files = readdirSync(tarDir).filter(f=>f.endsWith(".tgz"));
-    if (!files.length) { console.log(`  FAIL  tarball pack: ${name}: no file produced`); continue; }
-    const tgz = files[0];
-    const hash = createHash("sha256").update(readFileSync(join(tarDir,tgz))).digest("hex");
-    rmSync(join(tarDir,tgz),{force:true});
-    if (hash === p.tarballSha256) {
-      console.log(`  PASS  tarball sha256: ${name}@${p.version}`);
-    } else {
-      console.log(`  FAIL  tarball sha256: ${name}@${p.version}  expected ${p.tarballSha256.slice(0,12)}… got ${hash.slice(0,12)}…`);
-    }
-  } catch(e) {
-    console.log(`  FAIL  tarball sha256: ${name}: ${e.message}`);
-  }
-}
-JS
+set +e
+node "$WORK/tarball-check.cjs" "ARTIFACTS.json" "$TARBALL_TMP"
+TARBALL_RC=$?
+set -e
+if [[ $TARBALL_RC -ne 0 ]]; then
+  result "tarball sha256 verification" fail "exit $TARBALL_RC (FAIL lines above)"
+else
+  result "tarball sha256 verification" ok
+fi
 
 # ── 6. Install exact dependencies (clean) ────────────────────────────────────────
 
@@ -235,31 +315,31 @@ console.log(Object.entries(a.packages??{}).filter(([,p])=>p.version).map(([n,p])
 ")"
 
 echo "  Installing: $INSTALL_ARGS"
+set +e
 (
   cd "$INSTALL_TMP"
   npm init -y >/dev/null 2>&1
-  npm install --ignore-scripts $INSTALL_ARGS 2>&1 | tail -3 | sed 's/^/  /'
+  npm install --ignore-scripts $INSTALL_ARGS > "$WORK/npm-install.log" 2>&1
 )
-result "clean npm install" ok
+NPM_RC=$?
+set -e
+tail -3 "$WORK/npm-install.log" | sed 's/^/  /'
+if [[ $NPM_RC -ne 0 ]]; then
+  result "clean npm install" fail "exit $NPM_RC"
+else
+  result "clean npm install" ok
+fi
 
-# Verify resolved versions
-node - "$INSTALL_TMP" <<'JS'
-const [,,instDir] = process.argv;
-const a = JSON.parse(require("fs").readFileSync("ARTIFACTS.json","utf8"));
-const {readFileSync,existsSync} = require("fs");
-const {join} = require("path");
-for (const [name,p] of Object.entries(a.packages??{})) {
-  if (!p.version) continue;
-  const pkgPath = join(instDir,"node_modules",name,"package.json");
-  if (!existsSync(pkgPath)) { console.log(`  FAIL  installed: ${name}: package.json missing`); continue; }
-  const resolved = JSON.parse(readFileSync(pkgPath,"utf8")).version;
-  if (resolved===p.version) {
-    console.log(`  PASS  resolved version: ${name}@${resolved}`);
-  } else {
-    console.log(`  FAIL  resolved version: ${name}: expected ${p.version} got ${resolved}`);
-  }
-}
-JS
+echo "  Verifying resolved versions …"
+set +e
+node "$WORK/resolved-check.cjs" "ARTIFACTS.json" "$INSTALL_TMP"
+RESOLVED_RC=$?
+set -e
+if [[ $RESOLVED_RC -ne 0 ]]; then
+  result "resolved version verification" fail "exit $RESOLVED_RC (FAIL lines above)"
+else
+  result "resolved version verification" ok
+fi
 
 # ── 7. Execute runner ────────────────────────────────────────────────────────────────
 
@@ -305,22 +385,107 @@ else
   result "runner exits 0" fail "exit $RUN_EXIT"
 fi
 
-for CLAIM in "C1: PASS" "C2: PASS" "C3: PASS" "N1: BOUNDARY-HELD" "N2: BOUNDARY-HELD" "N3: BOUNDARY-HELD" "N4: BOUNDARY-HELD"; do
+# Expected verdicts are DERIVED from expected-results.json + fixture kinds, so
+# the rehearsal tracks the current case set instead of a hardcoded list.
+echo "  Deriving expected verdicts from expected-results.json + fixtures …"
+CLAIM_LIST="$(node -e '
+const e = JSON.parse(require("fs").readFileSync("expected-results.json","utf8"));
+const { readFileSync } = require("fs");
+const list = Object.entries(e.claims ?? {}).map(([id, c]) => {
+  const f = JSON.parse(readFileSync(c.fixture, "utf8"));
+  return id + ": " + (f.kind === "negative" ? "BOUNDARY-HELD" : "PASS");
+}).sort();
+if (new Set(list).size !== list.length) { console.error("duplicate claim ids"); process.exit(1); }
+console.log(list.join("\n"));
+')" || { echo "  FATAL: could not derive expected verdicts"; exit 1; }
+
+while IFS= read -r CLAIM; do
+  [[ -z "$CLAIM" ]] && continue
   if grep -qF "$CLAIM" "$WORK/runner-output.txt"; then
     result "verdict: $CLAIM" ok
   else
     result "verdict: $CLAIM" fail "not found in output"
   fi
-done
+done <<< "$CLAIM_LIST"
 
-# ── 8–10. Summary ───────────────────────────────────────────────────────────────────
+# Reverse coverage: the runner must not report verdicts outside the expected
+# set (exact set equality — no missing, no extra, no duplicates).
+EXPECTED_SORTED="$(printf '%s\n' "$CLAIM_LIST" | sed '/^$/d' | sort)"
+OBSERVED_SORTED="$(grep -oE '^[A-Za-z0-9]+: (PASS|BOUNDARY-HELD|BOUNDARY-BROKEN|FAIL)' "$WORK/runner-output.txt" | sort -u)"
+if [[ "$OBSERVED_SORTED" == "$EXPECTED_SORTED" ]]; then
+  result "verdict coverage exact (no missing, no extra)" ok "($(printf '%s\n' "$CLAIM_LIST" | grep -c .) claims)"
+else
+  result "verdict coverage exact (no missing, no extra)" fail "runner verdict set differs from expected set"
+  diff <(printf '%s\n' "$EXPECTED_SORTED") <(printf '%s\n' "$OBSERVED_SORTED") | sed 's/^/    /' || true
+fi
+
+# ── 8. Negative controls (self-test of the verification blocks) ─────────────────
 
 echo ""
-echo "[8] Environment"
+echo "[8] Negative controls (verification blocks must reject tampering)"
+
+NC_TMP="$WORK/negative-controls"
+mkdir -p "$NC_TMP/tarballs" "$NC_TMP/fake-install/node_modules/@wasmagent/core"
+nc() {
+  local label="$1" rc="$2"
+  if [[ $rc -ne 0 ]]; then
+    result "$label" ok "correctly rejected"
+  else
+    result "$label" fail "control passed but should have failed"
+  fi
+}
+
+# NC1: wrong registry integrity → registry check must exit nonzero
+node -e '
+const fs = require("fs");
+const a = JSON.parse(fs.readFileSync("ARTIFACTS.json", "utf8"));
+if (a.packages?.["@wasmagent/core"]) a.packages["@wasmagent/core"].integrity = "sha512-" + "A".repeat(88) + "==";
+fs.writeFileSync(process.argv[1], JSON.stringify(a, null, 2));
+' "$NC_TMP/manifest-nc1.json"
+set +e
+node "$WORK/registry-check.cjs" "$NC_TMP/manifest-nc1.json" > /dev/null 2>&1
+NC1_RC=$?
+set -e
+nc "NC1: wrong integrity → registry check fails" "$NC1_RC"
+
+# NC2: nonexistent version → tarball check must exit nonzero (download failure)
+node -e '
+const fs = require("fs");
+const a = JSON.parse(fs.readFileSync("ARTIFACTS.json", "utf8"));
+if (a.packages?.["@wasmagent/core"]) a.packages["@wasmagent/core"].version = "999.999.999";
+fs.writeFileSync(process.argv[1], JSON.stringify(a, null, 2));
+' "$NC_TMP/manifest-nc2.json"
+set +e
+node "$WORK/tarball-check.cjs" "$NC_TMP/manifest-nc2.json" "$NC_TMP/tarballs" > /dev/null 2>&1
+NC2_RC=$?
+set -e
+nc "NC2: nonexistent version → tarball check fails (download failure)" "$NC2_RC"
+
+# NC3: version mismatch → resolved-version check must exit nonzero
+node -e '
+const fs = require("fs");
+const path = require("path");
+const [manifestPath, fakeInstall] = process.argv.slice(1); // node -e: argv[1] is the first following arg
+const a = JSON.parse(fs.readFileSync("ARTIFACTS.json", "utf8"));
+if (a.packages?.["@wasmagent/core"]) a.packages["@wasmagent/core"].version = "3.9.999";
+fs.writeFileSync(manifestPath, JSON.stringify(a, null, 2));
+fs.mkdirSync(path.join(fakeInstall, "node_modules/@wasmagent/core"), { recursive: true });
+fs.writeFileSync(path.join(fakeInstall, "node_modules/@wasmagent/core/package.json"), JSON.stringify({ name: "@wasmagent/core", version: "3.9.0" }));
+' "$NC_TMP/manifest-nc3.json" "$NC_TMP/fake-install"
+set +e
+node "$WORK/resolved-check.cjs" "$NC_TMP/manifest-nc3.json" "$NC_TMP/fake-install" > /dev/null 2>&1
+NC3_RC=$?
+set -e
+nc "NC3: version mismatch → resolved-version check fails" "$NC3_RC"
+
+# ── 9–11. Summary ───────────────────────────────────────────────────────────────────
+
+echo ""
+echo "[9] Environment"
 echo "  node: $NODE_VER"
 echo "  npm:  $NPM_VER"
 echo "  os:   $OS_INFO"
-if ! $LOCAL_MODE; then
+if ! $LOCAL_MODE && ! $SELF_TEST; then
   echo "  clone tag:    $TAG"
   echo "  HEAD commit:  $(git rev-parse HEAD 2>/dev/null || echo unknown)"
 fi
