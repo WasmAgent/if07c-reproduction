@@ -298,6 +298,21 @@ function checkCleanInstall(artifacts) {
   return ok;
 }
 
+// ── Expected verdicts (data-driven) ─────────────────────────────────────────────
+// Derived from expected-results.json so the audit tracks the current case set:
+// kind=positive claims must report PASS, kind=negative claims must report
+// BOUNDARY-HELD. Replaces the former hardcoded 7-claim list.
+function expectedVerdicts() {
+  const expected = JSON.parse(readFileSync(join(PACK_ROOT, "expected-results.json"), "utf8"));
+  return Object.entries(expected.claims ?? {})
+    .map(([id, c]) => {
+      // kind lives in the fixture (inputs file), not in expected-results.json
+      const fixture = JSON.parse(readFileSync(join(PACK_ROOT, c.fixture), "utf8"));
+      return { id, verdict: fixture.kind === "negative" ? "BOUNDARY-HELD" : "PASS" };
+    })
+    .sort((a, b) => a.id.localeCompare(b.id));
+}
+
 // ── Section F: Execute the runner ────────────────────────────────────────────────
 
 function checkRunnerExecution(artifacts) {
@@ -331,15 +346,7 @@ function checkRunnerExecution(artifacts) {
     if (!runOk) ok = false;
 
     const output = result.stdout ?? "";
-    const EXPECTED_VERDICTS = [
-      { id: "C1", verdict: "PASS" },
-      { id: "C2", verdict: "PASS" },
-      { id: "C3", verdict: "PASS" },
-      { id: "N1", verdict: "BOUNDARY-HELD" },
-      { id: "N2", verdict: "BOUNDARY-HELD" },
-      { id: "N3", verdict: "BOUNDARY-HELD" },
-      { id: "N4", verdict: "BOUNDARY-HELD" },
-    ];
+    const EXPECTED_VERDICTS = expectedVerdicts();
     for (const { id, verdict } of EXPECTED_VERDICTS) {
       const found = output.includes(`${id}: ${verdict}`);
       check(`verdict: ${id} ${verdict}`, found, found ? "" : "not found in output");
@@ -393,8 +400,7 @@ function runnerOutputNegativeControl(label, mockRunnerContent) {
     const result = spawnSync("node", ["runner/run.mjs"], { cwd: tmp, encoding: "utf8", timeout: 10000 });
     const exitOk = result.status === 0;
     const output = result.stdout ?? "";
-    const ALL_VERDICTS = ["C1: PASS", "C2: PASS", "C3: PASS",
-      "N1: BOUNDARY-HELD", "N2: BOUNDARY-HELD", "N3: BOUNDARY-HELD", "N4: BOUNDARY-HELD"];
+    const ALL_VERDICTS = expectedVerdicts().map(({ id, verdict }) => `${id}: ${verdict}`);
     const verdictsOk = ALL_VERDICTS.every((v) => output.includes(v));
     // section F passes only if exit=0 AND all verdicts present; we expect it to fail
     const controlOk = !(exitOk && verdictsOk);
