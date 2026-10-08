@@ -1,1 +1,205 @@
-IyBJRi0wN2MgaW5kZXBlbmRlbnQgcmVwcm9kdWN0aW9uIHBhY2sgKHYxLjQuMCkKCkFueW9uZSBjYW4gcnVuIHRoaXMgcGFjayBhZ2FpbnN0ICoqcHVibGlzaGVkIG5wbSBhcnRpZmFjdHMqKiDigJQgbm8gd2FzbWFnZW50LWpzCm1vbm9yZXBvIGNvZGUsIG5vIHRlc3QgaGVscGVycywgbm8gaW50ZXJuYWwgYXNzZXJ0aW9uIGltcGxlbWVudGF0aW9uLiBJdApleGVjdXRlcyBlaWdodGVlbiBQT1NJVElWRSBzZWN1cml0eSBjbGFpbXMgYW5kIHNldmVuIE5FR0FUSVZFIGJvdW5kYXJ5IGNsYWltcywKYW5kIHByaW50cyBvbmUgdmVyZGljdCBwZXIgY2xhaW0gKGRlbGliZXJhdGVseSAqKm5vKiogYWdncmVnYXRlCiJzZWN1cmUvaW5zZWN1cmUiIGNvbmNsdXNpb24g4oCUIHNlZSBgQ0xBSU0tQk9VTkRBUlkubWRgKS4KClRoaXMgY29udGVudCB2ZXJzaW9uIGJ1aWxkcyBvbiB0aGUgdjEuMC54IGhhcmRlbmVkIGJhc2UgKHByZXB1Ymxpc2ggYXVkaXQsCm91dHNpZGVyIHJlaGVhcnNhbCwgcmVsZWFzZS1jYW5kaWRhdGUgZ2F0ZSk7IHRoZSBzZXZlbiB2MS4wIGNsYWltcyBhcmUKdW5jaGFuZ2VkIGFuZCBzZXZlbnRlZW4gY2xhaW0gY2FzZXMgYXJlIG5ldyAoMTgtY2FzZSB2MS4xLjAgc2V0ICsgcGVybWlzc2lvbi1tb2RlbCBwYWlycykuIFNlZSB0aGUgY2FzZS1zZXQgaWRlbnRpdHkgaW4KYEFSVElGQUNUUy5qc29uYCDihpIgYGNhc2VTZXRgLgoKYGBgdGV4dApQT1NJVElWRSAoUEFTUy9GQUlMKQpDMSAgdW5sYWJlbGVkIGJlbmlnbiBmbG93IOKGkiBubyBpbnRlcmZlcmVuY2UgICAgICAgICAgICAgICAgICAgICAgKFIwMSkKQzIgIGxhYmVsZWQgcmVhZCDihpIgbGF0ZXIgZGVueS1zaW5rIGNhbGwg4oaSIGRlbmllZCBhdXRvbWF0aWNhbGx5ICAgKFIwMikKQzMgIGxhYmVsZWQgcmVzdWx0IHRyYW5zZm9ybWVkIGluc2lkZSBhIGxhYmVsZWQgdG9vbCDihpIgcmVuYW1lZAogICAgZm9yd2FyZCDihpIgc3RpbGwgZGVuaWVkIHZpYSBwcm92ZW5hbmNlL2lkZW50aXR5ICAgICAgICAgICAgICAgKFIwMykKQzQgIGxhYmVsZWQgc2VjcmV0IG5lc3RlZCB2ZXJiYXRpbSBpbiB0aGUgc2luayBhcmdzIOKGkiBkZW5pZWQgICAgIChSMDMpCkQxICB1bmtub3duIHRvb2wgZGVzY3JpcHRvciDihpIgZmFpbC1jbG9zZWQgZGVueSwgemVybyBleGVjdXRpb25zICAoUjA0KQpEMiAgZ2F0ZXdheSBlc2NhbGF0aW9uLCBubyBhcHByb3ZhbCBmYWNpbGl0eSDihpIgZmFpbC1jbG9zZWQgZGVueSwKICAgIHplcm8gZXhlY3V0aW9ucyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoUjA1KQpEM2Egc2FtZSBlc2NhbGF0aW9uLCBhcHByb3ZlZCB2aWEgdGhlIGNoZWNrcG9pbnRlciBBUEkg4oaSIGV4ZWN1dGVzIChSMDYpCkQzYiBzYW1lIGVzY2FsYXRpb24sIHJlamVjdGVkIOKGkiB6ZXJvIGV4ZWN1dGlvbnMsIHJ1biBlbmRzICAgICAgICAoUjA2KQpMMSAgbGVnYWwgbmVnYXRpdmU6IGluIGEgdGFpbnRlZCBydW4gYmVuaWduIG5vbi1zaW5rIHRvb2xzIHN0aWxsCiAgICBleGVjdXRlOyBvbmx5IHRoZSBkZWNsYXJlZCBkZW55LXNpbmsgaXMgYmxvY2tlZCAgICAgICAgICAgICAgKFIwOSkKUDEgIHBlcm1pc3Npb24gcGFpcjogZ3JhbnRlZCBjcm9zcy10ZW5hbnQgc3VwcG9ydCByZWFkIGFsbG93ZWQ7CiAgICBjcm9zcy10ZW5hbnQgcmVmZXJlbmNlIGRlbmllZCBieSB0ZW5hbnQgaXNvbGF0aW9uICAgICAgICAgICAgKE9XQVNQIzQ0KQpQMiAgcGVybWlzc2lvbiBwYWlyOiB0ZW5hbnQtb3BlbiByZWFkIGFsbG93ZWQ7IGNhcGFiaWxpdHktZ2F0ZWQKICAgIHdyaXRlIGV4ZWN1dGVzIG9ubHkgd2l0aCBncmFudCArIHNjb3BlZCBjb25zZW50ICAgICAgICAgICAgICAoT1dBU1AjNDQpClAyYiB0d2luOiBzYW1lIHdyaXRlIHdpdGggTk8gZ3JhbnQgZGVuaWVkIGV2ZW4gdGhvdWdoIGNvbnNlbnQKICAgIGV4aXN0cyBmb3IgYW5vdGhlciBwcmluY2lwYWwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoT1dBU1AjNDQpClAzICBwZXJtaXNzaW9uIHBhaXI6IGRlc2NyaXB0b3Itb25seSB0b29sIHVzYWJsZSBvbiBhbiBvcGVyYXRvci0KICAgIFZFUklGSUVEIHNlcnZlciBib3VuZGFyeSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoT1dBU1AjNDQpClAzYiB0d2luOiBzYW1lIHRvb2wgcmVmdXNlZCBvbiBhbiB1bnZlcmlmaWVkIGJvdW5kYXJ5IHdpdGggYQogICAgZGVueS1vbi11bnByb2ZpbGVkIHBvbGljeSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIChPV0FTUCM0NCkKUDQgIHBlcm1pc3Npb24gcGFpcjogZGVsaWJlcmF0ZWx5IHB1YmxpYyByb3V0ZSBhbGxvd2VkOyBpbnRlcm5hbAogICAgcm91dGUgZGVuaWVkIGJ5IHRoZSBvcGVyYXRvcidzIGN1c3RvbSBydWxlIChnYXRld2F5IHRoZW4gcnVucwogICAgd2l0aCBzZWN1cml0eVByb2ZpbGUgImN1c3RvbSIpICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIChPV0FTUCM0NCkKCk5FR0FUSVZFIC8gYm91bmRhcnkgY2VpbGluZ3MgKEJPVU5EQVJZLUhFTEQvQk9VTkRBUlktQlJPS0VOKQpOMSAgdW53aXJlZCBhZ2VudCDihpIgZ2F0ZSBkb2VzIG5vdCBhdXRvLWZpcmUgICAgICAgICAgICAgICAgICAgICAgKFItY2VpbGluZykKTjIgIG5vIHJlc3VsdFRhaW50TGFiZWxzIHByb2ZpbGUg4oaSIHJ1bnRpbWUgaW52ZW50cyBubyBsYWJlbHMgICAgIChSLWNlaWxpbmcpCk4zICBjcm9zcy1ydW4gcmV1c2Ug4oaSIHByZXZpb3VzIHJ1bidzIGxlZGdlciBkb2VzIG5vdCBzdXJ2aXZlICAgICAoUjA3KQpONCAgbW9kZWwtc2lkZSB0cmFuc2Zvcm0g4oaSIGlkZW50aXR5IHJ1bGUgZG9lcyBub3QgZmlyZQogICAgKE5PVF9FU1RBQkxJU0hFRCBib3VuZGFyeSwgcGlubmVkIGFzIGV4ZWN1dGFibGUpICAgICAgICAgICAgIChSMDMpClMxICBEQUcgc2NoZWR1bGVyOiBsYXRlci1zdGVwIHNpbmsgZGVuaWVkICAgICAgICAgICAgICAgICAgICAgICAgKFIwOCkKUzIgIHBhcmFsbGVsIHNjaGVkdWxlcjogaWRlbnRpY2FsIGxhdGVyLXN0ZXAgZGVuaWFsICAgICAgICAgICAgICAoUjA4KQpTMyAgc2FtZS1iYXRjaCAkcmVmIGRhdGFmbG93OiBubyBwcm92ZW5hbmNlIHJ1bGUgZmlyZXM7IHRoZSByYXcKICAgIHJlc3VsdCBvYmplY3Qgc3Vic3RpdHV0aW9uIGZhaWxzIHRoZSBzaW5rJ3Mgc3RyaW5nIHNjaGVtYSwKICAgIHNvIHRoZSBzaW5rIG5ldmVyIGV4ZWN1dGVzIOKAlCBmYWlsLXNhZmUgYnkgdHlwaW5nLCBub3QgYnkKICAgIHRhaW50IHBvbGljeSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoUjA4KQpFMSAgbGVkZ2VyIG92ZXJmbG93IChkZWZhdWx0IGNhcCA1MTIpOiBvbGRlc3Qgc2Vuc2l0aXZlIGVudHJ5CiAgICBldmljdGVkIOKGkiBpZGVudGl0eSB0cmFja2luZyBkZWdyYWRlcywgbGFiZWwgY29udGFpbm1lbnQKICAgIHBlcnNpc3RzICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoZXZpY3Rpb24pCkUyICBldmljdGlvbiBwcmVmZXJzIG5vbi1zZW5zaXRpdmUgZW50cmllcyBiZWZvcmUgYW55IHNlbnNpdGl2ZQogICAgb25lICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIChldmljdGlvbikKUzQgIHNhbWUtYmF0Y2ggJHJlZiBpbnRvIGFuIG9iamVjdC1hY2NlcHRpbmcgbmV0d29yayBzaW5rIGlzCiAgICBERU5JRUQgYXQgZGlzcGF0Y2gtdGltZSByZS1ldmFsdWF0aW9uIOKAlCByZWdyZXNzaW9uIGd1YXJkCiAgICBmb3IgdGhlIGNvcmUgMy4xMC4wIGZpeCAodjEuMy4wIG1lYXN1cmVkIHRoZSBsZWFrIHRoaXMKICAgIGNhc2Ugbm93IGd1YXJkcyBhZ2FpbnN0KSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICgjNTAzLyM1MDUpCmBgYAoKVGhlIGBSMHhgIHRhZ3MgbWFwIHRoaXMgc2V0IG9udG8gdGhlIDIwMjYtMTAtMDggYWN0aW9uLXBsYW4gY2FzZSB0YWJsZQooUjAx4oCTUjA5KTsgdGhlIG1hcHBpbmcgaXMgcmVjb3JkZWQgaW4gYGV4cGVjdGVkLXJlc3VsdHMuanNvbmAg4oaSCmBjYXNlU2V0Lm1hcHBpbmdUb0FjdGlvblBsYW5gLgoKIyMgUnVuIGl0ICh0aGlyZC1wYXJ0eSBwcm9jZWR1cmUpCgpgYGBiYXNoCiMgMS4gY2xlYW4gcHJvamVjdCwgbG9ja2VkIGRlcGVuZGVuY3kgdHJlZSAocGFja2FnZS5qc29uIHBpbnMKIyAgICB6b2RANC42LjUsIEB3YXNtYWdlbnQvY29yZUAzLjEwLjAsIEB3YXNtYWdlbnQvbWNwLWZpcmV3YWxsQDIuMy4wLAojICAgIEB3YXNtYWdlbnQvbWNwLWdhdGV3YXlAMC4yLjA7IHBhY2thZ2UtbG9jay5qc29uIHBpbnMgdHJhbnNpdGl2ZXMpCm1rZGlyIGlmMDdjLXJlcHJvICYmIGNkIGlmMDdjLXJlcHJvCgojIDIuIGNvcHkgdGhlIHBhY2sgaW4gKGZpeHR1cmVzLywgcnVubmVyLywgc2NyaXB0cy8sIHByb2ZpbGUuanNvbiwKIyAgICBleHBlY3RlZC1yZXN1bHRzLmpzb24sIENMQUlNLUJPVU5EQVJZLm1kLCBwYWNrYWdlLmpzb24sCiMgICAgcGFja2FnZS1sb2NrLmpzb24sIFNIQTI1NlNVTVMpIGFuZCBpbnN0YWxsIHRoZSBsb2NrZWQgdHJlZQpucG0gY2kKCiMgMy4gZXhlY3V0ZQpub2RlIHJ1bm5lci9ydW4ubWpzICAgICAgICAjIHBlci1jbGFpbSB2ZXJkaWN0cyArIHJlc3VsdHMuanNvbjsgZXhpdCAwID0gYWxsIG1hdGNoZWQKCiMgNC4gKG1haW50YWluZXIpIHJlLWZyZWV6ZSBBUlRJRkFDVFMuanNvbiArIFNIQTI1NlNVTVMgYWZ0ZXIgYW55IHBhY2sgZWRpdApub2RlIHNjcmlwdHMvYnVpbGQtYXJ0aWZhY3RzLm1qcyAtLXByZWZpeCAuCmBgYAoKVGhlIHJ1bm5lciBhbHNvIHdyaXRlcyBgcmVzdWx0cy5qc29uYCAocGF0aCBvdmVycmlkYWJsZSB2aWEKYElGMDdDX1JFU1VMVFNfUEFUSGApIGNvbnRhaW5pbmcgdGhlIG9ic2VydmVkIGRlY2lzaW9ucywgcGVyLXRvb2wgZXhlY3V0aW9uCmNvdW50cywgZGVueSBydWxlIElEcywgaHVtYW4tYXBwcm92YWwgZXZlbnRzLCBldmVyeSBwcm9ibGVtIGxpbmUsIGFuZCBhCnBlcm1pc3Npb25TdGF0cyBibG9jayBmb3IgdGhlIFAtZmFtaWx5IChnYXRlIGhpdHMsIGNvbmZpcm1lZCB2aW9sYXRpb25zLApsZWdpdC1idXQtYmxvY2tlZCDigJQgd2hpY2ggbXVzdCBiZSB6ZXJvIOKAlCBhbmQgYWxsb3dlZCBkZWNpc2lvbnMpLgoqKkRlbnkgY2FzZXMgYXNzZXJ0IHplcm8gc2lkZS1lZmZlY3QgY291bnRzKiog4oCUIGEgZGVueSB0ZXh0IHdpdGhvdXQgYSB6ZXJvCmV4ZWN1dGlvbiBjb3VudCBkb2VzIG5vdCBwYXNzLCBhbmQgYmVuaWduIGNhc2VzIGFzc2VydCByZWFsIGV4ZWN1dGlvbnMgc28gYW4KYWxsLWRlbnkgcnVuIGNhbm5vdCBsb29rIGdyZWVuLgoKIyMgVmVyaWZ5aW5nIGEgcnVuIHJlY29yZCAod2hhdCBhIHRoaXJkIHBhcnR5IHNob3VsZCBjaGVjaykKCj4gKipEbyBub3QgdHJ1c3QgYEFSVElGQUNUUy5qc29uYCBhbG9uZS4qKiBJdCBpcyBhIGNvbnZlbmllbmNlIHJlY29yZCwgbm90IGEKPiByb290IG9mIHRydXN0LiBJbmRlcGVuZGVudGx5IGZldGNoIG5wbSBtZXRhZGF0YSAoYG5wbSB2aWV3IDxwa2c+QDx2ZXJzaW9uPgo+IGRpc3QuaW50ZWdyaXR5YCkgYW5kIHRoZSB0YXJiYWxscywgY29tcGFyZSB0aGVtIGFnYWluc3QgdGhlIGBwYWNrYWdlc3t9YAo+IGJsb2NrLCBhbmQgcmVjb21wdXRlIHRoZSBgZmlsZXN7fWAgaGFzaGVzIGFnYWluc3QgeW91ciBjb3B5IG9mIHRoZSBwYWNrLgoKMS4gYEFSVElGQUNUUy5qc29uYCDihpIgYGZpbGVze31gIGhhc2hlcyBtdXN0IG1hdGNoIHRoZSBwYWNrIGNvcHkgeW91IHJhbi4KMi4gYEFSVElGQUNUUy5qc29uYCDihpIgYHBhY2thZ2Vze31gIG11c3QgbWF0Y2ggeW91ciBpbnN0YWxsZWQgdmVyc2lvbnM7IHZlcmlmeQogICBgaW50ZWdyaXR5YCB3aXRoIGBucG0gdmlldyA8cGtnPkA8dmVyc2lvbj4gZGlzdC5pbnRlZ3JpdHlgIGFuZCB0aGUgdGFyYmFsbAogICBTSEEyNTYgYnkgZG93bmxvYWRpbmcgaXQgeW91cnNlbGYg4oCUIGRvIG5vdCB0cnVzdCB0aGUgcGFjaydzIG93biByZWNvcmQuCjMuIFRoZSBydW5uZXIgaGVhZGVyIG11c3QgcHJpbnQgdGhlIHNhbWUgYXJ0aWZhY3QgdmVyc2lvbnMgeW91IGluc3RhbGxlZC4KNC4gT25seSB0aGVuIGFyZSB0aGUgcGVyLWNsYWltIHZlcmRpY3RzIGF0dHJpYnV0YWJsZSB0byB0aGUgcGlubmVkIGFydGlmYWN0cy4KCiMjIEludGVycHJldGF0aW9uCgotIGBQQVNTYCBvbiB0aGUgcG9zaXRpdmUgY2xhaW1zIChDL0QvTCBmYW1pbGllcyk6IHRoZSBzZWN1cml0eSBwcm9wZXJ0aWVzCiAgaGVsZCBvbiB0aGVzZSBmaXh0dXJlcy4KLSBgQk9VTkRBUlktSEVMRGAgb24gdGhlIG5lZ2F0aXZlIGNsYWltcyAoTi9TL0UgZmFtaWxpZXMpOiB0aGUgZ2F0ZSBkaWQKICBleGFjdGx5IHdoYXQgdGhlIGRvY3VtZW50ZWQgY2xhaW0gY2VpbGluZyBzYXlzLgotIEFueXRoaW5nIGVsc2U6IHRoZSBydW4gZGl2ZXJnZXMgZnJvbSB0aGUgY2xhaW1zIOKAlCByZWNvcmQgdGhlIGZ1bGwgb3V0cHV0LAogIGByZXN1bHRzLmpzb25gLCB0aGUgYXJ0aWZhY3QgdmVyc2lvbnMsIGFuZCB0aGUgYEFSVElGQUNUUy5qc29uYCB5b3UKICB2ZXJpZmllZCBhZ2FpbnN0LgoKVGhlIGNsYWltIGJvdW5kYXJ5IChpbmNsdWRpbmcgd2hhdCBhIGdyZWVuIHJ1biBkb2VzIE5PVCBwcm92ZSDigJQgYWRhcHRpdmUKYWR2ZXJzYXJpYWwgY29tcGxldGVuZXNzLCBkZWZhdWx0LW9uIGJlaGF2aW9yLCBETFAsIHByb2R1Y3Rpb24KZmFsc2UtcG9zaXRpdmUgcmF0ZSwgaW5kZXBlbmRlbnQgY2VydGlmaWNhdGlvbikgbGl2ZXMgaW4KYENMQUlNLUJPVU5EQVJZLm1kYC4gVGhlIHBsYW50ZWQgc2VjcmV0IGlzIHRoZSBoYXJuZXNzIGNvbnN0YW50CmBzbW9rZS1zZWNyZXQtdmFsdWUtNDAyMS1hbHBoYWA7IGZpeHR1cmVzIHJlZmVyZW5jZSBpdCBzeW1ib2xpY2FsbHkgdmlhCmBfX2Rlcml2ZV9fYCwgc28gZml4dHVyZSBoYXNoZXMgZG8gbm90IGVtYmVkIGl0LgoKIyMgTGF5b3V0CgpgYGB0ZXh0CnJ1bm5lci9ydW4ubWpzICAgICAgICAgICAgICAgIHNpbmdsZS1maWxlIHJ1bm5lciAobWVjaGFuaXNtICsgdmVyZGljdHMgKyByZXN1bHRzLmpzb24pCmZpeHR1cmVzLyouanNvbiAgICAgICAgICAgICAgIGlucHV0cyBvbmx5IChjYWxsIHNjcmlwdHMgLyBwcm9iZSBkZWZpbml0aW9ucykKZXhwZWN0ZWQtcmVzdWx0cy5qc29uICAgICAgICAgdGhlIHNpbmdsZSBzb3VyY2Ugb2YgYXNzZXJ0aW9ucyAoKyBjYXNlLXNldCBpZGVudGl0eSkKcHJvZmlsZS5qc29uICAgICAgICAgICAgICAgICAgb3BlcmF0b3ItYXV0aG9yaXRhdGl2ZSBsYWJlbHMvc2lua3MgZGVjbGFyYXRpb25zICh2MikKQ0xBSU0tQk9VTkRBUlkubWQgICAgICAgICAgICAgcHJvdmVzIC8gZG9lcy1ub3QtcHJvdmUgLyB2ZXJkaWN0IHZvY2FidWxhcnkKcGFja2FnZS5qc29uIC8gcGFja2FnZS1sb2NrLmpzb24gIGV4YWN0IGRlcGVuZGVuY3kgcGlucyDigJQgaW5zdGFsbCB3aXRoIGBucG0gY2lgClNIQTI1NlNVTVMgICAgICAgICAgICAgICAgICAgIGZsYXQgaGFzaCBpbmRleCAoZnJvemVuIHNldCArIEFSVElGQUNUUy5qc29uOyBleGNsdWRlcyBpdHNlbGYpCnNjcmlwdHMvYnVpbGQtYXJ0aWZhY3RzLm1qcyAgIHJlZ2VuZXJhdGVzIEFSVElGQUNUUy5qc29uICsgU0hBMjU2U1VNUyAoaGFzaGVzLCB0YXJiYWxscywgaWRlbnRpdHkpCnNjcmlwdHMvcHJlcHVibGlzaC1hdWRpdC5tanMgIG1haW50YWluZXIgcHJlLXJlbGVhc2UgY2xvc3VyZSBhdWRpdApzY3JpcHRzL291dHNpZGVyLXJlcHJvLnNoICAgICBtYWludGFpbmVyIGNsZWFuLXJvb20gb3V0c2lkZXIgcmVoZWFyc2FsCmRvY3MvVjEuMC4wLUVYVEVSTkFMLUZJTkRJTkdTLm1kICBmcm96ZW4gcmVjb3JkIG9mIHYxLjAuMCBleHRlcm5hbCBmaW5kaW5ncwpkb2NzL1YxLjAuMS1QUkVQVUJMSVNILUdBVEUtRkFJTFVSRS5tZCAgZnJvemVuIHJlY29yZCBvZiB0aGUgdjEuMC4xIGdhdGUgZmFpbHVyZQpBUlRJRkFDVFMuanNvbiAgICAgICAgICAgICAgICBmcm96ZW4gYXJ0aWZhY3QgKyBmaWxlIGhhc2ggcmVjb3JkIChmb3JtYXQgdjIpCnJ1bnMvICAgICAgICAgICAgICAgICAgICAgICAgIGFyY2hpdmVkIHJ1biByZWNvcmRzCmBgYAoKIyMgU2NvcGUgY2VpbGluZ3MgKHVuY2hhbmdlZCkKClJ1bi1zY29wZWQgbGVkZ2VyIG9ubHkgKE4zKTsgb3B0LWluIHdpcmluZyBvbmx5IChOMSk7IG5vIERMUCAoTjIsIE40KTsKQ29kZUFnZW50IGxvb3Agb3V0IG9mIHNjb3BlOyBubyBwcm9kdWN0aW9uIGZhbHNlLXBvc2l0aXZlIGRhdGE7IGluZGVwZW5kZW50CnNlY3VyaXR5IGNlcnRpZmljYXRpb24gaXMgbm90IGVzdGFibGlzaGVkIGJ5IHRoaXMgb3IgYW55IHBhY2suIE5ldyBpbgp2MS4xLjA6IGlkZW50aXR5IHRyYWNraW5nIGlzIGJvdW5kZWQtbWVtb3J5IGFuZCBpdHMgZXZpY3Rpb24gYmVoYXZpb3IgaXMKcGlubmVkIGFzIGFuIGV4ZWN1dGFibGUgY2VpbGluZyAoRTEvRTIpLCBhbmQgc2FtZS1iYXRjaCBgJHJlZmAgZGF0YWZsb3cgaXMKZG9jdW1lbnRlZCBhcyBvdXRzaWRlIHRoZSB3aG9sZS1ydW4gdGhyZWFkaW5nIHByb3RlY3Rpb24gKFMzKS4gTmV3IGluCnYxLjIuMDogdGhlIHBlcm1pc3Npb24tbW9kZWwgcGFpcnMgKFAx4oCTUDRiKSBwaW4gb3BlcmF0b3ItZGVjbGFyZWQKcGVybWlzc2lvbiBpbnRlbnQgYXQgdGhlIHB1Ymxpc2hlZC1nYXRld2F5IGRlY2lzaW9uIGxldmVsOyB0aGUgZGVyaXZlZApleHBlY3RhdGlvbnMgZm9yIFAyL1AyYiBhbmQgUDNiIHdlcmUgcmVmdXRlZCBkdXJpbmcgZGV2ZWxvcG1lbnQgKGdyYW50cyBhcmUKZml4dHVyZS1zY29wZWQ7IHRoZSB1bnByb2ZpbGVkLXRvb2wgcnVsZSBhZGp1ZGljYXRlcyBvbmx5IHJlYWQtY2xhc3NpZmllZAp0b29scykgYW5kIHJlLWZyb3plbiBmcm9tIG9ic2VydmVkIGJlaGF2aW9yIHBsdXMgdGhlIHB1Ymxpc2hlZCBkaXN0Lgp2MS4zLjAgcGlubmVkIHRoZSBzYW1lLWJhdGNoIGAkcmVmYCBvYmplY3Qtc2luayBsZWFrIGFzIGFuIGV4ZWN1dGFibGUgY2FzZTsKKip2MS40LjAgcGlucyB0aGUgZml4Kio6IGFnYWluc3QgY29yZSAzLjEwLjAgKGRpc3BhdGNoLXRpbWUgcmUtYXV0aG9yaXphdGlvbiwKd2FzbWFnZW50LWpzIFJGQyAjNTA1KSB0aGUgZGVwZW5kZW50IHNpbmsgaXMgZGVuaWVkIHdpdGggYm90aCBwcm92ZW5hbmNlCnJ1bGVzIGFuZCBuZXZlciBleGVjdXRlcy4gdjEuMy4wIHJlbWFpbnMgdGFnZ2VkIGFzIHRoZSBob25lc3QgcHJlLWZpeApyZWNvcmQuIE5vdGUgdGhlIHBhY2sgcnVucyBhZ2FpbnN0IGNvcmUgMy4xMC4wIGZyb20gdGhpcyB2ZXJzaW9uIG9uIOKAlCB0aGUKbGVhayBpcyByZWFsIG9uIGNvcmUg4omkIDMuOS54IGFuZCBTNCBpcyBhIHJlZ3Jlc3Npb24gZ3VhcmQsIG5vdCBhIGxlZ2FjeQphcnRpZmFjdC4KCiMjIEZyb3plbiBzZXQgdnMgZ292ZXJuYW5jZSBmaWxlcwoKYEFSVElGQUNUUy5qc29uYCBmcmVlemVzIHRoZSBwYWNrICoqYXMgb2YgaXRzIGNvbnRlbnQgdGFnKiouIEFsbCBmaWxlcyBsaXN0ZWQKdW5kZXIgTGF5b3V0IGFib3ZlIGFyZSBwYXJ0IG9mIHRoZSBmcm96ZW4gaW5wdXQgc2V0LiBUaGUgdjEuMC54IGZyb3plbiBzZXRzCnJlbWFpbiBmcm96ZW4gYXQgdGFncyBgdjEuMC4wYCAvIGB2MS4wLjFgIC8gYHYxLjAuMmAuIFRoZSB2MS4yLjAgc2V0ICgyNApjbGFpbXMpIGlzIGZyb3plbiBhdCB0YWcgYHYxLjIuMGA7IHRoaXMgdjEuMi4xIHJldmlzaW9uIGdldHMgaXRzIG93biB0YWcgdmlhCnRoZSByZWxlYXNlLWNhbmRpZGF0ZS1hdWRpdCBnYXRlLiBXaGVuIGluIGRvdWJ0LCB2ZXJpZnkgYSBydW4gYWdhaW5zdCB0aGUgdGFnCm1hdGNoaW5nIHRoZSBjYXNlIHNldCB5b3UgcmFuLgoKIyMgdjEuMC4wIGRlZmVjdCByZWNvcmQKCmB2MS4wLjBgIGhhZCB0d28gcHVibGljYXRpb24tbGF5ZXIgZGVmZWN0cyBmb3VuZCBieSBhbiBvdXRzaWRlIG9wZXJhdG9yOgpgc21va2UubWpzYCB3YXMgbGlzdGVkIGluIGBBUlRJRkFDVFMuanNvbmAgYnV0IGFic2VudCBmcm9tIHRoZSB0YWdnZWQgdHJlZSwKYW5kIGB6b2RgIHdhcyBub3QgcGlubmVkIGluIHRoZSBpbnN0YWxsIGNvbW1hbmQgb3IgdGhlIHBhY2thZ2VzIHJlY29yZC4KVGhlIHBlci1jbGFpbSByZXN1bHRzIChDMeKAk0MzIFBBU1MsIE4x4oCTTjQgQk9VTkRBUlktSEVMRCkgd2VyZSBub3QgYWZmZWN0ZWQuCkZ1bGwgcmVjb3JkOiBgZG9jcy9WMS4wLjAtRVhURVJOQUwtRklORElOR1MubWRgLgoKIyMgRmlyc3QtcnVuIGhvbmVzdHkgcmVjb3JkICh2MS4xLjAgZXhwYW5zaW9uKQoKVGhlIDIwMjYtMTAtMDggZXhwYW5zaW9uIGZpcnN0IHJhbiB3aXRoIGEgc291cmNlLWRlcml2ZWQgZXhwZWN0YXRpb24gZm9yIFMzCigic2FtZS1iYXRjaCBkZXBlbmRlbnQgc2luayBleGVjdXRlcyIpIHRoYXQgdGhlIHB1Ymxpc2hlZCBhcnRpZmFjdCBSRUZVVEVECihvYnNlcnZlZDogc2luayBuZXZlciBleGVjdXRlcyDigJQgdGhlIGAkcmVmYCBzdWJzdGl0dXRpb24gZmFpbHMgdGhlIHN0cmluZwpzY2hlbWEpLiBUaGUgcmVmdXRlZCBleHBlY3RhdGlvbiwgdGhlIG9ic2VydmVkIGJlaGF2aW9yLCBhbmQgdGhlIHJlLWRlcml2ZWQKY2VpbGluZyBhcmUgcHJlc2VydmVkIGluIGBydW5zL2Ag4oCUIGV4cGVjdGF0aW9ucyB3ZXJlIHJlLWRlcml2ZWQgZnJvbSBvYnNlcnZlZAphcnRpZmFjdCBiZWhhdmlvciwgbmV2ZXIgcmVsYXhlZCB0byBmb3JjZSBhIHBhc3MuCgojIyB2MS4yLjEgcmV2aXNpb24gcmVjb3JkCgpSZXZpZXctcm91bmQgZml4ZXMgb24gdG9wIG9mIHYxLjIuMCAodjEuMi4wIHRhZyBwcmVzZXJ2ZWQgdW5jaGFuZ2VkKToKYG91dHNpZGVyLXJlcHJvLnNoYCBmYWlsdXJlIHByb3BhZ2F0aW9uIChldmVyeSBlbWJlZGRlZCBjaGVjayBibG9jayBub3cgZXhpdHMKbm9uemVybyBvbiBhbnkgZmFpbGVkIGl0ZW0gYW5kIGlzIGNvdW50ZWQgaW50byB0aGUgcmVoZWFyc2FsIHZlcmRpY3QpIHBsdXMKbmVnYXRpdmUgY29udHJvbHMgZm9yIHdyb25nIGludGVncml0eSAvIGRvd25sb2FkIGZhaWx1cmUgLyB2ZXJzaW9uIG1pc21hdGNoOwpgcGFja2FnZS5qc29uYCwgYHBhY2thZ2UtbG9jay5qc29uYCwgYW5kIGBTSEEyNTZTVU1TYCBhZGRlZCB0byB0aGUgcHVibGljIHRyZWUKd2l0aCB0aGUgaW5zdGFsbCBwcm9jZWR1cmUgdW5pZmllZCBvbiBgbnBtIGNpYDsgY2FzZS1jb3VudCBpZGVudGl0aWVzCmNvcnJlY3RlZCB0byAxNyBwb3NpdGl2ZSArIDcgbmVnYXRpdmUgKFMxL1MyIGFyZSBwb3NpdGl2ZSBjbGFpbXMpOwpgcmVsZWFzZS1jYW5kaWRhdGUtYXVkaXRgIHJ1bm5lci1jbGFpbSB2ZXJkaWN0cyBub3cgZGVyaXZlZCBmcm9tIHRoZSBjYXNlIHNldAp3aXRoIGFuIGV4YWN0LWNvdmVyYWdlIGFzc2VydGlvbiAobm8gbWlzc2luZywgbm8gZHVwbGljYXRlcywgbm90aGluZyBleHRyYSkuCg==
+# IF-07c independent reproduction pack (v1.4.0)
+
+Anyone can run this pack against **published npm artifacts** — no wasmagent-js
+monorepo code, no test helpers, no internal assertion implementation. It
+executes eighteen POSITIVE security claims and seven NEGATIVE boundary claims,
+and prints one verdict per claim (deliberately **no** aggregate
+"secure/insecure" conclusion — see `CLAIM-BOUNDARY.md`).
+
+This content version builds on the v1.0.x hardened base (prepublish audit,
+outsider rehearsal, release-candidate gate); the seven v1.0 claims are
+unchanged and seventeen claim cases are new (18-case v1.1.0 set + permission-model pairs). See the case-set identity in
+`ARTIFACTS.json` → `caseSet`.
+
+```text
+POSITIVE (PASS/FAIL)
+C1  unlabeled benign flow → no interference                      (R01)
+C2  labeled read → later deny-sink call → denied automatically   (R02)
+C3  labeled result transformed inside a labeled tool → renamed
+    forward → still denied via provenance/identity               (R03)
+C4  labeled secret nested verbatim in the sink args → denied     (R03)
+D1  unknown tool descriptor → fail-closed deny, zero executions  (R04)
+D2  gateway escalation, no approval facility → fail-closed deny,
+    zero executions                                              (R05)
+D3a same escalation, approved via the checkpointer API → executes (R06)
+D3b same escalation, rejected → zero executions, run ends        (R06)
+L1  legal negative: in a tainted run benign non-sink tools still
+    execute; only the declared deny-sink is blocked              (R09)
+P1  permission pair: granted cross-tenant support read allowed;
+    cross-tenant reference denied by tenant isolation            (OWASP#44)
+P2  permission pair: tenant-open read allowed; capability-gated
+    write executes only with grant + scoped consent              (OWASP#44)
+P2b twin: same write with NO grant denied even though consent
+    exists for another principal                                 (OWASP#44)
+P3  permission pair: descriptor-only tool usable on an operator-
+    VERIFIED server boundary                                     (OWASP#44)
+P3b twin: same tool refused on an unverified boundary with a
+    deny-on-unprofiled policy                                    (OWASP#44)
+P4  permission pair: deliberately public route allowed; internal
+    route denied by the operator's custom rule (gateway then runs
+    with securityProfile "custom")                               (OWASP#44)
+
+NEGATIVE / boundary ceilings (BOUNDARY-HELD/BOUNDARY-BROKEN)
+N1  unwired agent → gate does not auto-fire                      (R-ceiling)
+N2  no resultTaintLabels profile → runtime invents no labels     (R-ceiling)
+N3  cross-run reuse → previous run's ledger does not survive     (R07)
+N4  model-side transform → identity rule does not fire
+    (NOT_ESTABLISHED boundary, pinned as executable)             (R03)
+S1  DAG scheduler: later-step sink denied                        (R08)
+S2  parallel scheduler: identical later-step denial              (R08)
+S3  same-batch $ref dataflow: no provenance rule fires; the raw
+    result object substitution fails the sink's string schema,
+    so the sink never executes — fail-safe by typing, not by
+    taint policy                                                 (R08)
+E1  ledger overflow (default cap 512): oldest sensitive entry
+    evicted → identity tracking degrades, label containment
+    persists                                                     (eviction)
+E2  eviction prefers non-sensitive entries before any sensitive
+    one                                                          (eviction)
+S4  same-batch $ref into an object-accepting network sink is
+    DENIED at dispatch-time re-evaluation — regression guard
+    for the core 3.10.0 fix (v1.3.0 measured the leak this
+    case now guards against)                                 (#503/#505)
+```
+
+The `R0x` tags map this set onto the 2026-10-08 action-plan case table
+(R01–R09); the mapping is recorded in `expected-results.json` →
+`caseSet.mappingToActionPlan`.
+
+## Run it (third-party procedure)
+
+```bash
+# 1. clean project, locked dependency tree (package.json pins
+#    zod@4.6.5, @wasmagent/core@3.10.0, @wasmagent/mcp-firewall@2.3.0,
+#    @wasmagent/mcp-gateway@0.2.0; package-lock.json pins transitives)
+mkdir if07c-repro && cd if07c-repro
+
+# 2. copy the pack in (fixtures/, runner/, scripts/, profile.json,
+#    expected-results.json, CLAIM-BOUNDARY.md, package.json,
+#    package-lock.json, SHA256SUMS) and install the locked tree
+npm ci
+
+# 3. execute
+node runner/run.mjs        # per-claim verdicts + results.json; exit 0 = all matched
+
+# 4. (maintainer) re-freeze ARTIFACTS.json + SHA256SUMS after any pack edit
+node scripts/build-artifacts.mjs --prefix .
+```
+
+The runner also writes `results.json` (path overridable via
+`IF07C_RESULTS_PATH`) containing the observed decisions, per-tool execution
+counts, deny rule IDs, human-approval events, every problem line, and a
+permissionStats block for the P-family (gate hits, confirmed violations,
+legit-but-blocked — which must be zero — and allowed decisions).
+**Deny cases assert zero side-effect counts** — a deny text without a zero
+execution count does not pass, and benign cases assert real executions so an
+all-deny run cannot look green.
+
+## Verifying a run record (what a third party should check)
+
+> **Do not trust `ARTIFACTS.json` alone.** It is a convenience record, not a
+> root of trust. Independently fetch npm metadata (`npm view <pkg>@<version>
+> dist.integrity`) and the tarballs, compare them against the `packages{}`
+> block, and recompute the `files{}` hashes against your copy of the pack.
+
+1. `ARTIFACTS.json` → `files{}` hashes must match the pack copy you ran.
+2. `ARTIFACTS.json` → `packages{}` must match your installed versions; verify
+   `integrity` with `npm view <pkg>@<version> dist.integrity` and the tarball
+   SHA256 by downloading it yourself — do not trust the pack's own record.
+3. The runner header must print the same artifact versions you installed.
+4. Only then are the per-claim verdicts attributable to the pinned artifacts.
+
+## Interpretation
+
+- `PASS` on the positive claims (C/D/L families): the security properties
+  held on these fixtures.
+- `BOUNDARY-HELD` on the negative claims (N/S/E families): the gate did
+  exactly what the documented claim ceiling says.
+- Anything else: the run diverges from the claims — record the full output,
+  `results.json`, the artifact versions, and the `ARTIFACTS.json` you
+  verified against.
+
+The claim boundary (including what a green run does NOT prove — adaptive
+adversarial completeness, default-on behavior, DLP, production
+false-positive rate, independent certification) lives in
+`CLAIM-BOUNDARY.md`. The planted secret is the harness constant
+`smoke-secret-value-4021-alpha`; fixtures reference it symbolically via
+`__derive__`, so fixture hashes do not embed it.
+
+## Layout
+
+```text
+runner/run.mjs                single-file runner (mechanism + verdicts + results.json)
+fixtures/*.json               inputs only (call scripts / probe definitions)
+expected-results.json         the single source of assertions (+ case-set identity)
+profile.json                  operator-authoritative labels/sinks declarations (v2)
+CLAIM-BOUNDARY.md             proves / does-not-prove / verdict vocabulary
+package.json / package-lock.json  exact dependency pins — install with `npm ci`
+SHA256SUMS                    flat hash index (frozen set + ARTIFACTS.json; excludes itself)
+scripts/build-artifacts.mjs   regenerates ARTIFACTS.json + SHA256SUMS (hashes, tarballs, identity)
+scripts/prepublish-audit.mjs  maintainer pre-release closure audit
+scripts/outsider-repro.sh     maintainer clean-room outsider rehearsal
+docs/V1.0.0-EXTERNAL-FINDINGS.md  frozen record of v1.0.0 external findings
+docs/V1.0.1-PREPUBLISH-GATE-FAILURE.md  frozen record of the v1.0.1 gate failure
+ARTIFACTS.json                frozen artifact + file hash record (format v2)
+runs/                         archived run records
+```
+
+## Scope ceilings (unchanged)
+
+Run-scoped ledger only (N3); opt-in wiring only (N1); no DLP (N2, N4);
+CodeAgent loop out of scope; no production false-positive data; independent
+security certification is not established by this or any pack. New in
+v1.1.0: identity tracking is bounded-memory and its eviction behavior is
+pinned as an executable ceiling (E1/E2), and same-batch `$ref` dataflow is
+documented as outside the whole-run threading protection (S3). New in
+v1.2.0: the permission-model pairs (P1–P4b) pin operator-declared
+permission intent at the published-gateway decision level; the derived
+expectations for P2/P2b and P3b were refuted during development (grants are
+fixture-scoped; the unprofiled-tool rule adjudicates only read-classified
+tools) and re-frozen from observed behavior plus the published dist.
+v1.3.0 pinned the same-batch `$ref` object-sink leak as an executable case;
+**v1.4.0 pins the fix**: against core 3.10.0 (dispatch-time re-authorization,
+wasmagent-js RFC #505) the dependent sink is denied with both provenance
+rules and never executes. v1.3.0 remains tagged as the honest pre-fix
+record. Note the pack runs against core 3.10.0 from this version on — the
+leak is real on core ≤ 3.9.x and S4 is a regression guard, not a legacy
+artifact.
+
+## Frozen set vs governance files
+
+`ARTIFACTS.json` freezes the pack **as of its content tag**. All files listed
+under Layout above are part of the frozen input set. The v1.0.x frozen sets
+remain frozen at tags `v1.0.0` / `v1.0.1` / `v1.0.2`. The v1.2.0 set (24
+claims) is frozen at tag `v1.2.0`; this v1.2.1 revision gets its own tag via
+the release-candidate-audit gate. When in doubt, verify a run against the tag
+matching the case set you ran.
+
+## v1.0.0 defect record
+
+`v1.0.0` had two publication-layer defects found by an outside operator:
+`smoke.mjs` was listed in `ARTIFACTS.json` but absent from the tagged tree,
+and `zod` was not pinned in the install command or the packages record.
+The per-claim results (C1–C3 PASS, N1–N4 BOUNDARY-HELD) were not affected.
+Full record: `docs/V1.0.0-EXTERNAL-FINDINGS.md`.
+
+## First-run honesty record (v1.1.0 expansion)
+
+The 2026-10-08 expansion first ran with a source-derived expectation for S3
+("same-batch dependent sink executes") that the published artifact REFUTED
+(observed: sink never executes — the `$ref` substitution fails the string
+schema). The refuted expectation, the observed behavior, and the re-derived
+ceiling are preserved in `runs/` — expectations were re-derived from observed
+artifact behavior, never relaxed to force a pass.
+
+## v1.2.1 revision record
+
+Review-round fixes on top of v1.2.0 (v1.2.0 tag preserved unchanged):
+`outsider-repro.sh` failure propagation (every embedded check block now exits
+nonzero on any failed item and is counted into the rehearsal verdict) plus
+negative controls for wrong integrity / download failure / version mismatch;
+`package.json`, `package-lock.json`, and `SHA256SUMS` added to the public tree
+with the install procedure unified on `npm ci`; case-count identities
+corrected to 17 positive + 7 negative (S1/S2 are positive claims);
+`release-candidate-audit` runner-claim verdicts now derived from the case set
+with an exact-coverage assertion (no missing, no duplicates, nothing extra).

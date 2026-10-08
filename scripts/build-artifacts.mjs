@@ -1,1 +1,207 @@
-IyEvdXNyL2Jpbi9lbnYgbm9kZQovLyBCdWlsZCBBUlRJRkFDVFMuanNvbiBmb3IgdGhlIElGLTA3YyBpbmRlcGVuZGVudCByZXByb2R1Y3Rpb24gcGFjay4KLy8KLy8gUmVjb3JkcywgZGV0ZXJtaW5pc3RpY2FsbHk6Ci8vICAgLSB0aGUgZXhhY3QgcHVibGlzaGVkIG5wbSB2ZXJzaW9ucyBpbnN0YWxsZWQgaW4gdGhlIHZlcmlmaWNhdGlvbgovLyAgICAgZGlyZWN0b3J5IChkZWZhdWx0OiAuL3BhY2stdmVyaWZ5KSwgd2l0aCByZWdpc3RyeSBpbnRlZ3JpdHkgYW5kIHRoZQovLyAgICAgU0hBMjU2IG9mIHRoZSBkb3dubG9hZGVkIHRhcmJhbGw7Ci8vICAgLSB0aGUgU0hBMjU2IG9mIGV2ZXJ5IGZyb3plbiBwYWNrIGZpbGU7Ci8vICAgLSB0aGUgbm9kZS9ucG0gdmVyc2lvbnMgdXNlZC4KLy8KLy8gVXNhZ2UgKG5vcm1hbCDigJQgaGFzaGVzIHdvcmtpbmcgdHJlZSk6Ci8vICAgbnBtIGluc3RhbGwgem9kQDQuNi41IEB3YXNtYWdlbnQvY29yZUBYIEB3YXNtYWdlbnQvbWNwLWZpcmV3YWxsQFkgQHdhc21hZ2VudC9tY3AtZ2F0ZXdheUBaCi8vICAgbm9kZSBydW5uZXIvcnVuLm1qcwovLyAgIG5vZGUgc2NyaXB0cy9idWlsZC1hcnRpZmFjdHMubWpzIC0tcHJlZml4IC4vcGFjay12ZXJpZnkKLy8KLy8gVXNhZ2UgKHJlbGVhc2UgbW9kZSDigJQgaGFzaGVzIHRoZSBleGFjdCBjb21taXR0ZWQgdHJlZSwgcmVjb21tZW5kZWQgYmVmb3JlIHRhZ2dpbmcpOgovLyAgIG5vZGUgc2NyaXB0cy9idWlsZC1hcnRpZmFjdHMubWpzIC0tcHJlZml4IC4vcGFjay12ZXJpZnkgLS1naXQtcmVmIDxzaGEtb3ItdGFnPgovLwovLyBSZS1ydW5uaW5nIGlzIGRldGVybWluaXN0aWMgYXBhcnQgZnJvbSBnZW5lcmF0ZWRBdFV0Yy4KCmltcG9ydCB7IGV4ZWNGaWxlU3luYywgZXhlY1N5bmMgfSBmcm9tICJub2RlOmNoaWxkX3Byb2Nlc3MiOwppbXBvcnQgeyBjcmVhdGVIYXNoIH0gZnJvbSAibm9kZTpjcnlwdG8iOwppbXBvcnQgeyBleGlzdHNTeW5jLCBta2R0ZW1wU3luYywgcmVhZGRpclN5bmMsIHJlYWRGaWxlU3luYywgcm1TeW5jLCBzdGF0U3luYywgd3JpdGVGaWxlU3luYyB9IGZyb20gIm5vZGU6ZnMiOwppbXBvcnQgeyB0bXBkaXIgfSBmcm9tICJub2RlOm9zIjsKaW1wb3J0IHsgYmFzZW5hbWUsIGpvaW4sIHJlbGF0aXZlIH0gZnJvbSAibm9kZTpwYXRoIjsKCmNvbnN0IFBBQ0tfUk9PVCA9IG5ldyBVUkwoIi4uIiwgaW1wb3J0Lm1ldGEudXJsKS5wYXRobmFtZTsKY29uc3QgUEFDS0FHRVMgPSBbInpvZCIsICJAd2FzbWFnZW50L2NvcmUiLCAiQHdhc21hZ2VudC9tY3AtZmlyZXdhbGwiLCAiQHdhc21hZ2VudC9tY3AtZ2F0ZXdheSJdOwpjb25zdCBTS0lQX0RJUlMgPSBuZXcgU2V0KFsibm9kZV9tb2R1bGVzIiwgInBhY2stdmVyaWZ5IiwgInJlcHJvLXJ1biIsICJydW5zIiwgIi5naXQiLCAiLmdpdGh1YiJdKTsKCi8vIFB1Ymxpc2hlZC1zb3VyY2UgaWRlbnRpdHkgb2YgdGhlIHBpbm5lZCBucG0gcGFja2FnZXM6IHRoZSB3YXNtYWdlbnQtanMKLy8gY29tbWl0IHRoYXQgY2FycmllZCB0aGUgdmVyc2lvbiBidW1wcyAoY2hhbmdlc2V0cyByZWxlYXNlIGNvbW1pdCkgYW5kIHRoZQovLyBtZXJnZSB0aGF0IGxhbmRlZCBpdCBvbiBtYWluIChQUiBXYXNtQWdlbnQvd2FzbWFnZW50LWpzIzQ4NykuIE1haW50YWluZWQgYnkKLy8gdGhlIHBhY2sgYXV0aG9yOyBpbmRlcGVuZGVudGx5IHZlcmlmaWFibGUgaW4gdGhlIHdhc21hZ2VudC1qcyBnaXQgaGlzdG9yeS4KY29uc3QgUFVCTElTSEVEX1NPVVJDRSA9IHsKICByZXBvOiAiV2FzbUFnZW50L3dhc21hZ2VudC1qcyIsCiAgcmVsZWFzZUNvbW1pdDogIjEzYmNlNWU0M2Y0YjM4NzMwYWRkNWMwMWIwYjcyNjk5YTM1YmUzMzYiLAogIHJlbGVhc2VDb21taXRNZXNzYWdlOiAiY2hvcmU6IHJlbGVhc2UgcGFja2FnZXMgKGNvcmUgMy45LjAsIG1jcC1maXJld2FsbCAyLjMuMCwgbWNwLWdhdGV3YXkgMC4yLjApIiwKICByZWxlYXNlTWVyZ2VDb21taXQ6ICIyNTA0NWVmMjk4NGZmM2ZhYzBhZDMwZjA3NGEzYTRjZjVkOGFmNGQ3IiwKICByZWxlYXNlTWVyZ2U6ICJQUiAjNDg3IChjaGFuZ2VzZXQtcmVsZWFzZS9tYWluKSIsCiAgbm90ZTogIlRoZSBucG0gdGFyYmFsbHMgYXJlIHRoZSByb290IGlkZW50aXR5IChwYWNrYWdlc3t9IGFib3ZlKTsgdGhpcyBibG9jayByZWNvcmRzIHdoaWNoIHNvdXJjZSBjb21taXQgdGhleSBjb3JyZXNwb25kIHRvLiIsCn07CgovLyBUaGlzIHBhY2sncyBvd24gcHVibGljYXRpb24gaWRlbnRpdHk6IHRoZSBjb250ZW50IHRhZyB0aGF0IGZyZWV6ZXMgdGhpcwovLyBleGFjdCBmaWxlIHNldC4gVXBkYXRlZCBwZXIgY29udGVudCB2ZXJzaW9uOyB0aGUgdGFnIGl0c2VsZiBpcyBjcmVhdGVkIGJ5Ci8vIHRoZSBodW1hbiBtYWludGFpbmVyIG9ubHkgYWZ0ZXIgdGhlIHJlbGVhc2UtY2FuZGlkYXRlLWF1ZGl0IGdhdGUgcGFzc2VzLgpjb25zdCBQQUNLX0lERU5USVRZID0gewogIHJlcG86ICJXYXNtQWdlbnQvaWYwN2MtcmVwcm9kdWN0aW9uIiwKICBjb250ZW50VGFnOiAidjEuNC4wIiwKICBwcmV2aW91c0Zyb3plblRhZzogInYxLjMuMCIsCiAgbm90ZTogIkV4dGVybmFsLXRhZyBwdWJsaWNhdGlvbiBtb2RlbDogdGhlIHRhZyBmcmVlemVzIHRoaXMgZmlsZSBzZXQ7IG5vIG1hbmlmZXN0IGNhbiBvciBzaG91bGQgY29udGFpbiBpdHMgb3duIGZpbmFsIGhhc2guIiwKfTsKCmZ1bmN0aW9uIHBhcnNlQXJncyhhcmd2KSB7CiAgY29uc3Qgb3V0ID0geyBwcmVmaXg6IGpvaW4oUEFDS19ST09ULCAicGFjay12ZXJpZnkiKSwgZ2l0UmVmOiBudWxsIH07CiAgZm9yIChsZXQgaSA9IDA7IGkgPCBhcmd2Lmxlbmd0aDsgaSsrKSB7CiAgICBpZiAoYXJndltpXSA9PT0gIi0tcHJlZml4Iikgb3V0LnByZWZpeCA9IGFyZ3ZbKytpXTsKICAgIGVsc2UgaWYgKGFyZ3ZbaV0gPT09ICItLWdpdC1yZWYiKSBvdXQuZ2l0UmVmID0gYXJndlsrK2ldOwogICAgZWxzZSB7CiAgICAgIGNvbnNvbGUuZXJyb3IoYHVua25vd24gYXJndW1lbnQgJHthcmd2W2ldfWApOwogICAgICBwcm9jZXNzLmV4aXQoMik7CiAgICB9CiAgfQogIHJldHVybiBvdXQ7Cn0KCmZ1bmN0aW9uIHNoKGNtZCwgYXJncykgewogIHJldHVybiBleGVjRmlsZVN5bmMoY21kLCBhcmdzLCB7IGVuY29kaW5nOiAidXRmOCIgfSkudHJpbSgpOwp9CgpmdW5jdGlvbiBzaGEyNTZGaWxlKHBhdGgpIHsKICByZXR1cm4gY3JlYXRlSGFzaCgic2hhMjU2IikudXBkYXRlKHJlYWRGaWxlU3luYyhwYXRoKSkuZGlnZXN0KCJoZXgiKTsKfQoKZnVuY3Rpb24gc2hhMjU2QnVmKGJ1ZikgewogIHJldHVybiBjcmVhdGVIYXNoKCJzaGEyNTYiKS51cGRhdGUoYnVmKS5kaWdlc3QoImhleCIpOwp9CgovKiogRXh0cmFjdCB0aGUgY29tbWl0dGVkIHRyZWUgYXQgZ2l0UmVmIGludG8gYSB0ZW1wIGRpciBhbmQgcmV0dXJuIGl0cyBwYXRoLiAqLwpmdW5jdGlvbiBtYXRlcmlhbGl6ZUdpdEFyY2hpdmUoZ2l0UmVmLCB0bXBCYXNlKSB7CiAgY29uc3QgYXJjaGl2ZURpciA9IGpvaW4odG1wQmFzZSwgImFyY2hpdmUiKTsKICBleGVjU3luYyhgbWtkaXIgLXAgJHthcmNoaXZlRGlyfWAsIHsgc3RkaW86ICJpbmhlcml0IiB9KTsKICBleGVjU3luYyhgZ2l0IC1DICIke1BBQ0tfUk9PVH0iIGFyY2hpdmUgIiR7Z2l0UmVmfSIgfCB0YXIgLXggLUMgIiR7YXJjaGl2ZURpcn0iYCwgeyBzdGRpbzogImluaGVyaXQiIH0pOwogIHJldHVybiBhcmNoaXZlRGlyOwp9CgovKiogRXZlcnkgcGFjayBmaWxlIHVuZGVyIHJvb3QgZXhjZXB0IGdlbmVyYXRlZC92ZXJpZmljYXRpb24gZGlycy4gKi8KZnVuY3Rpb24gcGFja0ZpbGVzKHJvb3QpIHsKICBjb25zdCBvdXQgPSBbXTsKICBjb25zdCB3YWxrID0gKGRpcikgPT4gewogICAgZm9yIChjb25zdCBlbnRyeSBvZiByZWFkZGlyU3luYyhkaXIpLnNvcnQoKSkgewogICAgICBjb25zdCBmdWxsID0gam9pbihkaXIsIGVudHJ5KTsKICAgICAgY29uc3QgcmVsID0gcmVsYXRpdmUocm9vdCwgZnVsbCk7CiAgICAgIGlmIChzdGF0U3luYyhmdWxsKS5pc0RpcmVjdG9yeSgpKSB7CiAgICAgICAgaWYgKFNLSVBfRElSUy5oYXMoZW50cnkpKSBjb250aW51ZTsKICAgICAgICB3YWxrKGZ1bGwpOwogICAgICB9IGVsc2UgaWYgKGVudHJ5ICE9PSAiQVJUSUZBQ1RTLmpzb24iICYmIGVudHJ5ICE9PSAicmVzdWx0cy5qc29uIiAmJiBlbnRyeSAhPT0gIlNIQTI1NlNVTVMiKSB7CiAgICAgICAgb3V0LnB1c2gocmVsKTsKICAgICAgfQogICAgfQogIH07CiAgd2Fsayhyb290KTsKICByZXR1cm4gb3V0Owp9CgpmdW5jdGlvbiBtYWluKCkgewogIGNvbnN0IHsgcHJlZml4LCBnaXRSZWYgfSA9IHBhcnNlQXJncyhwcm9jZXNzLmFyZ3Yuc2xpY2UoMikpOwogIGlmICghZXhpc3RzU3luYyhqb2luKHByZWZpeCwgIm5vZGVfbW9kdWxlcyIpKSkgewogICAgY29uc29sZS5lcnJvcihgZXJyb3I6ICR7cHJlZml4fS9ub2RlX21vZHVsZXMgbm90IGZvdW5kIOKAlCBpbnN0YWxsIHRoZSBwaW5uZWQgcGFja2FnZXMgZmlyc3QgKHNlZSBSRUFETUUpYCk7CiAgICByZXR1cm4gMjsKICB9CgogIGNvbnN0IHBhY2thZ2VzID0ge307CiAgY29uc3QgdG1wID0gbWtkdGVtcFN5bmMoam9pbih0bXBkaXIoKSwgInJlcHJvLWFydGlmYWN0cy0iKSk7CiAgdHJ5IHsKICAgIGZvciAoY29uc3QgbmFtZSBvZiBQQUNLQUdFUykgewogICAgICBjb25zdCBwa2dKc29uID0gSlNPTi5wYXJzZShyZWFkRmlsZVN5bmMoam9pbihwcmVmaXgsICJub2RlX21vZHVsZXMiLCBuYW1lLCAicGFja2FnZS5qc29uIiksICJ1dGY4IikpOwogICAgICBjb25zdCB2ZXJzaW9uID0gcGtnSnNvbi52ZXJzaW9uOwogICAgICBjb25zdCBpbnRlZ3JpdHkgPSBzaCgibnBtIiwgWyJ2aWV3IiwgYCR7bmFtZX1AJHt2ZXJzaW9ufWAsICJkaXN0LmludGVncml0eSJdKTsKICAgICAgLy8gbnBtIHBhY2sgbmFtZXMgdGhlIGZpbGUgYmFzZWQgb24gdGhlIHBhY2thZ2UsIGhhbmRsaW5nIHNjb3BlZCBuYW1lcwogICAgICBjb25zdCB0bXBUZ3ogPSBqb2luKHRtcCwgYCR7bmFtZS5yZXBsYWNlKC9AL2csICIiKS5yZXBsYWNlKC9cLy9nLCAiLSIpfS0ke3ZlcnNpb259LnRnemApOwogICAgICBzaCgibnBtIiwgWyJwYWNrIiwgYCR7bmFtZX1AJHt2ZXJzaW9ufWAsICItLXBhY2stZGVzdGluYXRpb24iLCB0bXBdKTsKICAgICAgY29uc3QgZmlsZXMgPSByZWFkZGlyU3luYyh0bXApLmZpbHRlcigoZikgPT4gZi5lbmRzV2l0aCgiLnRneiIpICYmIGYuaW5jbHVkZXModmVyc2lvbikpOwogICAgICBjb25zdCBiYXNlbmFtZV8gPSBuYW1lLnJlcGxhY2UoL0AvZywgIiIpLnJlcGxhY2UoL1wvL2csICItIik7CiAgICAgIGNvbnN0IHRneiA9IGZpbGVzLmZpbmQoKGYpID0+IGYuc3RhcnRzV2l0aChiYXNlbmFtZV8pKSA/PyBmaWxlc1swXTsKICAgICAgaWYgKCF0Z3opIHRocm93IG5ldyBFcnJvcihgbnBtIHBhY2sgcHJvZHVjZWQgbm8gdGFyYmFsbCBmb3IgJHtuYW1lfUAke3ZlcnNpb259YCk7CiAgICAgIGV4ZWNGaWxlU3luYygibXYiLCBbam9pbih0bXAsIHRneiksIHRtcFRnel0pOwogICAgICBwYWNrYWdlc1tuYW1lXSA9IHsKICAgICAgICB2ZXJzaW9uLAogICAgICAgIGludGVncml0eSwKICAgICAgICB0YXJiYWxsU2hhMjU2OiBzaGEyNTZGaWxlKHRtcFRneiksCiAgICAgIH07CiAgICAgIGNvbnNvbGUubG9nKGAgICR7bmFtZX1AJHt2ZXJzaW9ufSAgaW50ZWdyaXR5ICR7aW50ZWdyaXR5LnNsaWNlKDAsIDIwKX3igKYgIHRhcmJhbGwgc2hhMjU2IHJlY29yZGVkYCk7CiAgICAgIC8vIGNsZWFuIHVwIHRneiBiZWZvcmUgbmV4dCBwYWNrYWdlIHRvIGF2b2lkIHN0YWxlIG1hdGNoZXMKICAgICAgcm1TeW5jKHRtcFRneiwgeyBmb3JjZTogdHJ1ZSB9KTsKICAgIH0KICB9IGZpbmFsbHkgewogICAgcm1TeW5jKHRtcCwgeyByZWN1cnNpdmU6IHRydWUsIGZvcmNlOiB0cnVlIH0pOwogIH0KCiAgLy8gRGV0ZXJtaW5lIHRoZSByb290IHRvIGhhc2ggZmlsZXMgZnJvbQogIGxldCBoYXNoUm9vdCA9IFBBQ0tfUk9PVDsKICBsZXQgYXJjaGl2ZVRtcCA9IG51bGw7CiAgaWYgKGdpdFJlZikgewogICAgY29uc29sZS5sb2coYCAgbWF0ZXJpYWxpemluZyBnaXQgYXJjaGl2ZSBhdCAke2dpdFJlZn0g4oCmYCk7CiAgICBhcmNoaXZlVG1wID0gbWtkdGVtcFN5bmMoam9pbih0bXBkaXIoKSwgInJlcHJvLWdpdGFyY2hpdmUtIikpOwogICAgaGFzaFJvb3QgPSBtYXRlcmlhbGl6ZUdpdEFyY2hpdmUoZ2l0UmVmLCBhcmNoaXZlVG1wKTsKICAgIGNvbnNvbGUubG9nKGAgIGFyY2hpdmUgZXh0cmFjdGVkIHRvICR7aGFzaFJvb3R9YCk7CiAgfQoKICBjb25zdCBmaWxlcyA9IHt9OwogIGxldCBjYXNlU2V0U291cmNlOwogIHRyeSB7CiAgICBmb3IgKGNvbnN0IHJlbCBvZiBwYWNrRmlsZXMoaGFzaFJvb3QpKSB7CiAgICAgIGZpbGVzW3JlbF0gPSBzaGEyNTZGaWxlKGpvaW4oaGFzaFJvb3QsIHJlbCkpOwogICAgfQogICAgLy8gcmVhZCBmcm9tIHRoZSBoYXNoZWQgdHJlZSAod29ya2luZyB0cmVlLCBvciB0aGUgbWF0ZXJpYWxpemVkIGFyY2hpdmUKICAgIC8vIGluIC0tZ2l0LXJlZiBtb2RlKSBCRUZPUkUgdGhlIGZpbmFsbHktYmxvY2sgcmVtb3ZlcyB0aGUgYXJjaGl2ZQogICAgY2FzZVNldFNvdXJjZSA9IEpTT04ucGFyc2UocmVhZEZpbGVTeW5jKGpvaW4oaGFzaFJvb3QsICJleHBlY3RlZC1yZXN1bHRzLmpzb24iKSwgInV0ZjgiKSk7CiAgfSBmaW5hbGx5IHsKICAgIGlmIChhcmNoaXZlVG1wKSBybVN5bmMoYXJjaGl2ZVRtcCwgeyByZWN1cnNpdmU6IHRydWUsIGZvcmNlOiB0cnVlIH0pOwogIH0KCiAgY29uc3QgZG9jID0gewogICAgZm9ybWF0OiAiaWYwN2MtaW5kZXBlbmRlbnQtcmVwcm9kdWN0aW9uL2FydGlmYWN0cy92MiIsCiAgICB2ZXJzaW9uOiBQQUNLX0lERU5USVRZLmNvbnRlbnRUYWcucmVwbGFjZSgvXnYvLCAiIiksCiAgICBnZW5lcmF0ZWRBdFV0YzogbmV3IERhdGUoKS50b0lTT1N0cmluZygpLAogICAgdG9vbGNoYWluOiB7CiAgICAgIG5vZGU6IHByb2Nlc3MudmVyc2lvbnMubm9kZSwKICAgICAgbnBtOiBzaCgibnBtIiwgWyItLXZlcnNpb24iXSksCiAgICB9LAogICAgLi4uKGdpdFJlZiA/IHsgZ2l0UmVmIH0gOiB7fSksCiAgICBwYWNrSWRlbnRpdHk6IFBBQ0tfSURFTlRJVFksCiAgICBwYWNrYWdlcywKICAgIHB1Ymxpc2hlZFNvdXJjZTogUFVCTElTSEVEX1NPVVJDRSwKICAgIGNhc2VTZXQ6IHsKICAgICAgaWQ6IGNhc2VTZXRTb3VyY2UuY2FzZVNldD8uaWQgPz8gInVua25vd24iLAogICAgICBjYXNlSWRzOiBPYmplY3Qua2V5cyhjYXNlU2V0U291cmNlLmNsYWltcyA/PyB7fSkuc29ydCgpLAogICAgICBjYXNlQ291bnQ6IE9iamVjdC5rZXlzKGNhc2VTZXRTb3VyY2UuY2xhaW1zID8/IHt9KS5sZW5ndGgsCiAgICAgIG5vdGU6ICJBdXRob3JpdGF0aXZlIGNhc2Utc2V0IGlkZW50aXR5OyBwZXItY2FzZSBraW5kcyBsaXZlIGluIGZpeHR1cmVzLyouanNvbiwgYXNzZXJ0aW9ucyBpbiBleHBlY3RlZC1yZXN1bHRzLmpzb24uIiwKICAgIH0sCiAgICBmaWxlcywKICAgIHZlcmlmaWNhdGlvbjogewogICAgICBpbnN0YWxsRGlyZWN0b3J5OiByZWxhdGl2ZShQQUNLX1JPT1QsIHByZWZpeCkgfHwgIi4iLAogICAgICBydW5uZXJDb21tYW5kOiAibm9kZSBydW5uZXIvcnVuLm1qcyIsCiAgICAgIG5vdGU6ICJBIHRoaXJkIHBhcnR5IHJlLXJ1bm5pbmcgdGhpcyBwYWNrIG11c3QgY29tcGFyZSB0aGUgZmlsZXN7fSBoYXNoZXMgYWdhaW5zdCB0aGVpciBjb3B5LCB0aGVuIHJlLXZlcmlmeSBwYWNrYWdlc3t9IGFnYWluc3QgdGhlIHJlZ2lzdHJ5IChucG0gdmlldyBkaXN0LmludGVncml0eSAvIHRhcmJhbGwgc2hhMjU2KSBiZWZvcmUgdHJ1c3RpbmcgYSBydW4gcmVjb3JkLiIsCiAgICB9LAogIH07CgogIGNvbnN0IG91dCA9IGpvaW4oUEFDS19ST09ULCAiQVJUSUZBQ1RTLmpzb24iKTsKICB3cml0ZUZpbGVTeW5jKG91dCwgYCR7SlNPTi5zdHJpbmdpZnkoZG9jLCBudWxsLCAyKX1cbmApOwoKICAvLyBTSEEyNTZTVU1TOiBmbGF0IGluZGV4IG9mIGV2ZXJ5IGRlY2xhcmVkIGZyb3plbiBmaWxlIFBMVVMgQVJUSUZBQ1RTLmpzb24KICAvLyBpdHNlbGYuIFByZXNlbnQgaW4gdGhlIHBhY2sgdHJlZSBidXQgTk9UIGRlY2xhcmVkIGluIEFSVElGQUNUUy5qc29uCiAgLy8gZmlsZXN7fSAoYW5kIGl0IG5ldmVyIGxpc3RzIGl0c2VsZiksIHNvIHRoZSBwYWlyIGlzIG5vdCBjaXJjdWxhciBhbmQKICAvLyByZWdlbmVyYXRpbmcgb25lIG5ldmVyIGludmFsaWRhdGVzIHRoZSBvdGhlci4KICBjb25zdCBzdW1zRW50cmllcyA9IFsKICAgIC4uLk9iamVjdC5lbnRyaWVzKGZpbGVzKS5tYXAoKFtyZWwsIGhhc2hdKSA9PiBgJHtoYXNofSAgJHtyZWx9YCksCiAgICBgJHtzaGEyNTZGaWxlKG91dCl9ICBBUlRJRkFDVFMuanNvbmAsCiAgXTsKICBzdW1zRW50cmllcy5zb3J0KChhLCBiKSA9PiBhLnNwbGl0KCIgICIpWzFdLmxvY2FsZUNvbXBhcmUoYi5zcGxpdCgiICAiKVsxXSkpOwogIHdyaXRlRmlsZVN5bmMoam9pbihQQUNLX1JPT1QsICJTSEEyNTZTVU1TIiksIGAke3N1bXNFbnRyaWVzLmpvaW4oIlxuIil9XG5gKTsKICBjb25zb2xlLmxvZyhgd3JvdGUgJHtvdXR9ICgke09iamVjdC5rZXlzKGZpbGVzKS5sZW5ndGh9IGZpbGVzLCAke09iamVjdC5rZXlzKHBhY2thZ2VzKS5sZW5ndGh9IHBhY2thZ2VzKWApOwogIHJldHVybiAwOwp9Cgpwcm9jZXNzLmV4aXQobWFpbigpKTsK
+#!/usr/bin/env node
+// Build ARTIFACTS.json for the IF-07c independent reproduction pack.
+//
+// Records, deterministically:
+//   - the exact published npm versions installed in the verification
+//     directory (default: ./pack-verify), with registry integrity and the
+//     SHA256 of the downloaded tarball;
+//   - the SHA256 of every frozen pack file;
+//   - the node/npm versions used.
+//
+// Usage (normal — hashes working tree):
+//   npm install zod@4.6.5 @wasmagent/core@X @wasmagent/mcp-firewall@Y @wasmagent/mcp-gateway@Z
+//   node runner/run.mjs
+//   node scripts/build-artifacts.mjs --prefix ./pack-verify
+//
+// Usage (release mode — hashes the exact committed tree, recommended before tagging):
+//   node scripts/build-artifacts.mjs --prefix ./pack-verify --git-ref <sha-or-tag>
+//
+// Re-running is deterministic apart from generatedAtUtc.
+
+import { execFileSync, execSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { basename, join, relative } from "node:path";
+
+const PACK_ROOT = new URL("..", import.meta.url).pathname;
+const PACKAGES = ["zod", "@wasmagent/core", "@wasmagent/mcp-firewall", "@wasmagent/mcp-gateway"];
+const SKIP_DIRS = new Set(["node_modules", "pack-verify", "repro-run", "runs", ".git", ".github"]);
+
+// Published-source identity of the pinned npm packages: the wasmagent-js
+// commit that carried the version bumps (changesets release commit) and the
+// merge that landed it on main (PR WasmAgent/wasmagent-js#487). Maintained by
+// the pack author; independently verifiable in the wasmagent-js git history.
+const PUBLISHED_SOURCE = {
+  repo: "WasmAgent/wasmagent-js",
+  releaseCommit: "13bce5e43f4b38730add5c01b0b72699a35be336",
+  releaseCommitMessage: "chore: release packages (core 3.9.0, mcp-firewall 2.3.0, mcp-gateway 0.2.0)",
+  releaseMergeCommit: "25045ef2984ff3fac0ad30f074a3a4cf5d8af4d7",
+  releaseMerge: "PR #487 (changeset-release/main)",
+  note: "The npm tarballs are the root identity (packages{} above); this block records which source commit they correspond to.",
+};
+
+// This pack's own publication identity: the content tag that freezes this
+// exact file set. Updated per content version; the tag itself is created by
+// the human maintainer only after the release-candidate-audit gate passes.
+const PACK_IDENTITY = {
+  repo: "WasmAgent/if07c-reproduction",
+  contentTag: "v1.4.0",
+  previousFrozenTag: "v1.3.0",
+  note: "External-tag publication model: the tag freezes this file set; no manifest can or should contain its own final hash.",
+};
+
+function parseArgs(argv) {
+  const out = { prefix: join(PACK_ROOT, "pack-verify"), gitRef: null };
+  for (let i = 0; i < argv.length; i++) {
+    if (argv[i] === "--prefix") out.prefix = argv[++i];
+    else if (argv[i] === "--git-ref") out.gitRef = argv[++i];
+    else {
+      console.error(`unknown argument ${argv[i]}`);
+      process.exit(2);
+    }
+  }
+  return out;
+}
+
+function sh(cmd, args) {
+  return execFileSync(cmd, args, { encoding: "utf8" }).trim();
+}
+
+function sha256File(path) {
+  return createHash("sha256").update(readFileSync(path)).digest("hex");
+}
+
+function sha256Buf(buf) {
+  return createHash("sha256").update(buf).digest("hex");
+}
+
+/** Extract the committed tree at gitRef into a temp dir and return its path. */
+function materializeGitArchive(gitRef, tmpBase) {
+  const archiveDir = join(tmpBase, "archive");
+  execSync(`mkdir -p ${archiveDir}`, { stdio: "inherit" });
+  execSync(`git -C "${PACK_ROOT}" archive "${gitRef}" | tar -x -C "${archiveDir}"`, { stdio: "inherit" });
+  return archiveDir;
+}
+
+/** Every pack file under root except generated/verification dirs. */
+function packFiles(root) {
+  const out = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir).sort()) {
+      const full = join(dir, entry);
+      const rel = relative(root, full);
+      if (statSync(full).isDirectory()) {
+        if (SKIP_DIRS.has(entry)) continue;
+        walk(full);
+      } else if (entry !== "ARTIFACTS.json" && entry !== "results.json" && entry !== "SHA256SUMS") {
+        out.push(rel);
+      }
+    }
+  };
+  walk(root);
+  return out;
+}
+
+function main() {
+  const { prefix, gitRef } = parseArgs(process.argv.slice(2));
+  if (!existsSync(join(prefix, "node_modules"))) {
+    console.error(`error: ${prefix}/node_modules not found — install the pinned packages first (see README)`);
+    return 2;
+  }
+
+  const packages = {};
+  const tmp = mkdtempSync(join(tmpdir(), "repro-artifacts-"));
+  try {
+    for (const name of PACKAGES) {
+      const pkgJson = JSON.parse(readFileSync(join(prefix, "node_modules", name, "package.json"), "utf8"));
+      const version = pkgJson.version;
+      const integrity = sh("npm", ["view", `${name}@${version}`, "dist.integrity"]);
+      // npm pack names the file based on the package, handling scoped names
+      const tmpTgz = join(tmp, `${name.replace(/@/g, "").replace(/\//g, "-")}-${version}.tgz`);
+      sh("npm", ["pack", `${name}@${version}`, "--pack-destination", tmp]);
+      const files = readdirSync(tmp).filter((f) => f.endsWith(".tgz") && f.includes(version));
+      const basename_ = name.replace(/@/g, "").replace(/\//g, "-");
+      const tgz = files.find((f) => f.startsWith(basename_)) ?? files[0];
+      if (!tgz) throw new Error(`npm pack produced no tarball for ${name}@${version}`);
+      execFileSync("mv", [join(tmp, tgz), tmpTgz]);
+      packages[name] = {
+        version,
+        integrity,
+        tarballSha256: sha256File(tmpTgz),
+      };
+      console.log(`  ${name}@${version}  integrity ${integrity.slice(0, 20)}…  tarball sha256 recorded`);
+      // clean up tgz before next package to avoid stale matches
+      rmSync(tmpTgz, { force: true });
+    }
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+
+  // Determine the root to hash files from
+  let hashRoot = PACK_ROOT;
+  let archiveTmp = null;
+  if (gitRef) {
+    console.log(`  materializing git archive at ${gitRef} …`);
+    archiveTmp = mkdtempSync(join(tmpdir(), "repro-gitarchive-"));
+    hashRoot = materializeGitArchive(gitRef, archiveTmp);
+    console.log(`  archive extracted to ${hashRoot}`);
+  }
+
+  const files = {};
+  let caseSetSource;
+  try {
+    for (const rel of packFiles(hashRoot)) {
+      files[rel] = sha256File(join(hashRoot, rel));
+    }
+    // read from the hashed tree (working tree, or the materialized archive
+    // in --git-ref mode) BEFORE the finally-block removes the archive
+    caseSetSource = JSON.parse(readFileSync(join(hashRoot, "expected-results.json"), "utf8"));
+  } finally {
+    if (archiveTmp) rmSync(archiveTmp, { recursive: true, force: true });
+  }
+
+  const doc = {
+    format: "if07c-independent-reproduction/artifacts/v2",
+    version: PACK_IDENTITY.contentTag.replace(/^v/, ""),
+    generatedAtUtc: new Date().toISOString(),
+    toolchain: {
+      node: process.versions.node,
+      npm: sh("npm", ["--version"]),
+    },
+    ...(gitRef ? { gitRef } : {}),
+    packIdentity: PACK_IDENTITY,
+    packages,
+    publishedSource: PUBLISHED_SOURCE,
+    caseSet: {
+      id: caseSetSource.caseSet?.id ?? "unknown",
+      caseIds: Object.keys(caseSetSource.claims ?? {}).sort(),
+      caseCount: Object.keys(caseSetSource.claims ?? {}).length,
+      note: "Authoritative case-set identity; per-case kinds live in fixtures/*.json, assertions in expected-results.json.",
+    },
+    files,
+    verification: {
+      installDirectory: relative(PACK_ROOT, prefix) || ".",
+      runnerCommand: "node runner/run.mjs",
+      note: "A third party re-running this pack must compare the files{} hashes against their copy, then re-verify packages{} against the registry (npm view dist.integrity / tarball sha256) before trusting a run record.",
+    },
+  };
+
+  const out = join(PACK_ROOT, "ARTIFACTS.json");
+  writeFileSync(out, `${JSON.stringify(doc, null, 2)}\n`);
+
+  // SHA256SUMS: flat index of every declared frozen file PLUS ARTIFACTS.json
+  // itself. Present in the pack tree but NOT declared in ARTIFACTS.json
+  // files{} (and it never lists itself), so the pair is not circular and
+  // regenerating one never invalidates the other.
+  const sumsEntries = [
+    ...Object.entries(files).map(([rel, hash]) => `${hash}  ${rel}`),
+    `${sha256File(out)}  ARTIFACTS.json`,
+  ];
+  sumsEntries.sort((a, b) => a.split("  ")[1].localeCompare(b.split("  ")[1]));
+  writeFileSync(join(PACK_ROOT, "SHA256SUMS"), `${sumsEntries.join("\n")}\n`);
+  console.log(`wrote ${out} (${Object.keys(files).length} files, ${Object.keys(packages).length} packages)`);
+  return 0;
+}
+
+process.exit(main());

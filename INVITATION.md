@@ -1,1 +1,61 @@
-IyBJbmRlcGVuZGVudCByZXByb2R1Y3Rpb24gYXNrIOKAlCBJRi0wN2MgcHJvdmVuYW5jZSBnYXRlIHYxLjEuMAoKWW91IGFyZSBpbnZpdGVkIHRvIGluZGVwZW5kZW50bHkgcnVuIHRoZSAqKklGLTA3YyByZXByb2R1Y3Rpb24gcGFjayB2MS40LjAqKgpvbiB0aGUgcGlubmVkIHB1Ymxpc2hlZCBucG0gYXJ0aWZhY3RzLiBUaGlzIGlzIGEgbmFycm93IGFzazogcGxlYXNlIGRvCioqbm90KiogcmV2aWV3IFdhc21BZ2VudCBzZWN1cml0eSBnZW5lcmFsbHksIGFuZCBkbyBub3QgYXVkaXQgdGhlCmltcGxlbWVudGF0aW9uLiBPbmx5IHJ1biB0aGUgZml4ZWQgcGFjayBhbmQgcmVwb3J0IHdoYXQgeW91IG9ic2VydmUuCgojIyBXaGF0IHlvdSBydW4KClRoZSBwYWNrIGluIHRoaXMgcmVwb3NpdG9yeSBhdCB0YWcgYHYxLjEuMGAgKHNlZSBgQVJUSUZBQ1RTLmpzb25gIGFuZCB0aGUKcmVsZWFzZSBub3RlcyBmb3IgdGhlIGZyb3plbiBoYXNoZXM7IHRoZSBlYXJsaWVyIDctY2FzZSBzZXQgcmVtYWlucyBmcm96ZW4KYXQgYHYxLjAuMGApLiBJdCBkcml2ZXMgbmluZSBwb3NpdGl2ZSBjbGFpbXMgYW5kIG5pbmUgbmVnYXRpdmUgYm91bmRhcnkKY2xhaW1zIHRocm91Z2ggYSBzY3JpcHRlZCBhZ2VudCBsb29wIGFuZCBkaXJlY3QgZ2F0ZXdheS1BUEkgcHJvYmVzIGJ1aWx0CmVudGlyZWx5IG9uIHB1Ymxpc2hlZCBgQHdhc21hZ2VudC9jb3JlYCwgYEB3YXNtYWdlbnQvbWNwLWZpcmV3YWxsYCwgYW5kCmBAd2FzbWFnZW50L21jcC1nYXRld2F5YCBwYWNrYWdlcyDigJQgbm8gbW9ub3JlcG8gY29kZSwgbm8gdGVzdCBoZWxwZXJzLgoKIyMgUHJvY2VkdXJlCgoxLiBWZXJpZnkgeW91ciBjb3B5OiByZWNvbXB1dGUgdGhlIFNIQTI1NiBvZiBldmVyeSBmaWxlIGxpc3RlZCBpbgogICBgQVJUSUZBQ1RTLmpzb25gIOKGkiBgZmlsZXN7fWAgYW5kIGNvbXBhcmUuICoqRG8gbm90IHRydXN0CiAgIGBBUlRJRkFDVFMuanNvbmAgYWxvbmUqKiDigJQgaW5kZXBlbmRlbnRseSBmZXRjaCBucG0gbWV0YWRhdGEKICAgKGBucG0gdmlldyA8cGtnPkA8dmVyc2lvbj4gZGlzdC5pbnRlZ3JpdHlgKSBhbmQgdGhlIHRhcmJhbGxzLCBhbmQgY29tcGFyZQogICBhZ2FpbnN0IGBwYWNrYWdlc3t9YC4KMi4gSW4gYSBjbGVhbiBkaXJlY3RvcnksIGNvcHkgdGhlIHBhY2sgaW4gYW5kIGluc3RhbGwgdGhlIGxvY2tlZCB0cmVlOgogICBgbnBtIGNpYCAoZXhhY3QgdmVyc2lvbnMgcGlubmVkIGluIGBwYWNrYWdlLmpzb25gIC8gYHBhY2thZ2UtbG9jay5qc29uYDsKICAgdGhlIHNhbWUgdmVyc2lvbnMgYXJlIHJlY29yZGVkIGluIGBBUlRJRkFDVFMuanNvbmAg4oaSIGBwYWNrYWdlc3t9YCkuCjMuIFJ1biBgbm9kZSBydW5uZXIvcnVuLm1qc2AuCjQuIFJlY29yZCBldmVyeXRoaW5nIGxpc3RlZCB1bmRlciAiUmVwb3J0IGZvcm1hdCIgYmVsb3cuCgojIyBSZXBvcnQgZm9ybWF0IChwZXIgY2xhaW0gb25seSkKClJlcG9ydCBleGFjdGx5IHRoZXNlIGZpZWxkcyBmb3IgZWFjaCBvZiB0aGUgMjUgY2xhaW1zICgxOCBwb3NpdGl2ZTogQzHigJNDNCwgRDHigJNEM2IsIEwxLCBTMeKAk1MyLCBTNCwgUDHigJNQNGI7CjcgbmVnYXRpdmU6IE4x4oCTTjQsIFMzLCBFMeKAk0UyKToKCi0gYHJ1bm5lciBjb21taXRgIOKAlCB0aGUgY29tbWl0IFNIQSBvZiB0aGlzIHJlcG9zaXRvcnkgeW91IHJhbgotIGBPUyAvIE5vZGUgdmVyc2lvbmAg4oCUIHlvdXIgZW52aXJvbm1lbnQKLSBgbnBtLXJlc29sdmVkIHZlcnNpb25zYCDigJQgd2hhdCBucG0gYWN0dWFsbHkgaW5zdGFsbGVkIChgbnBtIGxzIEB3YXNtYWdlbnQvY29yZWApCi0gYHRhcmJhbGwgaW50ZWdyaXR5YCDigJQgdGhlIGBkaXN0LmludGVncml0eWAgeW91IGluZGVwZW5kZW50bHkgZmV0Y2hlZAotIGBwZXItY2xhaW0gcmVzdWx0YCDigJQgUEFTUyAvIEZBSUwgZm9yIHBvc2l0aXZlIGNsYWltcywgQk9VTkRBUlktSEVMRCAvCiAgQk9VTkRBUlktQlJPS0VOIGZvciBuZWdhdGl2ZSBjbGFpbXMsIGV4YWN0bHkgYXMgdGhlIHJ1bm5lciBwcmludHMgdGhlbQotIGByYXcgb3V0cHV0YCDigJQgdGhlIGNvbXBsZXRlLCB1bmVkaXRlZCBydW5uZXIgb3V0cHV0LCBwbHVzIHRoZQogIGByZXN1bHRzLmpzb25gIGl0IGdlbmVyYXRlZCBhbmQgYSBgc2hhMjU2c3VtIC1jIFNIQTI1NlNVTVNgIHRyYW5zY3JpcHQKCiMjIFBsZWFzZSBkbyBOT1QKCi0gRG8gbm90IHN1bW1hcml6ZSB0aGUgcmVzdWx0IGFzICJzZWN1cmUiIC8gInBhc3NlZCBzZWN1cml0eSIg4oCUIHRoZSBwYWNrCiAgZGVsaWJlcmF0ZWx5IGVtaXRzIG5vIGFnZ3JlZ2F0ZSB2ZXJkaWN0LCBhbmQgbmVpdGhlciBzaG91bGQgdGhlIHJlcG9ydC4KLSBEbyBub3QgbW9kaWZ5IHRoZSBmaXh0dXJlcywgZXhwZWN0ZWQtcmVzdWx0cy5qc29uLCBvciB0aGUgcnVubmVyIGJlZm9yZQogIHRoZSBydW4uIElmIHlvdSBiZWxpZXZlIGEgZml4dHVyZSBpcyB3cm9uZywgcnVuIGl0IHVubW9kaWZpZWQgZmlyc3QgYW5kCiAgZmlsZSB0aGUgb2JzZXJ2YXRpb24gc2VwYXJhdGVseS4KLSBEbyBub3QgcmUtcnVuIHdpdGggZWRpdGVkIGNsYWltcyBhbmQgcHJlc2VudCBpdCBhcyBhIHJlcHJvZHVjdGlvbiDigJQgdGhhdAogIGlzIGEgbmV3IGV4cGVyaW1lbnQsIG5vdCBhIHJlcHJvZHVjdGlvbi4KCiMjIFdoYXQgYSBncmVlbiBydW4gZG9lcyBhbmQgZG9lcyBub3QgbWVhbgoKU2VlIGBDTEFJTS1CT1VOREFSWS5tZGAgZm9yIHRoZSBmdWxsIHZvY2FidWxhcnkuIEluIHNob3J0OiBhIGZ1bGwgZ3JlZW4gcnVuCnJlcHJvZHVjZXMgdGhlIHBpbm5lZCBjbGFpbXMgYW5kIGNlaWxpbmdzIG9uIHRoZSBwaW5uZWQgYXJ0aWZhY3RzIOKAlCBpdCBkb2VzCm5vdCBlc3RhYmxpc2ggYWRhcHRpdmUgYWR2ZXJzYXJpYWwgY29tcGxldGVuZXNzLCBwcm9jZXNzLXdpZGUgdGFpbnQKdHJhY2tpbmcsIGRlZmF1bHQtb24gYmVoYXZpb3IsIERMUCwgcHJvdGVjdGlvbiBvZiBzYW1lLWJhdGNoIGRhdGFmbG93IGJ5CnRhaW50IHBvbGljeSwgdW5ib3VuZGVkLXJ1biB0YWludCBpbnRlZ3JpdHksIHByb2R1Y3Rpb24gZmFsc2UtcG9zaXRpdmUKcmF0ZXMsIG9yIGFueSBpbmRlcGVuZGVudCBzZWN1cml0eSBjZXJ0aWZpY2F0aW9uLgo=
+# Independent reproduction ask — IF-07c provenance gate v1.1.0
+
+You are invited to independently run the **IF-07c reproduction pack v1.4.0**
+on the pinned published npm artifacts. This is a narrow ask: please do
+**not** review WasmAgent security generally, and do not audit the
+implementation. Only run the fixed pack and report what you observe.
+
+## What you run
+
+The pack in this repository at tag `v1.1.0` (see `ARTIFACTS.json` and the
+release notes for the frozen hashes; the earlier 7-case set remains frozen
+at `v1.0.0`). It drives nine positive claims and nine negative boundary
+claims through a scripted agent loop and direct gateway-API probes built
+entirely on published `@wasmagent/core`, `@wasmagent/mcp-firewall`, and
+`@wasmagent/mcp-gateway` packages — no monorepo code, no test helpers.
+
+## Procedure
+
+1. Verify your copy: recompute the SHA256 of every file listed in
+   `ARTIFACTS.json` → `files{}` and compare. **Do not trust
+   `ARTIFACTS.json` alone** — independently fetch npm metadata
+   (`npm view <pkg>@<version> dist.integrity`) and the tarballs, and compare
+   against `packages{}`.
+2. In a clean directory, copy the pack in and install the locked tree:
+   `npm ci` (exact versions pinned in `package.json` / `package-lock.json`;
+   the same versions are recorded in `ARTIFACTS.json` → `packages{}`).
+3. Run `node runner/run.mjs`.
+4. Record everything listed under "Report format" below.
+
+## Report format (per claim only)
+
+Report exactly these fields for each of the 25 claims (18 positive: C1–C4, D1–D3b, L1, S1–S2, S4, P1–P4b;
+7 negative: N1–N4, S3, E1–E2):
+
+- `runner commit` — the commit SHA of this repository you ran
+- `OS / Node version` — your environment
+- `npm-resolved versions` — what npm actually installed (`npm ls @wasmagent/core`)
+- `tarball integrity` — the `dist.integrity` you independently fetched
+- `per-claim result` — PASS / FAIL for positive claims, BOUNDARY-HELD /
+  BOUNDARY-BROKEN for negative claims, exactly as the runner prints them
+- `raw output` — the complete, unedited runner output, plus the
+  `results.json` it generated and a `sha256sum -c SHA256SUMS` transcript
+
+## Please do NOT
+
+- Do not summarize the result as "secure" / "passed security" — the pack
+  deliberately emits no aggregate verdict, and neither should the report.
+- Do not modify the fixtures, expected-results.json, or the runner before
+  the run. If you believe a fixture is wrong, run it unmodified first and
+  file the observation separately.
+- Do not re-run with edited claims and present it as a reproduction — that
+  is a new experiment, not a reproduction.
+
+## What a green run does and does not mean
+
+See `CLAIM-BOUNDARY.md` for the full vocabulary. In short: a full green run
+reproduces the pinned claims and ceilings on the pinned artifacts — it does
+not establish adaptive adversarial completeness, process-wide taint
+tracking, default-on behavior, DLP, protection of same-batch dataflow by
+taint policy, unbounded-run taint integrity, production false-positive
+rates, or any independent security certification.

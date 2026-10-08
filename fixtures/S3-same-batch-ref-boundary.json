@@ -1,1 +1,36 @@
-ewogICJpZCI6ICJTMyIsCiAgInRpdGxlIjogIlNhbWUtYmF0Y2ggJHJlZiBpbnRvIGEgc3RyaW5nLXNjaGVtYSBuZXR3b3JrIHNpbmsgaXMgREVOSUVEIGJ5IHByb3ZlbmFuY2UgcnVsZXMgYXQgZGlzcGF0Y2gtdGltZSByZS1ldmFsdWF0aW9uIChmaXhlZCBpbiBjb3JlIDMuMTAuMCkiLAogICJraW5kIjogIm5lZ2F0aXZlIiwKICAid2lyaW5nIjogIndpcmVkIiwKICAicHJvZmlsZVNldCI6ICJmdWxsIiwKICAic2NoZWR1bGVyIjogImRhZyIsCiAgInJ1bnMiOiBbCiAgICB7CiAgICAgICJzdGVwcyI6IFsKICAgICAgICB7CiAgICAgICAgICAiY2FsbHMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAiaWQiOiAiYzEiLAogICAgICAgICAgICAgICJuYW1lIjogInNlYXJjaF9kb2NzIiwKICAgICAgICAgICAgICAiaW5wdXQiOiB7CiAgICAgICAgICAgICAgICAia2V5IjogImsiCiAgICAgICAgICAgICAgfQogICAgICAgICAgICB9LAogICAgICAgICAgICB7CiAgICAgICAgICAgICAgImlkIjogImMyIiwKICAgICAgICAgICAgICAibmFtZSI6ICJzZW5kX3JlcG9ydCIsCiAgICAgICAgICAgICAgImlucHV0IjogewogICAgICAgICAgICAgICAgImJvZHkiOiAiJGMxIgogICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgXQogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgInRleHQiOiAiZG9uZSIKICAgICAgICB9CiAgICAgIF0KICAgIH0KICBdLAogICJub3RlIjogInYxLjMuMCBwaW5uZWQgdGhpcyBhcyAnbm8gcHJvdmVuYW5jZSBydWxlLCBmYWlsLXNhZmUgYnkgdHlwaW5nJy4gV2l0aCBkaXNwYXRjaC10aW1lIHJlLWF1dGhvcml6YXRpb24gKGNvcmUgMy4xMC4wLCBSRkMgIzUwNSkgdGhlIGRlcGVuZGVudCBzaW5rIGlzIGdhdGVkIG9uIHRoZSBsZWRnZXIgaW5jbHVkaW5nIHRoZSBpbi1iYXRjaCByZWFkLCBzbyB0aGUgZGVuaWFsIGlzIG5vdyBCWSBUQUlOVCBQT0xJQ1kuIEV4cGVjdGF0aW9uIGZyb3plbiBmcm9tIHRoZSBmaXJzdCBydW4gb24gdGhlIGZpeGVkIGFydGlmYWN0cy4iCn0K
+{
+  "id": "S3",
+  "title": "Same-batch $ref into a string-schema network sink is DENIED by provenance rules at dispatch-time re-evaluation (fixed in core 3.10.0)",
+  "kind": "negative",
+  "wiring": "wired",
+  "profileSet": "full",
+  "scheduler": "dag",
+  "runs": [
+    {
+      "steps": [
+        {
+          "calls": [
+            {
+              "id": "c1",
+              "name": "search_docs",
+              "input": {
+                "key": "k"
+              }
+            },
+            {
+              "id": "c2",
+              "name": "send_report",
+              "input": {
+                "body": "$c1"
+              }
+            }
+          ]
+        },
+        {
+          "text": "done"
+        }
+      ]
+    }
+  ],
+  "note": "v1.3.0 pinned this as 'no provenance rule, fail-safe by typing'. With dispatch-time re-authorization (core 3.10.0, RFC #505) the dependent sink is gated on the ledger including the in-batch read, so the denial is now BY TAINT POLICY. Expectation frozen from the first run on the fixed artifacts."
+}

@@ -1,1 +1,151 @@
-IyBDbGFpbSBib3VuZGFyeSDigJQgd2hhdCBhIGdyZWVuIHJ1biBvZiB0aGlzIHBhY2sgcHJvdmVzLCBhbmQgd2hhdCBpdCBkb2VzIG5vdAoKVGhpcyBwYWNrIGV4ZWN1dGVzIGVpZ2h0ZWVuIFBPU0lUSVZFIGNsYWltcyBhbmQgc2V2ZW4gTkVHQVRJVkUgYm91bmRhcnkgY2xhaW1zCmFnYWluc3QgcHVibGlzaGVkIG5wbSBhcnRpZmFjdHMuIFJlYWQgdGhpcyBmaWxlIGJlZm9yZSBjaXRpbmcgYW55IHJlc3VsdC4KCiMjIFByb3ZlcyAob24gdGhlIHBpbm5lZCBmaXh0dXJlcywgd2l0aCB0aGUgcGlubmVkIGFydGlmYWN0IHZlcnNpb25zKQoKYGBgdGV4dApDMSAgYW4gdW5sYWJlbGVkIGJlbmlnbiBmbG93IHJ1bnMgd2l0aG91dCBpbnRlcmZlcmVuY2Ug4oCUIHRoZSBnYXRlIGRvZXMgbm90CiAgICBkZW55IHdoYXQgbm8gb3BlcmF0b3IgZXZlciBsYWJlbGVkOwpDMiAgYSBsYWJlbGVkIHJlYWQgZm9sbG93ZWQgYnkgYSBkZW55LXNpbmsgY2FsbCBpcyBkZW5pZWQgYXV0b21hdGljYWxseSDigJQKICAgIG5vIGNhbGxlci1zaWRlIHByb3ZlbmFuY2UgdGhyZWFkaW5nOwpDMyAgYSBsYWJlbGVkIHJlc3VsdCB0cmFuc2Zvcm1lZCBJTlNJREUgYSBsYWJlbGVkIHRvb2wgYW5kIGZvcndhcmRlZCB1bmRlciBhCiAgICByZW5hbWVkIGFyZ3VtZW50IGlzIHN0aWxsIGRlbmllZCDigJQgdGhlIGRlbnkga2V5cyBvbiBwcm92ZW5hbmNlIGxhYmVscyArCiAgICBjb250ZW50IGlkZW50aXR5LCBub3Qgb24gdmFsdWUgc2hhcGU7CkM0ICB0aGUgdmVyYmF0aW0gc2VjcmV0IG5lc3RlZCBpbnNpZGUgYSBzdHJ1Y3R1cmVkIHNpbmsgYXJndW1lbnQgaXMgc3RpbGwKICAgIGNhdWdodCBieSB0aGUgaWRlbnRpdHkgcnVsZSdzIGJvdW5kZWQgYXJnIHdhbGs7CkQxICBhIHRvb2wgd2l0aCBubyByZWdpc3RlcmVkIGRlc2NyaXB0b3IgaXMgcmVmdXNlZCBmYWlsLWNsb3NlZAogICAgKGRlc2NyaXB0b3ItdW5hdmFpbGFibGUpIOKAlCB0aGUgZ2F0ZXdheSBuZXZlciBndWVzc2VzOwpEMiAgYSBnYXRld2F5IGFza191c2VyIGVzY2FsYXRpb24gd2l0aCBubyBhcHByb3ZhbCBmYWNpbGl0eSB3aXJlZCBkZWdyYWRlcwogICAgdG8gYSBmYWlsLWNsb3NlZCBkZW55IChjb25zZW50LXVuYXZhaWxhYmxlKSDigJQgY29uc2VudCBjYW5ub3QgYmUKICAgIHNpbGVudGx5IHNraXBwZWQ7CkQzYS9EM2IgdGhlIHNhbWUgZXNjYWxhdGlvbiB0aHJvdWdoIHRoZSBzdXBwb3J0ZWQgY2hlY2twb2ludGVyIEFQSToKICAgIGFwcHJvdmFsIGV4ZWN1dGVzIHRoZSBjYWxsIGV4YWN0bHkgb25jZTsgcmVqZWN0aW9uIGV4ZWN1dGVzIG5vdGhpbmcgYW5kCiAgICBlbmRzIHRoZSBydW4gd2l0aG91dCBhIGZpbmFsIGFuc3dlcjsKTDEgIGEgdGFpbnRlZCBydW4gaXMgbm90IGEgZnJvemVuIHJ1biDigJQgYmVuaWduIG5vbi1zaW5rIHRvb2xzIGtlZXAKICAgIGV4ZWN1dGluZzsgb25seSBkZWNsYXJlZCBkZW55LXNpbmtzIGFyZSBibG9ja2VkLgpQMSAgcGVybWlzc2lvbiBpbnRlbnQgZGVjbGFyZWQgdXAgZnJvbnQ6IGEgc3VwcG9ydCBwcmluY2lwYWwgaG9sZGluZyBhCiAgICB0ZW5hbnQtc2NvcGVkIGNhcGFiaWxpdHkgZ3JhbnQgcmVhZHMgdGhlIHRlbmFudCBpdHMgcmVxdWVzdCBvcGVyYXRlcwogICAgb24gKGFsbG93LCBubyBydWxlcyBmaXJlZCk7IHRoZSB0d2luIHJlcXVlc3Qgb3BlcmF0aW5nIG9uIHRlbmFudC1hCiAgICB3aGlsZSByZWZlcmVuY2luZyB0ZW5hbnQtYiByZXNvdXJjZXMgaXMgZGVuaWVkIGJ5IHRlbmFudCBpc29sYXRpb24KICAgIChncmFudHMgZXhpc3QgZm9yIEJPVEggdGVuYW50cywgc28gdGhlIGRlbnkgaXMgYXR0cmlidXRhYmxlIHRvCiAgICBpc29sYXRpb24sIG5vdCB0byBhIG1pc3NpbmcgZ3JhbnQpOwpQMiAgdGVuYW50LW9wZW4gcmVhZHMgc3RheSBvcGVuOyBhIGNhcGFiaWxpdHktZ2F0ZWQgZXh0ZXJuYWwgd3JpdGUKICAgIGV4ZWN1dGVzIG9ubHkgd2l0aCBncmFudCBQTFVTIGFyZ3VtZW50LXNjb3BlLSBhbmQgc2Vzc2lvbi1ib3VuZAogICAgb3BlcmF0b3IgY29uc2VudCAodXNlckNvbnNlbnRSZWYgb24gZmlsZSk7ClAyYiB0aGUgc2FtZSB3cml0ZSB3aXRoIG5vIGdyYW50IGlzIGRlbmllZCBvdXRyaWdodCDigJQgY29uc2VudCBvbiBmaWxlCiAgICBmb3IgYW5vdGhlciBwcmluY2lwYWwgbmV2ZXIgZG93bmdyYWRlcyBhbnl0aGluZyAoY29uc2VudCB0dXJucwogICAgYXNrX3VzZXIgaW50byBhbGxvdywgbmV2ZXIgZGVueSBpbnRvIGFsbG93KTsKUDMvUDNiIHRoZSB0cnVzdCBhbmNob3IgaXMgdGhlIG9wZXJhdG9yLXZlcmlmaWVkIHNlcnZlciBib3VuZGFyeTogYQogICAgZGVzY3JpcHRvci1vbmx5IHRvb2wgaXMgdXNhYmxlIG9uIGEgdmVyaWZpZWQgYm91bmRhcnkgYW5kIHJlZnVzZWQKICAgICh1bnByb2ZpbGVkLXRvb2wtZGVueSkgb24gYW4gdW52ZXJpZmllZCBvbmUgdW5kZXIgYQogICAgZGVueS1vbi11bnByb2ZpbGVkIHBvbGljeS4KUDQgIGEgZGVsaWJlcmF0ZWx5IHB1YmxpYyByb3V0ZSBpcyBhbGxvd2VkIGJ5IGRlZmF1bHQgYW5kIGFuIGludGVybmFsCiAgICByb3V0ZSBkZW5pZWQgYnkgYW4gT1BFUkFUT1ItU1VQUExJRUQgY3VzdG9tIHJ1bGUuCmBgYAoKIyMgUHJvdmVzIHRoZSBCT1VOREFSSUVTIGhvbGQgKG5lZ2F0aXZlIGdyb3VwKQoKQSBuZWdhdGl2ZSBjbGFpbSdzIGBCT1VOREFSWS1IRUxEYCB2ZXJkaWN0IG1lYW5zIHRoZSBnYXRlIGRpZCBleGFjdGx5IHdoYXQKdGhlIGRvY3VtZW50ZWQgY2xhaW0gY2VpbGluZyBzYXlzIOKAlCBpbmNsdWRpbmcgTk9UIGRvaW5nIHRoaW5ncyBpdCBuZXZlcgpjbGFpbWVkLiBUaGVzZSBhcmUgZXhlY3V0YWJsZSBjZWlsaW5nIGFzc2VydGlvbnM6CgpgYGB0ZXh0Ck4xICB1bndpcmVkIGFnZW50ICDihpIgdGhlIHByb3ZlbmFuY2UgZ2F0ZSBkb2VzIG5vdCBhdXRvLWZpcmUuIFdpcmluZyBpcwogICAgb3B0LWluOyBhbiBhZ2VudCB3aXRoIG5vIHBvbGljeUdhdGV3YXkgYmVoYXZlcyBhcyBiZWZvcmUuCk4yICBubyByZXN1bHRUYWludExhYmVscyBwcm9maWxlIOKGkiB0aGUgcnVudGltZSBkb2VzIG5vdCBpbnZlbnQgc2VjcmV0CiAgICBsYWJlbHMuIE5vIERMUCwgbm8gaGV1cmlzdGljIHNlY3JldCBzY2FubmluZy4KTjMgIGNyb3NzLXJ1biByZXVzZSDihpIgdGhlIGxlZGdlciBpcyBydW4tc2NvcGVkLiBBIHByZXZpb3VzIHJ1bidzCiAgICBvYnNlcnZhdGlvbnMgZG8gbm90IGdhdGUgdGhlIG5leHQgcnVuLiBObyBwcm9jZXNzLXdpZGUgdGFpbnQgbGVkZ2VyLgpONCAgbW9kZWwtc2lkZSB0cmFuc2Zvcm0gb2YgYW4gaW4tY29udGV4dCBzZWNyZXQg4oaSIHRoZSBJREVOVElUWSBydWxlIGRvZXMKICAgIG5vdCBmaXJlLiBUaGlzIGRldGVjdGlvbiBpcyBOT1RfRVNUQUJMSVNIRUQgYnkgZGVzaWduLiAoSW4gdGhpcyBmaXh0dXJlCiAgICB0aGUgY2FsbCBpcyBzdGlsbCBibG9ja2VkIOKAlCBieSB0aGUgbGFiZWwgcnVsZSwgYmVjYXVzZSB3aG9sZS1ydW4KICAgIHRocmVhZGluZyBnYXRlcyBldmVyeSBsYXRlciBkZW55LXNpbmsgY2FsbCBpbiB0aGUgc2FtZSBydW4uIFRoZSB2ZXJkaWN0CiAgICBwaW5zIHRoZSBBQlNFTkNFIG9mIGlkZW50aXR5LXJ1bGUgYXR0cmlidXRpb24sIG5vdCB0aGUgc2VuZCdzIGV4ZWN1dGlvbi4pClMxL1MyIHdob2xlLXJ1biB0aHJlYWRpbmcgaXMgc2NoZWR1bGVyLWluZGVwZW5kZW50OiB0aGUgc2FtZSBsYXRlci1zdGVwCiAgICByZWFk4oaSc2luayBzY3JpcHQgaXMgZGVuaWVkIHVuZGVyIGJvdGggdGhlIGRlZmF1bHQgREFHIHNjaGVkdWxlciBhbmQgdGhlCiAgICBwYXJhbGxlbCBzY2hlZHVsZXIuIE5vIGJhdGNoLWludGVybmFsIGhhcHBlbnMtYmVmb3JlIGlzIGFzc2VydGVkIG9yCiAgICBhc3N1bWVkIGFueXdoZXJlIGluIHRoaXMgcGFjay4KUzMgIHNhbWUtYmF0Y2ggJHJlZiBkYXRhZmxvdyBpcyBPVVRTSURFIHRoZSB0aHJlYWRpbmcgcHJvdGVjdGlvbjogcG9saWN5CiAgICBkZWNpc2lvbnMgZm9yIGEgYmF0Y2ggYXJlIGV2YWx1YXRlZCBiZWZvcmUgdGhlIGJhdGNoIGRpc3BhdGNoZXMsIHNvIHRoZQogICAgZGVwZW5kZW50IHNpbmsncyBnYXRlIHNlZXMgYW4gZW1wdHkgbGVkZ2VyIGFuZCBubyBwcm92ZW5hbmNlIHJ1bGUgZmlyZXMuCiAgICBUaGUgcGlubmVkIGFydGlmYWN0IHRoZW4gZmFpbHMgdGhlIGNhbGwgb24gdHlwaW5nICh0aGUgJHJlZiBzdWJzdGl0dXRpb24KICAgIHBhc3NlcyB0aGUgcmVhZCdzIHJhdyByZXN1bHQgb2JqZWN0OyBhIHN0cmluZy1pbnB1dCBzaW5rIHJlamVjdHMgaXQpLCBzbwogICAgbm8gZWZmZWN0IG9jY3VycyDigJQgYnV0IHRoYXQgaXMgc2NoZW1hIHR5cGluZywgbm90IHRhaW50IHBvbGljeS4gQSBzaW5rCiAgICB3aG9zZSBzY2hlbWEgYWNjZXB0ZWQgb2JqZWN0cyB3b3VsZCBub3QgYmUgc3BhcmVkIGJ5IHR5cGluZy4gR3VpZGFuY2U6CiAgICBzdWJtaXQgZGVwZW5kZW50IHNpbmtzIGluIGxhdGVyIHN0ZXBzLgpFMSAgdGhlIGxlZGdlciBpcyBib3VuZGVkIChkZWZhdWx0IDUxMiBvYnNlcnZhdGlvbnMpLiBBbGwtc2Vuc2l0aXZlIG92ZXJmbG93CiAgICBldmljdHMgdGhlIE9MREVTVCBlbnRyeTogaWRlbnRpdHkgdHJhY2tpbmcgZm9yIHRoZSBldmljdGVkIHNlY3JldAogICAgZGVncmFkZXMgKHRoZSBpZGVudGl0eSBydWxlIHN0b3BzIGZpcmluZyBmb3IgaXQpIHdoaWxlIGxhYmVsLWJhc2VkCiAgICBjb250YWlubWVudCBwZXJzaXN0cy4gQm91bmRlZC1tZW1vcnkgaWRlbnRpdHkgaXMgYSBkb2N1bWVudGVkIGNlaWxpbmcsCiAgICBub3QgdW5ib3VuZGVkLXJ1biB0YWludCBpbnRlZ3JpdHkuCkUyICBldmljdGlvbiBwcmVmZXJzIG5vbi1zZW5zaXRpdmUgZW50cmllczogYSBkZWNsYXJlZCBub24tc2Vuc2l0aXZlIGxhYmVsCiAgICAoJ2ludGVybmFsJykgZXZpY3RzIGJlZm9yZSBhbnkgc2Vuc2l0aXZlIGVudHJ5LiBEZWNsYXJlZCBsYWJlbHMgYXJlCiAgICBvcGVyYXRvciBmYWN0cywgbm90IERMUCBqdWRnbWVudHMuClMtZmFtaWx5IHNjb3BlOiB0aGUgUC1mYW1pbHkgcGlucyBERUNJU0lPTlMgb2YgdGhlIHB1Ymxpc2hlZCBnYXRld2F5CiAgICAoYWxsb3cvZGVueS9hc2sgKyBtYXRjaGVkIHJ1bGUgaWRzICsgY29uc2VudCByZWZlcmVuY2UpLiBSZWFsLWV4ZWN1dGlvbgogICAgY291bnRlcnBhcnRzIGZvciBhbGxvdyBkZWNpc2lvbnMgYXJlIHBpbm5lZCBieSB0aGUgYWdlbnQtbGV2ZWwgY2FzZXMKICAgIChDMSwgRDNhLCBMMSk7IHRoZSBwZXJtaXNzaW9uIHByb2JlcyB0aGVtc2VsdmVzIGRvIG5vdCBleGVjdXRlIHRvb2xzLgogICAgVGhlIHVucHJvZmlsZWQtdG9vbCBib3VuZGFyeSBydWxlIGFkanVkaWNhdGVzIGhldXJpc3RpY2FsbHkKICAgIHJlYWQtY2xhc3NpZmllZCB1bnByb2ZpbGVkIHRvb2xzIG9ubHkgKG90aGVyIGVmZmVjdCBjbGFzc2VzIGFyZSBvd25lZAogICAgYnkgZGlmZmVyZW50IHJ1bGVzLCBlLmcuIHRoZSB1bmtub3duLXByb2ZpbGUgZmFpbC1zYWZlKS4gUDQncyByb3V0ZQogICAgcG9saWN5IGlzIG9wZXJhdG9yLXN1cHBsaWVkIGFuZCB0aGVyZWZvcmUgcnVucyB3aXRoIHNlY3VyaXR5UHJvZmlsZQogICAgImN1c3RvbSIsIG5vdCAiaGFyZGVuZWQiIOKAlCB0aGUgcHVibGlzaGVkIHN0YWNrIGhhcyBubyBmaXJzdC1jbGFzcwogICAgcm91dGUgYWxsb3dsaXN0L2RlbnlsaXN0LCB3aGljaCB0aGlzIHBhaXIgcmVjb3JkcyBhcyBhbiB1cHN0cmVhbSBnYXAuCmBgYAoKIyMgRG9lcyBOT1QgcHJvdmUKCmBgYHRleHQKYWRhcHRpdmUgYWR2ZXJzYXJpYWwgY29tcGxldGVuZXNzICh0aGlzIGlzIGEgZml4ZWQgZml4dHVyZSBzZXQsIG5vdCBhCiAgcmVkLXRlYW0gY29ycHVzKTsKcHJvY2Vzcy13aWRlIG9yIGNyb3NzLXJ1biB0YWludCB0cmFja2luZyAoTjMgYXNzZXJ0cyB0aGUgb3Bwb3NpdGUpOwpkZWZhdWx0LW9uIGJlaGF2aW9yIChOMSBhc3NlcnRzIHRoZSBvcHBvc2l0ZTogb3B0LWluIG9ubHkpOwpDb2RlQWdlbnQgY292ZXJhZ2UgKHRoZSBzZWNvbmQgYWdlbnQgbG9vcCBpcyB1bndpcmVkIHRlcnJpdG9yeSk7CkRMUCAvIG1vZGVsLXNpZGUgdHJhbnNmb3JtIGRldGVjdGlvbiAoTjQgYXNzZXJ0cyB0aGUgb3Bwb3NpdGUpOwpzYW1lLWJhdGNoICRyZWYgREVQRU5ERU5UIGNhbGxzIGFyZSBub3cgVEFJTlQtUE9MSUNZIEdBVEVEIGF0IGRpc3BhdGNoCiAgdGltZSAoUzMvUzQpOyB3aGF0IHJlbWFpbnMgdW5nYXRlZCBpcyBzYW1lLWJhdGNoIElOREVQRU5ERU5UIGNvbmN1cnJlbmN5CiAgKG5vIGhhcHBlbnMtYmVmb3JlIGlzIGNyZWF0ZWQgb3IgYXNzZXJ0ZWQpOwp1bmJvdW5kZWQtcnVuIHRhaW50IGludGVncml0eSAoRTEvRTIgcGluIGJvdW5kZWQtbWVtb3J5IGV2aWN0aW9uCiAgc2VtYW50aWNzOiBpZGVudGl0eSB0cmFja2luZyBkZWdyYWRlcyBmb3IgZXZpY3RlZCBlbnRyaWVzKTsKcHJvZHVjdGlvbiBmYWxzZS1wb3NpdGl2ZSByYXRlIChubyByZWFsIHdvcmtsb2FkIGlzIGV4ZXJjaXNlZCBoZXJlOyBMMSBhbmQKICB0aGUgUC1mYW1pbHkgYXJlIGZpeHR1cmUtbGV2ZWwgbGVnYWwgbmVnYXRpdmVzLCBub3QgZGVwbG95bWVudCBzdGF0aXN0aWNzCiAg4oCUIHRoZSBwZXJtaXNzaW9uIHByb2JlcyBhc3NlcnQgZGVjaXNpb25zLCBub3QgbWVhc3VyZWQgZmFsc2UtcG9zaXRpdmUKICByYXRlcyk7CmZpcnN0LWNsYXNzIHJvdXRlIHBvbGljeSB1bmRlciB0aGUgaGFyZGVuZWQgc3RhY2sgKFA0J3Mgcm91dGUgcnVsZSBpcwogIG9wZXJhdG9yLXN1cHBsaWVkIGFuZCBmbGlwcyB0aGUgZ2F0ZXdheSB0byBzZWN1cml0eVByb2ZpbGUgImN1c3RvbSIpOwppbmRlcGVuZGVudCBzZWN1cml0eSBjZXJ0aWZpY2F0aW9uIChhIGdyZWVuIHJ1biBieSBBTlkgcGFydHkg4oCUIGluY2x1ZGluZyBhCiAgdGhpcmQgcGFydHkg4oCUIGlzIGEgcmVwcm9kdWN0aW9uIG9mIHBpbm5lZCBjbGFpbXMsIG5vdCBhbiBhdWRpdCkuCmBgYAoKIyMgV2hvbGUtcnVuIHRocmVhZGluZyBwb3N0dXJlIChkb2N1bWVudGVkLCBhbmQgdmlzaWJsZSBpbiB0aGlzIHBhY2spCgpUaGUgcmVmZXJlbmNlIGFkYXB0ZXIgdGhyZWFkcyB0aGUgcnVuJ3Mgd2hvbGUgbGVkZ2VyIG9uIGV2ZXJ5IGV2YWx1YXRlLgpVbmRlciBJRi0wN2Egc2VtYW50aWNzLCB0aHJlYWRpbmcgaXMgdGhlIGNhbGxlcidzIGRlY2xhcmF0aW9uIHRoYXQgdGhlIGNhbGwKY29uc3VtZXMgZGF0YSBkZXJpdmVkIGZyb20gdGhvc2Ugb2JzZXJ2YXRpb25zIOKAlCBzbyBhZnRlciBhIGxhYmVsZWQgcmVhZCBpbiBhCnJ1biwgbGF0ZXIgZGVueS1zaW5rIGNhbGxzIGFyZSBnYXRlZCBieSB0aGUgbGFiZWwgcnVsZSBldmVuIHdoZW4gdGhlaXIKYXJndW1lbnRzIGNhcnJ5IG5vbmUgb2YgdGhlIGxhYmVsZWQgY29udGVudCAodmlzaWJsZSBpbiBONCkuIExlZ2l0aW1hdGUKZmxvd3MgdGhhdCBtdXN0IGFjdCBvbiB0YWludGVkIGRhdGEgZ28gdGhyb3VnaCB0aGUgb3BlcmF0b3ItcHJvZmlsZSBwYXRoCihlLmcuIGhvbmVzdCBzaW5rIGRlY2xhcmF0aW9ucyksIGV4YWN0bHkgYXMgZG9jdW1lbnRlZCBpbiBJRi0wN2EuIFRoZQp0aHJlYWRpbmcgdW5pdCBpcyB0aGUgRVZBTFVBVElPTiwgd2hpY2ggaGFwcGVucyBwZXIgc3VibWl0dGVkIGJhdGNoIOKAlCBoZW5jZQp0aGUgUzMgY2VpbGluZy4gT25seSBkZWNsYXJlZCBkZW55LXNpbmtzIGFyZSBldmVyIGdhdGVkIGJ5IGl0IChMMSkuCgojIyBDb25zZW50IGFuZCBkZXNjcmlwdG9yIGZhaWwtY2xvc2VkIHBvc3R1cmUgKEQxLCBEMiwgRDNhL0QzYikKClR3byBtb3JlIGZhaWwtY2xvc2VkIHNlYW1zIGFyZSBwaW5uZWQgYWxvbmdzaWRlIHRoZSBwcm92ZW5hbmNlIGdhdGU6IGFuCnVucmVzb2x2YWJsZSBkZXNjcmlwdG9yIGlzIGEgZGVuaWFsLCBuZXZlciBhIGd1ZXNzOyBhbmQgYSBjb25zZW50CmVzY2FsYXRpb24gd2l0aG91dCBhbiBhcHByb3ZhbCBmYWNpbGl0eSBpcyBhIGRlbmlhbCwgbmV2ZXIgYSBzaWxlbnQKZXhlY3V0aW9uLiBBcHByb3ZhbCwgd2hlbiB3aXJlZCwgYmluZHMgdG8gYSBzcGVjaWZpYyBwcm9tcHRJZCB0aHJvdWdoIHRoZQpjaGVja3BvaW50ZXIgQVBJOyB0aGUgcGFjayBleGVyY2lzZXMgb25seSB0aGUgaW4tcHJvY2VzcyBiaW5kaW5nIChhcHByb3ZhbAp3aXRoaW4gdGhlIHNhbWUgcnVuJ3MgZXZlbnQgbG9vcCkgYW5kIGNsYWltcyBub3RoaW5nIGFib3V0IGNyb3NzLXByb2Nlc3MKcmVzdW1lIHNlbWFudGljcy4KCiMjIFZlcmRpY3Qgdm9jYWJ1bGFyeQoKfCBWZXJkaWN0IHwgTWVhbmluZyB8CnwtLS18LS0tfAp8IGBQQVNTYCB8IHBvc2l0aXZlIGNsYWltOiBvYnNlcnZlZCBiZWhhdmlvciBtYXRjaGVkIGV4cGVjdGVkLXJlc3VsdHMuanNvbiB8CnwgYEZBSUxgIHwgcG9zaXRpdmUgY2xhaW06IG9ic2VydmVkIGJlaGF2aW9yIGRpdmVyZ2VkIHwKfCBgQk9VTkRBUlktSEVMRGAgfCBuZWdhdGl2ZSBjbGFpbTogdGhlIGdhdGUgZGlkIG5vdCBleGNlZWQgaXRzIGRvY3VtZW50ZWQgY2VpbGluZyB8CnwgYEJPVU5EQVJZLUJST0tFTmAgfCBuZWdhdGl2ZSBjbGFpbTogdGhlIGdhdGUgZGlkIHNvbWV0aGluZyBpdHMgY2VpbGluZyBzYXlzIGl0IGRvZXMgbm90IGRvIOKAlCBhIGNsYWltLWxhbmd1YWdlIGJ1ZyBhdCBtaW5pbXVtLCBhIHNlY3VyaXR5IHJlZ3Jlc3Npb24gYXQgd29yc3QgfAo=
+# Claim boundary — what a green run of this pack proves, and what it does not
+
+This pack executes eighteen POSITIVE claims and seven NEGATIVE boundary claims
+against published npm artifacts. Read this file before citing any result.
+
+## Proves (on the pinned fixtures, with the pinned artifact versions)
+
+```text
+C1  an unlabeled benign flow runs without interference — the gate does not
+    deny what no operator ever labeled;
+C2  a labeled read followed by a deny-sink call is denied automatically —
+    no caller-side provenance threading;
+C3  a labeled result transformed INSIDE a labeled tool and forwarded under a
+    renamed argument is still denied — the deny keys on provenance labels +
+    content identity, not on value shape;
+C4  the verbatim secret nested inside a structured sink argument is still
+    caught by the identity rule's bounded arg walk;
+D1  a tool with no registered descriptor is refused fail-closed
+    (descriptor-unavailable) — the gateway never guesses;
+D2  a gateway ask_user escalation with no approval facility wired degrades
+    to a fail-closed deny (consent-unavailable) — consent cannot be
+    silently skipped;
+D3a/D3b the same escalation through the supported checkpointer API:
+    approval executes the call exactly once; rejection executes nothing and
+    ends the run without a final answer;
+L1  a tainted run is not a frozen run — benign non-sink tools keep
+    executing; only declared deny-sinks are blocked.
+P1  permission intent declared up front: a support principal holding a
+    tenant-scoped capability grant reads the tenant its request operates
+    on (allow, no rules fired); the twin request operating on tenant-a
+    while referencing tenant-b resources is denied by tenant isolation
+    (grants exist for BOTH tenants, so the deny is attributable to
+    isolation, not to a missing grant);
+P2  tenant-open reads stay open; a capability-gated external write
+    executes only with grant PLUS argument-scope- and session-bound
+    operator consent (userConsentRef on file);
+P2b the same write with no grant is denied outright — consent on file
+    for another principal never downgrades anything (consent turns
+    ask_user into allow, never deny into allow);
+P3/P3b the trust anchor is the operator-verified server boundary: a
+    descriptor-only tool is usable on a verified boundary and refused
+    (unprofiled-tool-deny) on an unverified one under a
+    deny-on-unprofiled policy.
+P4  a deliberately public route is allowed by default and an internal
+    route denied by an OPERATOR-SUPPLIED custom rule.
+```
+
+## Proves the BOUNDARIES hold (negative group)
+
+A negative claim's `BOUNDARY-HELD` verdict means the gate did exactly what
+the documented claim ceiling says — including NOT doing things it never
+claimed. These are executable ceiling assertions:
+
+```text
+N1  unwired agent  → the provenance gate does not auto-fire. Wiring is
+    opt-in; an agent with no policyGateway behaves as before.
+N2  no resultTaintLabels profile → the runtime does not invent secret
+    labels. No DLP, no heuristic secret scanning.
+N3  cross-run reuse → the ledger is run-scoped. A previous run's
+    observations do not gate the next run. No process-wide taint ledger.
+N4  model-side transform of an in-context secret → the IDENTITY rule does
+    not fire. This detection is NOT_ESTABLISHED by design. (In this fixture
+    the call is still blocked — by the label rule, because whole-run
+    threading gates every later deny-sink call in the same run. The verdict
+    pins the ABSENCE of identity-rule attribution, not the send's execution.)
+S1/S2 whole-run threading is scheduler-independent: the same later-step
+    read→sink script is denied under both the default DAG scheduler and the
+    parallel scheduler. No batch-internal happens-before is asserted or
+    assumed anywhere in this pack.
+S3  same-batch $ref dataflow is OUTSIDE the threading protection: policy
+    decisions for a batch are evaluated before the batch dispatches, so the
+    dependent sink's gate sees an empty ledger and no provenance rule fires.
+    The pinned artifact then fails the call on typing (the $ref substitution
+    passes the read's raw result object; a string-input sink rejects it), so
+    no effect occurs — but that is schema typing, not taint policy. A sink
+    whose schema accepted objects would not be spared by typing. Guidance:
+    submit dependent sinks in later steps.
+E1  the ledger is bounded (default 512 observations). All-sensitive overflow
+    evicts the OLDEST entry: identity tracking for the evicted secret
+    degrades (the identity rule stops firing for it) while label-based
+    containment persists. Bounded-memory identity is a documented ceiling,
+    not unbounded-run taint integrity.
+E2  eviction prefers non-sensitive entries: a declared non-sensitive label
+    ('internal') evicts before any sensitive entry. Declared labels are
+    operator facts, not DLP judgments.
+S-family scope: the P-family pins DECISIONS of the published gateway
+    (allow/deny/ask + matched rule ids + consent reference). Real-execution
+    counterparts for allow decisions are pinned by the agent-level cases
+    (C1, D3a, L1); the permission probes themselves do not execute tools.
+    The unprofiled-tool boundary rule adjudicates heuristically
+    read-classified unprofiled tools only (other effect classes are owned
+    by different rules, e.g. the unknown-profile fail-safe). P4's route
+    policy is operator-supplied and therefore runs with securityProfile
+    "custom", not "hardened" — the published stack has no first-class
+    route allowlist/denylist, which this pair records as an upstream gap.
+```
+
+## Does NOT prove
+
+```text
+adaptive adversarial completeness (this is a fixed fixture set, not a
+  red-team corpus);
+process-wide or cross-run taint tracking (N3 asserts the opposite);
+default-on behavior (N1 asserts the opposite: opt-in only);
+CodeAgent coverage (the second agent loop is unwired territory);
+DLP / model-side transform detection (N4 asserts the opposite);
+same-batch $ref DEPENDENT calls are now TAINT-POLICY GATED at dispatch
+  time (S3/S4); what remains ungated is same-batch INDEPENDENT concurrency
+  (no happens-before is created or asserted);
+unbounded-run taint integrity (E1/E2 pin bounded-memory eviction
+  semantics: identity tracking degrades for evicted entries);
+production false-positive rate (no real workload is exercised here; L1 and
+  the P-family are fixture-level legal negatives, not deployment statistics
+  — the permission probes assert decisions, not measured false-positive
+  rates);
+first-class route policy under the hardened stack (P4's route rule is
+  operator-supplied and flips the gateway to securityProfile "custom");
+independent security certification (a green run by ANY party — including a
+  third party — is a reproduction of pinned claims, not an audit).
+```
+
+## Whole-run threading posture (documented, and visible in this pack)
+
+The reference adapter threads the run's whole ledger on every evaluate.
+Under IF-07a semantics, threading is the caller's declaration that the call
+consumes data derived from those observations — so after a labeled read in a
+run, later deny-sink calls are gated by the label rule even when their
+arguments carry none of the labeled content (visible in N4). Legitimate
+flows that must act on tainted data go through the operator-profile path
+(e.g. honest sink declarations), exactly as documented in IF-07a. The
+threading unit is the EVALUATION, which happens per submitted batch — hence
+the S3 ceiling. Only declared deny-sinks are ever gated by it (L1).
+
+## Consent and descriptor fail-closed posture (D1, D2, D3a/D3b)
+
+Two more fail-closed seams are pinned alongside the provenance gate: an
+unresolvable descriptor is a denial, never a guess; and a consent
+escalation without an approval facility is a denial, never a silent
+execution. Approval, when wired, binds to a specific promptId through the
+checkpointer API; the pack exercises only the in-process binding (approval
+within the same run's event loop) and claims nothing about cross-process
+resume semantics.
+
+## Verdict vocabulary
+
+| Verdict | Meaning |
+|---|---|
+| `PASS` | positive claim: observed behavior matched expected-results.json |
+| `FAIL` | positive claim: observed behavior diverged |
+| `BOUNDARY-HELD` | negative claim: the gate did not exceed its documented ceiling |
+| `BOUNDARY-BROKEN` | negative claim: the gate did something its ceiling says it does not do — a claim-language bug at minimum, a security regression at worst |
