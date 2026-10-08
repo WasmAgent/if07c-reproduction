@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "description": "Operator-authoritative security declarations for the reproduction harness. resultTaintLabels are DECLARED facts about a tool's outputs (no DLP, no heuristic secret scanning anywhere in this pack); sinks are declared facts about where a tool writes. The gateway treats a trusted profile as authoritative for both classification and the IF-07a gate's sink resolution.",
+  "version": 3,
+  "description": "Operator-authoritative security declarations for the reproduction harness. resultTaintLabels are DECLARED facts about a tool's outputs (no DLP, no heuristic secret scanning anywhere in this pack); sinks are declared facts about where a tool writes; capabilitiesRequired is DECLARED permission intent supplied by the fixture author (never inferred from detection signals). The gateway treats a trusted profile as authoritative for classification and sink resolution. v3 additions power the permission-model pairs (P1-P4): read_tenant_doc / read_workspace / publish_file (profiled tools exercising capability grants, tenant isolation, and consent) and get_status_page (descriptor-only, used under an operator-supplied custom rule that expresses the route policy).",
   "serverId": "repro-srv",
   "principal": "external-repro",
   "tools": {
@@ -8,40 +8,66 @@
       "description": "search documents",
       "inputSchema": {
         "type": "object",
-        "properties": { "key": { "type": "string" } },
-        "required": ["key"]
+        "properties": {
+          "key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key"
+        ]
       },
       "profile": {
         "effects": [],
         "sinks": [],
         "capabilitiesRequired": [],
-        "resultTaintLabels": ["secret"]
+        "resultTaintLabels": [
+          "secret"
+        ]
       }
     },
     "transform_text": {
       "description": "applies a text transform",
       "inputSchema": {
         "type": "object",
-        "properties": { "data": { "type": "string" } },
-        "required": ["data"]
+        "properties": {
+          "data": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data"
+        ]
       },
       "profile": {
         "effects": [],
         "sinks": [],
         "capabilitiesRequired": [],
-        "resultTaintLabels": ["secret"]
+        "resultTaintLabels": [
+          "secret"
+        ]
       }
     },
     "send_report": {
       "description": "send report",
       "inputSchema": {
         "type": "object",
-        "properties": { "body": { "type": "string" } },
-        "required": ["body"]
+        "properties": {
+          "body": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "body"
+        ]
       },
       "profile": {
-        "effects": ["network"],
-        "sinks": ["network_send"],
+        "effects": [
+          "network"
+        ],
+        "sinks": [
+          "network_send"
+        ],
         "capabilitiesRequired": []
       }
     },
@@ -49,22 +75,185 @@
       "description": "echo text",
       "inputSchema": {
         "type": "object",
-        "properties": { "text": { "type": "string" } },
-        "required": ["text"]
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
       },
       "profile": {
         "effects": [],
         "sinks": [],
         "capabilitiesRequired": []
       }
+    },
+    "internal_docs": {
+      "description": "list internal project names",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key"
+        ]
+      },
+      "profile": {
+        "effects": [],
+        "sinks": [],
+        "capabilitiesRequired": [],
+        "resultTaintLabels": [
+          "internal"
+        ]
+      }
+    },
+    "unprofiled_echo": {
+      "description": "echo text (no security profile registered — descriptor only)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "descriptorOnly": true,
+      "profile": null
+    },
+    "read_tenant_doc": {
+      "description": "read a tenant document by resource path",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "resource": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource"
+        ]
+      },
+      "profile": {
+        "effects": [],
+        "sinks": [],
+        "capabilitiesRequired": [
+          "support.cross_tenant_read"
+        ]
+      }
+    },
+    "read_workspace": {
+      "description": "read a workspace document",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path"
+        ]
+      },
+      "profile": {
+        "effects": [],
+        "sinks": [],
+        "capabilitiesRequired": []
+      }
+    },
+    "publish_file": {
+      "description": "publish a document to the external archive",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "content"
+        ]
+      },
+      "profile": {
+        "effects": [
+          "write_external"
+        ],
+        "sinks": [
+          "filesystem_write"
+        ],
+        "capabilitiesRequired": [
+          "fs.write_external"
+        ]
+      }
+    },
+    "get_status_page": {
+      "description": "get a status page (no security profile registered — descriptor only; route policy is supplied by the operator's custom rule in fixture P4)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path"
+        ]
+      },
+      "descriptorOnly": true,
+      "profile": null
     }
   },
   "profileSets": {
-    "full": ["search_docs", "transform_text", "send_report", "plain_echo"],
-    "no-labels": ["search_docs", "transform_text", "send_report", "plain_echo"]
+    "full": [
+      "search_docs",
+      "transform_text",
+      "send_report",
+      "plain_echo"
+    ],
+    "no-labels": [
+      "search_docs",
+      "transform_text",
+      "send_report",
+      "plain_echo"
+    ],
+    "full-unprofiled": [
+      "search_docs",
+      "transform_text",
+      "send_report",
+      "plain_echo",
+      "unprofiled_echo"
+    ],
+    "probe": [
+      "search_docs",
+      "internal_docs",
+      "send_report"
+    ],
+    "perm": [
+      "read_tenant_doc",
+      "read_workspace",
+      "publish_file"
+    ],
+    "route": [
+      "get_status_page"
+    ]
   },
   "profileSetSemantics": {
     "full": "as declared above (search_docs and transform_text outputs carry the operator-declared 'secret' label)",
-    "no-labels": "identical tool set, but resultTaintLabels is STRIPPED from every profile at load time — used by fixture N2 to prove the runtime never invents labels"
+    "no-labels": "identical tool set, but resultTaintLabels is STRIPPED from every profile at load time — used by fixture N2 to prove the runtime never invents labels",
+    "full-unprofiled": "the full set plus unprofiled_echo, whose descriptor is registered but whose security profile is deliberately absent — the hardened gateway escalates it to ask_user; used by D2/D3",
+    "probe": "gateway-probe set for the ledger-eviction fixtures E1/E2: a secret-labeled source, an internal-labeled (non-sensitive) source, and the deny-sink",
+    "perm": "permission-pair set for P1/P2: a capability-gated cross-tenant reader, an open reader, and a capability-gated external write (consent path exercised on the write)",
+    "route": "descriptor-only get_status_page for P3/P3b/P4; heuristically classified read_only, so the unprofiled-tool boundary rule applies to it on unverified boundaries, and P4's operator rule supplies the route allow/deny line"
   }
 }

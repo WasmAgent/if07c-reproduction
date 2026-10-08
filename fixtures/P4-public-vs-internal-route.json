@@ -1,0 +1,31 @@
+{
+  "id": "P4",
+  "title": "Deliberately public route is allowed; the internal route is denied by the operator's custom route rule",
+  "kind": "positive",
+  "mode": "permission-probe",
+  "profileSet": "route",
+  "probe": {
+    "principal": "status-reader-9",
+    "session": "sess-p4",
+    "gateway": {
+      "rules": [
+        { "kind": "path-prefix-deny", "prefix": "/internal/", "policyId": "internal-route-deny" }
+      ]
+    },
+    "legs": [
+      {
+        "name": "legit-public-route",
+        "role": "legit",
+        "request": { "tool": "get_status_page", "args": { "path": "/status/health" } },
+        "expect": { "decision": "allow", "matchedPolicyIds": [] }
+      },
+      {
+        "name": "violating-internal-route",
+        "role": "violating",
+        "request": { "tool": "get_status_page", "args": { "path": "/internal/admin" } },
+        "expect": { "decision": "deny", "matchedPolicyIds": ["internal-route-deny"] }
+      }
+    ]
+  },
+  "note": "The published hardened stack has NO first-class route allowlist/denylist, so the route policy here is operator-supplied (a declarative path-prefix deny rule authored in this fixture — the permission intent) and the gateway therefore runs with securityProfile \"custom\", not \"hardened\". That trade-off is part of the claim: the public route's allow is the no-rule-hit default; the internal route is denied solely by the operator's rule. Recording this pair also registers the upstream gap (a route-policy rule factory would let this pair run under the hardened stack)."
+}

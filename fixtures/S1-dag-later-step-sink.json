@@ -1,0 +1,18 @@
+{
+  "id": "S1",
+  "title": "Under the default DAG scheduler, a sink submitted in a step AFTER the labeled read completed is denied (label + identity)",
+  "kind": "positive",
+  "wiring": "wired",
+  "profileSet": "full",
+  "scheduler": "dag",
+  "runs": [
+    {
+      "steps": [
+        { "calls": [{ "id": "c1", "name": "search_docs", "input": { "key": "k" } }] },
+        { "calls": [{ "id": "c2", "name": "send_report", "input": { "body": { "__derive__": { "from": "SECRET", "transform": "identity" } } } }] },
+        { "text": "done" }
+      ]
+    }
+  ],
+  "note": "R08 (DAG leg). scheduler:\"dag\" is pinned explicitly (it is also the default). The dependent sink is submitted in a LATER step, i.e. after the read completed — the sequencing the provenance contract actually requires."
+}

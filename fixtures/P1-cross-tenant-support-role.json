@@ -1,0 +1,39 @@
+{
+  "id": "P1",
+  "title": "Cross-tenant support role: a granted support principal reads tenant-b; the same principal's request operating on tenant-a while referencing tenant-b resources is denied by tenant isolation",
+  "kind": "positive",
+  "mode": "permission-probe",
+  "profileSet": "perm",
+  "probe": {
+    "principal": "support-agent-7",
+    "session": "sess-p1",
+    "gateway": { "tenantEnforcement": true, "capabilityRegistry": true },
+    "grants": [
+      { "tenant": "tenant-b", "capability": "support.cross_tenant_read" },
+      { "tenant": "tenant-a", "capability": "support.cross_tenant_read" }
+    ],
+    "legs": [
+      {
+        "name": "legit-cross-tenant-support-read",
+        "role": "legit",
+        "request": {
+          "tenant": "tenant-b",
+          "tool": "read_tenant_doc",
+          "args": { "resource": "/tenants/tenant-b/doc-42" }
+        },
+        "expect": { "decision": "allow", "matchedPolicyIds": [] }
+      },
+      {
+        "name": "violating-cross-tenant-reference",
+        "role": "violating",
+        "request": {
+          "tenant": "tenant-a",
+          "tool": "read_tenant_doc",
+          "args": { "resource": "/tenants/tenant-b/doc-42" }
+        },
+        "expect": { "decision": "deny", "matchedPolicyIdPrefix": "tenant-isolation:" }
+      }
+    ]
+  },
+  "note": "Permission intent is DECLARED by the fixture author: the operator grants the support role per tenant (capability grants) and the request carries an authoritative tenant. The legitimate leg is a support read of the tenant the request operates on; the violating twin operates on tenant-a while its arguments reference tenant-b resources — the tenant isolation rule denies it (rule id embeds the principal hash). Grants exist for BOTH tenants, so the deny is attributable to isolation, not to a missing grant. Effects: the probe asserts decisions only; real-execution counterparts for allow decisions are pinned by the agent-level cases."
+}

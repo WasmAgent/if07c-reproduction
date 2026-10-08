@@ -1,0 +1,17 @@
+{
+  "id": "D3a",
+  "title": "The same escalation with a checkpointer wired: operator approval executes the call through the supported API",
+  "kind": "positive",
+  "wiring": "wired",
+  "profileSet": "full-unprofiled",
+  "checkpointerPolicy": "approve-first",
+  "runs": [
+    {
+      "steps": [
+        { "calls": [{ "id": "c1", "name": "unprofiled_echo", "input": { "text": "hi" } }] },
+        { "text": "done" }
+      ]
+    }
+  ],
+  "note": "R06 (approve leg). The runner answers the await_human_input event via InMemoryCheckpointer.respond(traceId, promptId, \"yes\") — the supported approval API — and the escalated call then executes exactly once. Only the binding actually exercised here is claimed: an in-process approval within the run's own event loop."
+}

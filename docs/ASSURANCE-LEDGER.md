@@ -28,6 +28,9 @@
 | v1.0.1 manifest closure | ESTABLISHED — prepublish-audit.mjs sections A–G passed |
 | v1.0.1 dependency closure | ESTABLISHED — zod@4.6.5 pinned, all packages declared |
 | v1.0.1 outsider rehearsal | FAILED — see docs/V1.0.1-PREPUBLISH-GATE-FAILURE.md |
+| v1.1.0 integrated 18-case set (2026-10-08) | PENDING RELEASE GATE — prepublish-audit A–G passed on the integration commit (120/120, local); release-candidate-audit workflow + maintainer pre-tag approval outstanding |
+| v1.2.0 24-case set with permission pairs (2026-10-08) | PENDING RELEASE GATE — clean-install 24/24 green (zod 4.6.5); formal gate outstanding |
+| v1.1.0/v1.2.0 premature tags | REMOVED — tags were pushed before the release-candidate gate existed in this line; re-tagging only after the gate (see runs/EXTERNAL-RECORD-TEMPLATE.md intake rules) |
 | v1.0.1 publication closure | NOT ESTABLISHED — rehearsal failed; release sequencing defect |
 | v1.0.1 independent reproduction | NOT YET ESTABLISHED |
 | v1.0.2 manifest closure | ESTABLISHED |

@@ -28,6 +28,29 @@ const PACK_ROOT = new URL("..", import.meta.url).pathname;
 const PACKAGES = ["zod", "@wasmagent/core", "@wasmagent/mcp-firewall", "@wasmagent/mcp-gateway"];
 const SKIP_DIRS = new Set(["node_modules", "pack-verify", "repro-run", "runs", ".git", ".github"]);
 
+// Published-source identity of the pinned npm packages: the wasmagent-js
+// commit that carried the version bumps (changesets release commit) and the
+// merge that landed it on main (PR WasmAgent/wasmagent-js#487). Maintained by
+// the pack author; independently verifiable in the wasmagent-js git history.
+const PUBLISHED_SOURCE = {
+  repo: "WasmAgent/wasmagent-js",
+  releaseCommit: "13bce5e43f4b38730add5c01b0b72699a35be336",
+  releaseCommitMessage: "chore: release packages (core 3.9.0, mcp-firewall 2.3.0, mcp-gateway 0.2.0)",
+  releaseMergeCommit: "25045ef2984ff3fac0ad30f074a3a4cf5d8af4d7",
+  releaseMerge: "PR #487 (changeset-release/main)",
+  note: "The npm tarballs are the root identity (packages{} above); this block records which source commit they correspond to.",
+};
+
+// This pack's own publication identity: the content tag that freezes this
+// exact file set. Updated per content version; the tag itself is created by
+// the human maintainer only after the release-candidate-audit gate passes.
+const PACK_IDENTITY = {
+  repo: "WasmAgent/if07c-reproduction",
+  contentTag: "v1.2.0",
+  previousFrozenTag: "v1.1.0",
+  note: "External-tag publication model: the tag freezes this file set; no manifest can or should contain its own final hash.",
+};
+
 function parseArgs(argv) {
   const out = { prefix: join(PACK_ROOT, "pack-verify"), gitRef: null };
   for (let i = 0; i < argv.length; i++) {
@@ -71,7 +94,7 @@ function packFiles(root) {
       if (statSync(full).isDirectory()) {
         if (SKIP_DIRS.has(entry)) continue;
         walk(full);
-      } else if (entry !== "ARTIFACTS.json" && entry !== "package.json" && entry !== "package-lock.json") {
+      } else if (entry !== "ARTIFACTS.json" && entry !== "package.json" && entry !== "package-lock.json" && entry !== "results.json" && entry !== "SHA256SUMS") {
         out.push(rel);
       }
     }
@@ -126,23 +149,35 @@ function main() {
   }
 
   const files = {};
+  let caseSetSource;
   try {
     for (const rel of packFiles(hashRoot)) {
       files[rel] = sha256File(join(hashRoot, rel));
     }
+    // read from the hashed tree (working tree, or the materialized archive
+    // in --git-ref mode) BEFORE the finally-block removes the archive
+    caseSetSource = JSON.parse(readFileSync(join(hashRoot, "expected-results.json"), "utf8"));
   } finally {
     if (archiveTmp) rmSync(archiveTmp, { recursive: true, force: true });
   }
 
   const doc = {
-    format: "if07c-independent-reproduction/artifacts/v1",
+    format: "if07c-independent-reproduction/artifacts/v2",
     generatedAtUtc: new Date().toISOString(),
     toolchain: {
       node: process.versions.node,
       npm: sh("npm", ["--version"]),
     },
     ...(gitRef ? { gitRef } : {}),
+    packIdentity: PACK_IDENTITY,
     packages,
+    publishedSource: PUBLISHED_SOURCE,
+    caseSet: {
+      id: caseSetSource.caseSet?.id ?? "unknown",
+      caseIds: Object.keys(caseSetSource.claims ?? {}).sort(),
+      caseCount: Object.keys(caseSetSource.claims ?? {}).length,
+      note: "Authoritative case-set identity; per-case kinds live in fixtures/*.json, assertions in expected-results.json.",
+    },
     files,
     verification: {
       installDirectory: relative(PACK_ROOT, prefix) || ".",
