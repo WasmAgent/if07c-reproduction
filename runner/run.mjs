@@ -103,6 +103,7 @@ const counts = {
   plain_echo: 0,
   internal_docs: 0,
   unprofiled_echo: 0,
+  structured_sink: 0,
 };
 
 function forwardFor(name) {
@@ -136,6 +137,11 @@ function forwardFor(name) {
       return async ({ text }) => {
         counts.unprofiled_echo++;
         return text;
+      };
+    case "structured_sink":
+      return async (args) => {
+        counts.structured_sink++;
+        return `ingested:${JSON.stringify(args?.body ?? null)}`;
       };
     default:
       throw new Error(`harness has no implementation for tool ${name}`);
@@ -175,25 +181,31 @@ function buildProfiles(profileSet) {
 function zodInputFor(name) {
   const decl = profile.tools[name];
   const shape = Object.fromEntries(
-    Object.keys(decl.inputSchema.properties ?? {}).map((k) => [k, z.string()])
+    Object.entries(decl.inputSchema.properties ?? {}).map(([k, spec]) => [
+      k,
+      spec?.type === "object" ? z.any() : z.string(),
+    ])
   );
   return z.object(shape);
 }
 
-function buildToolset(descriptors) {
+function buildToolset(descriptors, receivedArgs) {
   return descriptors.map((d) => ({
     name: d.name,
     description: d.description,
     inputSchema: zodInputFor(d.name),
     outputSchema: z.string(),
-    readOnly: d.name !== "send_report",
+    readOnly: d.name !== "send_report" && d.name !== "structured_sink",
     idempotent:
       d.name === "plain_echo" ||
       d.name === "search_docs" ||
       d.name === "transform_text" ||
       d.name === "internal_docs" ||
       d.name === "unprofiled_echo",
-    forward: forwardFor(d.name),
+    forward: async (args) => {
+      receivedArgs[d.name] = JSON.parse(JSON.stringify(args ?? {}));
+      return await forwardFor(d.name)(args);
+    },
   }));
 }
 
@@ -304,6 +316,7 @@ async function runPermissionProbe({ profileSet, probe }) {
 
 async function runScriptedRun({ wiring, profileSet, steps, runIndex, scheduler, checkpointerPolicy }) {
   resetCounts();
+  const receivedArgs = {};
   const { registry, descriptors } = buildProfiles(profileSet);
   const gateway = new MCPGateway({ profileRegistry: registry });
   const factory = createAgentPolicyGateway({
@@ -313,7 +326,7 @@ async function runScriptedRun({ wiring, profileSet, steps, runIndex, scheduler, 
     principal: profile.principal,
   });
 
-  const tools = buildToolset(descriptors);
+  const tools = buildToolset(descriptors, receivedArgs);
 
   // A FRESH port instance per run() — the same factory, a new run-scoped
   // ledger. This is the exact property fixture N3 pins.
@@ -375,6 +388,7 @@ async function runScriptedRun({ wiring, profileSet, steps, runIndex, scheduler, 
     humanReviewDenied,
     errorEvents,
     toolErrors,
+    receivedArgs,
   };
 }
 
@@ -481,6 +495,15 @@ function compareRunExpectation(exp, actual) {
   }
   if (exp.humanReviewDenied !== undefined && !!exp.humanReviewDenied !== actual.humanReviewDenied) {
     problems.push(`humanReviewDenied: expected ${exp.humanReviewDenied}, observed ${actual.humanReviewDenied}`);
+  }
+  if (exp.receivedArgsContains !== undefined) {
+    for (const [tool, wantSecret] of Object.entries(exp.receivedArgsContains)) {
+      const got = JSON.stringify(actual.receivedArgs?.[tool] ?? null);
+      const has = got.includes(SECRET);
+      if (wantSecret !== has) {
+        problems.push(`receivedArgsContains[${tool}]: secret ${wantSecret ? "missing" : "unexpectedly present"} in ${got.slice(0, 140)}`);
+      }
+    }
   }
   if (exp.toolErrors !== undefined) {
     const expKey = JSON.stringify(exp.toolErrors);
