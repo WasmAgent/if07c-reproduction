@@ -1,0 +1,643 @@
+{
+  "format": "if07c-independent-reproduction/results/v2",
+  "generatedAtUtc": "2026-10-08T02:54:23.266Z",
+  "artifacts": {
+    "@wasmagent/core": "3.9.0",
+    "@wasmagent/mcp-firewall": "2.3.0",
+    "@wasmagent/mcp-gateway": "0.2.0"
+  },
+  "cases": [
+    {
+      "id": "C1",
+      "fixture": "C1-benign-unlabeled.json",
+      "kind": "positive",
+      "mode": "agent",
+      "claim": "unlabeled benign flow → no interference",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 0,
+            "send_report": 1,
+            "transform_text": 0,
+            "plain_echo": 1,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": []
+        }
+      ],
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "id": "C2",
+      "fixture": "C2-labeled-read-to-sink.json",
+      "kind": "positive",
+      "mode": "agent",
+      "claim": "labeled read → later deny-sink call → denied automatically (label rule, plus identity rule on the verbatim reuse)",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 1,
+            "send_report": 0,
+            "transform_text": 0,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [
+            "sink-tainted-identity-deny",
+            "sink-tainted-provenance-deny"
+          ],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": [
+            {
+              "callId": "c2",
+              "toolName": "send_report",
+              "code": "execution_error"
+            }
+          ]
+        }
+      ],
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "id": "C3",
+      "fixture": "C3-labeled-transform-rename-to-sink.json",
+      "kind": "positive",
+      "mode": "agent",
+      "claim": "labeled result transformed inside a labeled tool → renamed forward → still denied via provenance/identity",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 1,
+            "send_report": 0,
+            "transform_text": 1,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [
+            "sink-tainted-identity-deny",
+            "sink-tainted-provenance-deny"
+          ],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": [
+            {
+              "callId": "c3",
+              "toolName": "send_report",
+              "code": "execution_error"
+            }
+          ]
+        }
+      ],
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "id": "C4",
+      "fixture": "C4-nested-verbatim-to-sink.json",
+      "kind": "positive",
+      "mode": "agent",
+      "claim": "labeled secret forwarded verbatim inside a nested sink argument → denied (identity rule's arg walk reaches nested leaves; label rule via whole-run threading)",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 1,
+            "send_report": 0,
+            "transform_text": 0,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [
+            "sink-tainted-identity-deny",
+            "sink-tainted-provenance-deny"
+          ],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": [
+            {
+              "callId": "c2",
+              "toolName": "send_report",
+              "code": "execution_error"
+            }
+          ]
+        }
+      ],
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "id": "D1",
+      "fixture": "D1-unknown-descriptor.json",
+      "kind": "positive",
+      "mode": "agent",
+      "claim": "unknown descriptor → fail-closed deny (rule descriptor-unavailable), zero executions, run still terminates normally",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 0,
+            "send_report": 0,
+            "transform_text": 0,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [
+            "descriptor-unavailable"
+          ],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": [
+            {
+              "callId": "c1",
+              "toolName": "unknown_tool",
+              "code": "execution_error"
+            }
+          ]
+        }
+      ],
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "id": "D2",
+      "fixture": "D2-escalation-no-checkpointer.json",
+      "kind": "positive",
+      "mode": "agent",
+      "claim": "gateway ask_user escalation with no approval facility → fail-closed deny (rule consent-unavailable), zero executions",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 0,
+            "send_report": 0,
+            "transform_text": 0,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [
+            "consent-unavailable"
+          ],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": [
+            {
+              "callId": "c1",
+              "toolName": "unprofiled_echo",
+              "code": "execution_error"
+            }
+          ]
+        }
+      ],
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "id": "D3a",
+      "fixture": "D3a-escalation-approved.json",
+      "kind": "positive",
+      "mode": "agent",
+      "claim": "same escalation with checkpointer wired → operator approval via the supported API executes the call once",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 0,
+            "send_report": 0,
+            "transform_text": 0,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 1
+          },
+          "denyRuleIds": [],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 1,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": []
+        }
+      ],
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "id": "D3b",
+      "fixture": "D3b-escalation-rejected.json",
+      "kind": "positive",
+      "mode": "agent",
+      "claim": "same escalation rejected → zero executions, human-review denial error, run ends without a final answer",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 0,
+            "send_report": 0,
+            "transform_text": 0,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [],
+          "finalAnswerEmitted": false,
+          "awaitHumanInputCount": 1,
+          "humanReviewDenied": true,
+          "errorEvents": [
+            "Tool \"unprofiled_echo\" execution denied by human reviewer"
+          ],
+          "toolErrors": []
+        }
+      ],
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "id": "E1",
+      "fixture": "E1-ledger-overflow-oldest-sensitive-evicted.json",
+      "kind": "negative",
+      "mode": "gateway-probe",
+      "claim": "ledger capacity (default 512): all-sensitive overflow evicts the OLDEST observation — identity tracking degrades for the evicted secret while label containment persists on every check",
+      "runs": [
+        {
+          "mintedCount": 600,
+          "checks": [
+            {
+              "callId": "check-0",
+              "toolName": "send_report",
+              "action": "deny",
+              "ruleIds": [
+                "sink-tainted-provenance-deny"
+              ]
+            },
+            {
+              "callId": "check-1",
+              "toolName": "send_report",
+              "action": "deny",
+              "ruleIds": [
+                "sink-tainted-identity-deny",
+                "sink-tainted-provenance-deny"
+              ]
+            }
+          ]
+        }
+      ],
+      "verdict": "BOUNDARY-HELD",
+      "problems": []
+    },
+    {
+      "id": "E2",
+      "fixture": "E2-ledger-eviction-prefers-nonsensitive.json",
+      "kind": "negative",
+      "mode": "gateway-probe",
+      "claim": "eviction preference: the first NON-SENSITIVE (non-sensitive declared label) observation is evicted before any sensitive one — the oldest secret keeps identity tracking; label containment persists",
+      "runs": [
+        {
+          "mintedCount": 516,
+          "checks": [
+            {
+              "callId": "check-0",
+              "toolName": "send_report",
+              "action": "deny",
+              "ruleIds": [
+                "sink-tainted-provenance-deny"
+              ]
+            },
+            {
+              "callId": "check-1",
+              "toolName": "send_report",
+              "action": "deny",
+              "ruleIds": [
+                "sink-tainted-identity-deny",
+                "sink-tainted-provenance-deny"
+              ]
+            },
+            {
+              "callId": "check-2",
+              "toolName": "send_report",
+              "action": "deny",
+              "ruleIds": [
+                "sink-tainted-identity-deny",
+                "sink-tainted-provenance-deny"
+              ]
+            }
+          ]
+        }
+      ],
+      "verdict": "BOUNDARY-HELD",
+      "problems": []
+    },
+    {
+      "id": "L1",
+      "fixture": "L1-tainted-run-benign-unimpeded.json",
+      "kind": "positive",
+      "mode": "agent",
+      "claim": "legal negative: in a tainted run, benign non-sink tools still execute; only the declared deny-sink is blocked (strict sink refusal is the documented contract, not a false positive)",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 1,
+            "send_report": 0,
+            "transform_text": 0,
+            "plain_echo": 1,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [
+            "sink-tainted-identity-deny",
+            "sink-tainted-provenance-deny"
+          ],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": [
+            {
+              "callId": "c3",
+              "toolName": "send_report",
+              "code": "execution_error"
+            }
+          ]
+        }
+      ],
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "id": "N1",
+      "fixture": "N1-unwired-agent.json",
+      "kind": "negative",
+      "mode": "agent",
+      "claim": "unwired agent → provenance gate does not auto-fire",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 1,
+            "send_report": 1,
+            "transform_text": 0,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": []
+        }
+      ],
+      "verdict": "BOUNDARY-HELD",
+      "problems": []
+    },
+    {
+      "id": "N2",
+      "fixture": "N2-no-profile-no-invention.json",
+      "kind": "negative",
+      "mode": "agent",
+      "claim": "no resultTaintLabels profile → runtime does not invent secret labels",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 1,
+            "send_report": 1,
+            "transform_text": 0,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": []
+        }
+      ],
+      "verdict": "BOUNDARY-HELD",
+      "problems": []
+    },
+    {
+      "id": "N3",
+      "fixture": "N3-cross-run-ledger-non-survival.json",
+      "kind": "negative",
+      "mode": "agent",
+      "claim": "cross-run reuse → previous run's ledger does not survive",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 1,
+            "send_report": 0,
+            "transform_text": 0,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": []
+        },
+        {
+          "executions": {
+            "search_docs": 0,
+            "send_report": 1,
+            "transform_text": 0,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": []
+        }
+      ],
+      "verdict": "BOUNDARY-HELD",
+      "problems": []
+    },
+    {
+      "id": "N4",
+      "fixture": "N4-model-side-transform-not-established.json",
+      "kind": "negative",
+      "mode": "agent",
+      "claim": "model-side transform of an in-context secret → the IDENTITY rule does not fire (that detection is NOT_ESTABLISHED); the call is still blocked by the label rule because whole-run threading denies every later deny-sink call in the run",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 1,
+            "send_report": 0,
+            "transform_text": 0,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [
+            "sink-tainted-provenance-deny"
+          ],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": [
+            {
+              "callId": "c2",
+              "toolName": "send_report",
+              "code": "execution_error"
+            }
+          ]
+        }
+      ],
+      "verdict": "BOUNDARY-HELD",
+      "problems": []
+    },
+    {
+      "id": "S1",
+      "fixture": "S1-dag-later-step-sink.json",
+      "kind": "positive",
+      "mode": "agent",
+      "claim": "DAG scheduler (default, pinned): a sink submitted in a step AFTER the labeled read completed is denied (label + identity)",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 1,
+            "send_report": 0,
+            "transform_text": 0,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [
+            "sink-tainted-identity-deny",
+            "sink-tainted-provenance-deny"
+          ],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": [
+            {
+              "callId": "c2",
+              "toolName": "send_report",
+              "code": "execution_error"
+            }
+          ]
+        }
+      ],
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "id": "S2",
+      "fixture": "S2-parallel-later-step-sink.json",
+      "kind": "positive",
+      "mode": "agent",
+      "claim": "parallel scheduler: the same later-step script is denied identically — whole-run threading is scheduler-independent; batch-internal concurrency carries no happens-before guarantee and none is asserted",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 1,
+            "send_report": 0,
+            "transform_text": 0,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [
+            "sink-tainted-identity-deny",
+            "sink-tainted-provenance-deny"
+          ],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": [
+            {
+              "callId": "c2",
+              "toolName": "send_report",
+              "code": "execution_error"
+            }
+          ]
+        }
+      ],
+      "verdict": "PASS",
+      "problems": []
+    },
+    {
+      "id": "S3",
+      "fixture": "S3-same-batch-ref-boundary.json",
+      "kind": "negative",
+      "mode": "agent",
+      "claim": "same-batch $ref dataflow ceiling: no provenance rule fires (the batch's gate evaluation precedes the read's observation), and the $ref substitution passes the read's raw result object which the string sink schema rejects — the sink never executes (fail-safe by typing, not by taint policy)",
+      "runs": [
+        {
+          "executions": {
+            "search_docs": 1,
+            "send_report": 0,
+            "transform_text": 0,
+            "plain_echo": 0,
+            "internal_docs": 0,
+            "unprofiled_echo": 0
+          },
+          "denyRuleIds": [],
+          "finalAnswerEmitted": true,
+          "awaitHumanInputCount": 0,
+          "humanReviewDenied": false,
+          "errorEvents": [],
+          "toolErrors": [
+            {
+              "callId": "c2",
+              "toolName": "send_report",
+              "code": "execution_error"
+            }
+          ]
+        }
+      ],
+      "verdict": "BOUNDARY-HELD",
+      "problems": []
+    }
+  ],
+  "summary": {
+    "failures": 0,
+    "verdicts": [
+      "PASS",
+      "PASS",
+      "PASS",
+      "PASS",
+      "PASS",
+      "PASS",
+      "PASS",
+      "PASS",
+      "BOUNDARY-HELD",
+      "BOUNDARY-HELD",
+      "PASS",
+      "BOUNDARY-HELD",
+      "BOUNDARY-HELD",
+      "BOUNDARY-HELD",
+      "BOUNDARY-HELD",
+      "PASS",
+      "PASS",
+      "BOUNDARY-HELD"
+    ]
+  }
+}

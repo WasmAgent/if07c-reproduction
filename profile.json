@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "description": "Operator-authoritative security declarations for the reproduction harness. resultTaintLabels are DECLARED facts about a tool's outputs (no DLP, no heuristic secret scanning anywhere in this pack); sinks are declared facts about where a tool writes. The gateway treats a trusted profile as authoritative for both classification and the IF-07a gate's sink resolution.",
+  "version": 2,
+  "description": "Operator-authoritative security declarations for the reproduction harness. resultTaintLabels are DECLARED facts about a tool's outputs (no DLP, no heuristic secret scanning anywhere in this pack); sinks are declared facts about where a tool writes. The gateway treats a trusted profile as authoritative for both classification and the IF-07a gate's sink resolution. v2 additions: internal_docs (non-sensitive declared label, for the eviction-boundary probes) and unprofiled_echo (descriptor registered, profile deliberately absent — drives the hardened gateway's ask_user escalation in D2/D3).",
   "serverId": "repro-srv",
   "principal": "external-repro",
   "tools": {
@@ -57,14 +57,42 @@
         "sinks": [],
         "capabilitiesRequired": []
       }
+    },
+    "internal_docs": {
+      "description": "list internal project names",
+      "inputSchema": {
+        "type": "object",
+        "properties": { "key": { "type": "string" } },
+        "required": ["key"]
+      },
+      "profile": {
+        "effects": [],
+        "sinks": [],
+        "capabilitiesRequired": [],
+        "resultTaintLabels": ["internal"]
+      }
+    },
+    "unprofiled_echo": {
+      "description": "echo text (no security profile registered — descriptor only)",
+      "inputSchema": {
+        "type": "object",
+        "properties": { "text": { "type": "string" } },
+        "required": ["text"]
+      },
+      "descriptorOnly": true,
+      "profile": null
     }
   },
   "profileSets": {
     "full": ["search_docs", "transform_text", "send_report", "plain_echo"],
-    "no-labels": ["search_docs", "transform_text", "send_report", "plain_echo"]
+    "no-labels": ["search_docs", "transform_text", "send_report", "plain_echo"],
+    "full-unprofiled": ["search_docs", "transform_text", "send_report", "plain_echo", "unprofiled_echo"],
+    "probe": ["search_docs", "internal_docs", "send_report"]
   },
   "profileSetSemantics": {
     "full": "as declared above (search_docs and transform_text outputs carry the operator-declared 'secret' label)",
-    "no-labels": "identical tool set, but resultTaintLabels is STRIPPED from every profile at load time — used by fixture N2 to prove the runtime never invents labels"
+    "no-labels": "identical tool set, but resultTaintLabels is STRIPPED from every profile at load time — used by fixture N2 to prove the runtime never invents labels",
+    "full-unprofiled": "the full set plus unprofiled_echo, whose descriptor is registered but whose security profile is deliberately absent — the hardened gateway escalates it to ask_user; used by D2/D3",
+    "probe": "gateway-probe set for the ledger-eviction fixtures E1/E2: a secret-labeled source, an internal-labeled (non-sensitive) source, and the deny-sink"
   }
 }

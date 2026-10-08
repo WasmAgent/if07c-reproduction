@@ -1,39 +1,72 @@
-# IF-07c independent reproduction pack (v1)
+# IF-07c independent reproduction pack (v1.1.0)
 
 Anyone can run this pack against **published npm artifacts** — no wasmagent-js
 monorepo code, no test helpers, no internal assertion implementation. It
-executes three POSITIVE security claims and four NEGATIVE boundary claims,
+executes nine POSITIVE security claims and nine NEGATIVE boundary claims,
 and prints one verdict per claim (deliberately **no** aggregate
 "secure/insecure" conclusion — see `CLAIM-BOUNDARY.md`).
 
 ```text
-C1  unlabeled benign flow → no interference                      (positive)
-C2  labeled read → later deny-sink call → denied automatically   (positive)
+POSITIVE (PASS/FAIL)
+C1  unlabeled benign flow → no interference                      (R01)
+C2  labeled read → later deny-sink call → denied automatically   (R02)
 C3  labeled result transformed inside a labeled tool → renamed
-    forward → still denied via provenance/identity               (positive)
-N1  unwired agent → gate does not auto-fire                      (negative)
-N2  no resultTaintLabels profile → runtime invents no labels     (negative)
-N3  cross-run reuse → previous run's ledger does not survive     (negative)
+    forward → still denied via provenance/identity               (R03)
+C4  labeled secret nested verbatim in the sink args → denied     (R03)
+D1  unknown tool descriptor → fail-closed deny, zero executions  (R04)
+D2  gateway escalation, no approval facility → fail-closed deny,
+    zero executions                                              (R05)
+D3a same escalation, approved via the checkpointer API → executes (R06)
+D3b same escalation, rejected → zero executions, run ends        (R06)
+L1  legal negative: in a tainted run benign non-sink tools still
+    execute; only the declared deny-sink is blocked              (R09)
+
+NEGATIVE / boundary ceilings (BOUNDARY-HELD/BOUNDARY-BROKEN)
+N1  unwired agent → gate does not auto-fire                      (R-ceiling)
+N2  no resultTaintLabels profile → runtime invents no labels     (R-ceiling)
+N3  cross-run reuse → previous run's ledger does not survive     (R07)
 N4  model-side transform → identity rule does not fire
-    (NOT_ESTABLISHED boundary, pinned as executable)             (negative)
+    (NOT_ESTABLISHED boundary, pinned as executable)             (R03)
+S1  DAG scheduler: later-step sink denied                        (R08)
+S2  parallel scheduler: identical later-step denial              (R08)
+S3  same-batch $ref dataflow: no provenance rule fires; the raw
+    result object substitution fails the sink's string schema,
+    so the sink never executes — fail-safe by typing, not by
+    taint policy                                                 (R08)
+E1  ledger overflow (default cap 512): oldest sensitive entry
+    evicted → identity tracking degrades, label containment
+    persists                                                     (eviction)
+E2  eviction prefers non-sensitive entries before any sensitive
+    one                                                          (eviction)
 ```
+
+The `R0x` tags map this set onto the 2026-10-08 action-plan case table
+(R01–R09); the mapping is recorded in `expected-results.json` →
+`caseSet.mappingToActionPlan`.
 
 ## Run it (third-party procedure)
 
 ```bash
-# 1. clean project, pinned artifact versions
-mkdir if07c-repro && cd if07c-repro && npm init -y
-npm install zod @wasmagent/core@3.9.0 @wasmagent/mcp-firewall@2.3.0 @wasmagent/mcp-gateway@0.2.0
+# 1. clean project — the pack pins exact versions in package.json and
+#    package-lock.json (@wasmagent/core 3.9.0, @wasmagent/mcp-firewall 2.3.0,
+#    @wasmagent/mcp-gateway 0.2.0, zod 3.25.76)
+mkdir if07c-repro && cd if07c-repro
 
 # 2. copy the pack in (fixtures/, runner/, scripts/, profile.json,
-#    expected-results.json, CLAIM-BOUNDARY.md)
+#    expected-results.json, package.json, package-lock.json,
+#    CLAIM-BOUNDARY.md) and install EXACTLY the locked tree
+npm ci
 
 # 3. execute
-node runner/run.mjs        # per-claim verdicts; exit 0 = all matched
-
-# 4. (maintainer) re-freeze ARTIFACTS.json after any pack edit
-node scripts/build-artifacts.mjs --prefix .
+node runner/run.mjs        # per-claim verdicts + results.json; exit 0 = all matched
 ```
+
+The runner writes `results.json` (path overridable via `IF07C_RESULTS_PATH`)
+containing the observed decisions, per-tool execution counts, deny rule IDs,
+human-approval events, and every problem line. **Deny cases assert zero
+side-effect counts** — a deny text without a zero execution count does not
+pass, and benign cases assert real executions so an all-deny run cannot look
+green.
 
 ## Verifying a run record (what a third party should check)
 
@@ -42,19 +75,24 @@ node scripts/build-artifacts.mjs --prefix .
 > dist.integrity`) and the tarballs, compare them against the `packages{}`
 > block, and recompute the `files{}` hashes against your copy of the pack.
 
-1. `ARTIFACTS.json` → `files{}` hashes must match the pack copy you ran.
+1. `ARTIFACTS.json` → `files{}` hashes must match the pack copy you ran
+   (`SHA256SUMS` is a convenience index of the same set plus ARTIFACTS.json
+   itself; it does not list itself).
 2. `ARTIFACTS.json` → `packages{}` must match your installed versions; verify
    `integrity` with `npm view <pkg>@<version> dist.integrity` and the tarball
    SHA256 by downloading it yourself — do not trust the pack's own record.
-3. The runner header must print the same artifact versions you installed.
+3. The runner header must print the same artifact versions you installed
+   (`npm ls` after `npm ci`).
 4. Only then are the per-claim verdicts attributable to the pinned artifacts.
 
 ## Interpretation
 
-- `PASS` on C1–C3: the security properties held on these fixtures.
-- `BOUNDARY-HELD` on N1–N4: the gate did not exceed its documented ceiling.
+- `PASS` on C1–C4, D1–D3b, L1: the security property held on these fixtures.
+- `BOUNDARY-HELD` on N1–N4, S1–S3, E1–E2: the gate did exactly what the
+  documented claim ceiling says — including NOT doing things it never claimed.
 - Anything else: the run diverges from the claims — record the full output,
-  the artifact versions, and the `ARTIFACTS.json` you verified against.
+  `results.json`, the artifact versions, and the `ARTIFACTS.json` you verified
+  against.
 
 The claim boundary (including what a green run does NOT prove — adaptive
 adversarial completeness, default-on behavior, DLP, production
@@ -66,28 +104,45 @@ false-positive rate, independent certification) lives in
 ## Layout
 
 ```text
-runner/run.mjs          single-file runner (mechanism + verdicts)
-fixtures/*.json         inputs only (call scripts; no expectations inside)
-expected-results.json   the single source of assertions
-profile.json            operator-authoritative labels/sinks declarations
+runner/run.mjs          single-file runner (mechanism + verdicts + results.json)
+fixtures/*.json         inputs only (call scripts / probe definitions; no expectations inside)
+expected-results.json   the single source of assertions (+ case-set identity, R0x mapping)
+profile.json            operator-authoritative labels/sinks declarations (v2)
 CLAIM-BOUNDARY.md       proves / does-not-prove / verdict vocabulary
-scripts/build-artifacts.mjs  regenerates ARTIFACTS.json (hashes, tarballs)
-ARTIFACTS.json          frozen artifact + file hash record
-repro-run/              first archived run record (2026-10-04, v0 runner)
+package.json            exact dependency pins (private; never published)
+package-lock.json       locked dependency tree — install with `npm ci`
+scripts/build-artifacts.mjs  regenerates ARTIFACTS.json + SHA256SUMS
+ARTIFACTS.json          frozen artifact + file hash record (format v2: adds pack
+                        identity, published-source identity, case-set identity)
+SHA256SUMS              flat hash index of the frozen set + ARTIFACTS.json
+runs/                   archived run records (evidence; protected by git history,
+                        not part of the frozen input set)
 ```
 
 ## Scope ceilings (unchanged)
 
 Run-scoped ledger only (N3); opt-in wiring only (N1); no DLP (N2, N4);
 CodeAgent loop out of scope; no production false-positive data; independent
-security certification is not established by this or any pack.
+security certification is not established by this or any pack. New in v1.1.0:
+identity tracking is bounded-memory and its eviction behavior is pinned as an
+executable ceiling (E1/E2), and same-batch `$ref` dataflow is documented as
+outside the whole-run threading protection (S3).
 
 ## Frozen set vs governance files
 
-`ARTIFACTS.json` freezes the pack **as of tag `v1.0.0`**. Governance files
-added on `main` afterwards (e.g. this repository's `LICENSE`) are NOT part
-of the frozen input set — their presence alongside a v1.0.0 pack copy does
-not invalidate a run, and their content is protected by this repository's
-git history rather than by the manifest. They will be folded into the
-frozen set at the next content version (v1.0.1). When in doubt, verify a
-run against the `v1.0.0` tag.
+`ARTIFACTS.json` freezes the pack content. Governance files added between
+content versions (e.g. this repository's `LICENSE`) are NOT part of the
+frozen input set — their presence alongside a pack copy does not invalidate a
+run, and their content is protected by this repository's git history rather
+than by the manifest. The v1.0.0 frozen set (7 cases, C1–C3 + N1–N4) remains
+frozen at tag `v1.0.0`; this v1.1.0 set is a superset with its own tag. When
+in doubt, verify a run against the tag matching the case set you ran.
+
+## First-run honesty record
+
+The 2026-10-08 expansion first ran with a source-derived expectation for S3
+("same-batch dependent sink executes") that the published artifact REFUTED
+(observed: sink never executes — the `$ref` substitution fails the string
+schema). The refuted expectation, the observed behavior, and the re-derived
+ceiling are preserved in `runs/` — expectations were re-derived from observed
+artifact behavior, never relaxed to force a pass.

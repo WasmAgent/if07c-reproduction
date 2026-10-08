@@ -1,0 +1,35 @@
+{
+  "id": "E2",
+  "title": "Eviction preference boundary: overflow evicts the first NON-SENSITIVE observation before any sensitive one — labeled-but-benign entries buffer the ledger",
+  "kind": "negative",
+  "mode": "gateway-probe",
+  "profileSet": "probe",
+  "probe": {
+    "label": "nonsensitive-first-eviction",
+    "mints": [
+      { "tool": "search_docs", "count": 512, "template": "secret-value-{i}" },
+      { "tool": "internal_docs", "count": 4, "template": "internal-plan-{i}" }
+    ],
+    "checks": [
+      {
+        "toolName": "send_report",
+        "args": { "body": "secret-value-0" },
+        "action": "deny",
+        "ruleIds": ["sink-tainted-provenance-deny"]
+      },
+      {
+        "toolName": "send_report",
+        "args": { "body": "secret-value-1" },
+        "action": "deny",
+        "ruleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"]
+      },
+      {
+        "toolName": "send_report",
+        "args": { "body": "secret-value-511" },
+        "action": "deny",
+        "ruleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"]
+      }
+    ]
+  },
+  "note": "Second eviction rule: once the cap is full of sensitive entries, each internal_docs (declared label 'internal' — non-sensitive) mint evicts the previous non-sensitive entry, NOT the oldest secret. So secret-value-0 (evicted before the internals arrived) lost identity tracking, while secret-value-1 and secret-value-511 both keep it. All checks stay deny via the label rule. Declared non-secret labels are operator facts, not a DLP judgment."
+}

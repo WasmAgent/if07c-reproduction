@@ -1,0 +1,27 @@
+# IF-07c independent reproduction runner (v2)
+# artifacts: @wasmagent/core@3.9.0 | @wasmagent/mcp-firewall@2.3.0 | @wasmagent/mcp-gateway@0.2.0
+# Per-claim verdicts only — this runner intentionally prints NO
+# aggregate secure/insecure conclusion.
+C1: PASS — unlabeled benign flow → no interference
+C2: PASS — labeled read → later deny-sink call → denied automatically (label rule, plus identity rule on the verbatim reuse)
+C3: PASS — labeled result transformed inside a labeled tool → renamed forward → still denied via provenance/identity
+C4: PASS — labeled secret forwarded verbatim inside a nested sink argument → denied (identity rule's arg walk reaches nested leaves; label rule via whole-run threading)
+D1: PASS — unknown descriptor → fail-closed deny (rule descriptor-unavailable), zero executions, run still terminates normally
+D2: PASS — gateway ask_user escalation with no approval facility → fail-closed deny (rule consent-unavailable), zero executions
+D3a: PASS — same escalation with checkpointer wired → operator approval via the supported API executes the call once
+D3b: PASS — same escalation rejected → zero executions, human-review denial error, run ends without a final answer
+E1: BOUNDARY-BROKEN — ledger capacity (default 512): all-sensitive overflow evicts the OLDEST observation — identity tracking degrades for the evicted secret while label containment persists on every check
+    E1: harness error: unknown profileSet: undefined
+E2: BOUNDARY-BROKEN — eviction preference: the first NON-SENSITIVE (non-sensitive declared label) observation is evicted before any sensitive one — the oldest secret keeps identity tracking; label containment persists
+    E2: harness error: unknown profileSet: undefined
+L1: PASS — legal negative: in a tainted run, benign non-sink tools still execute; only the declared deny-sink is blocked (strict sink refusal is the documented contract, not a false positive)
+N1: BOUNDARY-HELD — unwired agent → provenance gate does not auto-fire
+N2: BOUNDARY-HELD — no resultTaintLabels profile → runtime does not invent secret labels
+N3: BOUNDARY-HELD — cross-run reuse → previous run's ledger does not survive
+N4: BOUNDARY-HELD — model-side transform of an in-context secret → the IDENTITY rule does not fire (that detection is NOT_ESTABLISHED); the call is still blocked by the label rule because whole-run threading denies every later deny-sink call in the run
+S1: PASS — DAG scheduler (default, pinned): a sink submitted in a step AFTER the labeled read completed is denied (label + identity)
+S2: PASS — parallel scheduler: the same later-step script is denied identically — whole-run threading is scheduler-independent; batch-internal concurrency carries no happens-before guarantee and none is asserted
+S3: BOUNDARY-BROKEN — same-batch $ref dataflow ceiling: the dependent sink is gated on the ledger as it stood at batch-evaluation time (empty), so the send EXECUTES with the read's output — run-level threading protects later-step sinks, not same-batch dataflow
+    S3: run 1: send_report: expected 1 execution(s), observed 0
+# claims executed: C1: PASS | C2: PASS | C3: PASS | C4: PASS | D1: PASS | D2: PASS | D3a: PASS | D3b: PASS | E1: BOUNDARY-BROKEN | E2: BOUNDARY-BROKEN | L1: PASS | N1: BOUNDARY-HELD | N2: BOUNDARY-HELD | N3: BOUNDARY-HELD | N4: BOUNDARY-HELD | S1: PASS | S2: PASS | S3: BOUNDARY-BROKEN
+# results written to /private/tmp/if07c-dev/results.json

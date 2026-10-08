@@ -1,0 +1,16 @@
+{
+  "id": "D2",
+  "title": "A gateway ask_user escalation with no approval facility wired degrades to a fail-closed deny; the tool never executes",
+  "kind": "positive",
+  "wiring": "wired",
+  "profileSet": "full-unprofiled",
+  "runs": [
+    {
+      "steps": [
+        { "calls": [{ "id": "c1", "name": "unprofiled_echo", "input": { "text": "hi" } }] },
+        { "text": "done" }
+      ]
+    }
+  ],
+  "note": "R05. unprofiled_echo has a registered descriptor but NO security profile, so the hardened gateway escalates it (ask_user). No checkpointer is wired, so there is nobody to ask: the confirm must degrade to a fail-closed deny (rule: consent-unavailable) and the execution count must stay zero. This is the documented consent ceiling, not a provenance-rule event."
+}

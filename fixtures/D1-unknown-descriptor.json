@@ -1,0 +1,16 @@
+{
+  "id": "D1",
+  "title": "A call to a tool with no registered descriptor is denied fail-closed and never executed",
+  "kind": "positive",
+  "wiring": "wired",
+  "profileSet": "full",
+  "runs": [
+    {
+      "steps": [
+        { "calls": [{ "id": "c1", "name": "unknown_tool", "input": { "x": "1" } }] },
+        { "text": "done" }
+      ]
+    }
+  ],
+  "note": "R04. The policy gateway cannot evaluate a tool it has no descriptor for, so it must refuse the call (rule: descriptor-unavailable) and the run must still finish normally with the denial fed back to the model — execution count stays zero."
+}

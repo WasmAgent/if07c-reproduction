@@ -1,6 +1,15 @@
 {
-  "version": 1,
-  "description": "Expected outcomes for every fixture in fixtures/. The runner compares observed behavior against THESE assertions only; fixtures carry inputs, expected-results carries the assertions. kind=positive PASS means the security property held; kind=negative BOUNDARY-HELD means the gate behaved exactly as the documented claim ceiling says (it does not do things it never claimed).",
+  "version": 2,
+  "description": "Expected outcomes for every fixture in fixtures/. The runner compares observed behavior against THESE assertions only; fixtures carry inputs, expected-results carries the assertions. kind=positive PASS means the security property held; kind=negative BOUNDARY-HELD means the gate behaved exactly as the documented claim ceiling says (it does not do things it never claimed). v2 extends the v1 set (C1–C3, N1–N4, unchanged) with consent/descriptor fail-closed cases (D*), scheduler-mode cases (S*), a legal-negative case (L1), eviction-boundary probes (E1/E2), and a nested-identity case (C4).",
+  "caseSet": {
+    "id": "if07c-repro-case-set/2026-10-08",
+    "note": "Stable identifier for this exact fixture set. Any change to fixtures/ or to these expectations is a new case set and a new content version of the pack.",
+    "mappingToActionPlan": {
+      "R01": "C1", "R02": "C2", "R03": "C3 + C4 + N4", "R04": "D1", "R05": "D2",
+      "R06": "D3a + D3b", "R07": "N3", "R08": "S1 + S2 + S3", "R09": "L1",
+      "ledgerCapacityAndEviction": "E1 + E2", "optInAndNoInventionCeilings": "N1 + N2"
+    }
+  },
   "claims": {
     "C1": {
       "fixture": "fixtures/C1-benign-unlabeled.json",
@@ -27,6 +36,114 @@
         "executions": { "search_docs": 1, "send_report": 0, "transform_text": 1, "plain_echo": 0 },
         "denyRuleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"],
         "finalAnswerEmitted": true
+      }
+    },
+    "C4": {
+      "fixture": "fixtures/C4-nested-verbatim-to-sink.json",
+      "claim": "labeled secret forwarded verbatim inside a nested sink argument → denied (identity rule's arg walk reaches nested leaves; label rule via whole-run threading)",
+      "expect": {
+        "executions": { "search_docs": 1, "send_report": 0, "transform_text": 0, "plain_echo": 0 },
+        "denyRuleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"],
+        "finalAnswerEmitted": true
+      }
+    },
+    "D1": {
+      "fixture": "fixtures/D1-unknown-descriptor.json",
+      "claim": "unknown descriptor → fail-closed deny (rule descriptor-unavailable), zero executions, run still terminates normally",
+      "expect": {
+        "executions": { "search_docs": 0, "send_report": 0, "transform_text": 0, "plain_echo": 0 },
+        "denyRuleIds": ["descriptor-unavailable"],
+        "finalAnswerEmitted": true
+      }
+    },
+    "D2": {
+      "fixture": "fixtures/D2-escalation-no-checkpointer.json",
+      "claim": "gateway ask_user escalation with no approval facility → fail-closed deny (rule consent-unavailable), zero executions",
+      "expect": {
+        "executions": { "search_docs": 0, "send_report": 0, "transform_text": 0, "plain_echo": 0, "unprofiled_echo": 0 },
+        "denyRuleIds": ["consent-unavailable"],
+        "finalAnswerEmitted": true
+      }
+    },
+    "D3a": {
+      "fixture": "fixtures/D3a-escalation-approved.json",
+      "claim": "same escalation with checkpointer wired → operator approval via the supported API executes the call once",
+      "expect": {
+        "executions": { "search_docs": 0, "send_report": 0, "transform_text": 0, "plain_echo": 0, "unprofiled_echo": 1 },
+        "denyRuleIds": [],
+        "finalAnswerEmitted": true,
+        "awaitHumanInputCount": 1
+      }
+    },
+    "D3b": {
+      "fixture": "fixtures/D3b-escalation-rejected.json",
+      "claim": "same escalation rejected → zero executions, human-review denial error, run ends without a final answer",
+      "expect": {
+        "executions": { "search_docs": 0, "send_report": 0, "transform_text": 0, "plain_echo": 0, "unprofiled_echo": 0 },
+        "denyRuleIds": [],
+        "finalAnswerEmitted": false,
+        "awaitHumanInputCount": 1,
+        "humanReviewDenied": true
+      }
+    },
+    "L1": {
+      "fixture": "fixtures/L1-tainted-run-benign-unimpeded.json",
+      "claim": "legal negative: in a tainted run, benign non-sink tools still execute; only the declared deny-sink is blocked (strict sink refusal is the documented contract, not a false positive)",
+      "expect": {
+        "executions": { "search_docs": 1, "send_report": 0, "transform_text": 0, "plain_echo": 1 },
+        "denyRuleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"],
+        "finalAnswerEmitted": true
+      }
+    },
+    "S1": {
+      "fixture": "fixtures/S1-dag-later-step-sink.json",
+      "claim": "DAG scheduler (default, pinned): a sink submitted in a step AFTER the labeled read completed is denied (label + identity)",
+      "expect": {
+        "executions": { "search_docs": 1, "send_report": 0, "transform_text": 0, "plain_echo": 0 },
+        "denyRuleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"],
+        "finalAnswerEmitted": true
+      }
+    },
+    "S2": {
+      "fixture": "fixtures/S2-parallel-later-step-sink.json",
+      "claim": "parallel scheduler: the same later-step script is denied identically — whole-run threading is scheduler-independent; batch-internal concurrency carries no happens-before guarantee and none is asserted",
+      "expect": {
+        "executions": { "search_docs": 1, "send_report": 0, "transform_text": 0, "plain_echo": 0 },
+        "denyRuleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"],
+        "finalAnswerEmitted": true
+      }
+    },
+    "S3": {
+      "fixture": "fixtures/S3-same-batch-ref-boundary.json",
+      "claim": "same-batch $ref dataflow ceiling: no provenance rule fires (the batch's gate evaluation precedes the read's observation), and the $ref substitution passes the read's raw result object which the string sink schema rejects — the sink never executes (fail-safe by typing, not by taint policy)",
+      "expect": {
+        "executions": { "search_docs": 1, "send_report": 0, "transform_text": 0, "plain_echo": 0 },
+        "denyRuleIds": [],
+        "finalAnswerEmitted": true,
+        "toolErrors": [{ "callId": "c2", "toolName": "send_report", "code": "execution_error" }]
+      }
+    },
+    "E1": {
+      "fixture": "fixtures/E1-ledger-overflow-oldest-sensitive-evicted.json",
+      "claim": "ledger capacity (default 512): all-sensitive overflow evicts the OLDEST observation — identity tracking degrades for the evicted secret while label containment persists on every check",
+      "expect": {
+        "mintedCount": 600,
+        "checks": [
+          { "toolName": "send_report", "action": "deny", "ruleIds": ["sink-tainted-provenance-deny"] },
+          { "toolName": "send_report", "action": "deny", "ruleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"] }
+        ]
+      }
+    },
+    "E2": {
+      "fixture": "fixtures/E2-ledger-eviction-prefers-nonsensitive.json",
+      "claim": "eviction preference: the first NON-SENSITIVE (non-sensitive declared label) observation is evicted before any sensitive one — the oldest secret keeps identity tracking; label containment persists",
+      "expect": {
+        "mintedCount": 516,
+        "checks": [
+          { "toolName": "send_report", "action": "deny", "ruleIds": ["sink-tainted-provenance-deny"] },
+          { "toolName": "send_report", "action": "deny", "ruleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"] },
+          { "toolName": "send_report", "action": "deny", "ruleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"] }
+        ]
       }
     },
     "N1": {

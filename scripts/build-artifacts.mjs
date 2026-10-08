@@ -1,17 +1,27 @@
 #!/usr/bin/env node
-// Build ARTIFACTS.json for the IF-07c independent reproduction pack.
+// Build ARTIFACTS.json (format v2) and SHA256SUMS for the IF-07c
+// independent reproduction pack.
 //
 // Records, deterministically:
 //   - the exact published npm versions installed in the verification
 //     directory (default: ./pack-verify), with registry integrity and the
 //     SHA256 of the downloaded tarball;
-//   - the SHA256 of every pack file (runner, fixtures, profile,
-//     expected-results, docs, this script);
+//   - the SHA256 of every frozen pack file (runner, fixtures, profile,
+//     expected-results, docs, scripts, package.json, package-lock.json) —
+//     ARTIFACTS.json excludes itself;
+//   - the pack's own identity (repo, content tag) and the published-source
+//     identity of the pinned npm packages (the wasmagent-js release commit
+//     and merge that carried these versions);
+//   - the case-set identity read from expected-results.json;
 //   - the node/npm versions used.
 //
+// Then writes SHA256SUMS: a flat `<sha256>  <path>` index of the frozen set
+// PLUS ARTIFACTS.json itself (SHA256SUMS never lists itself; ARTIFACTS.json
+// never lists SHA256SUMS — no circularity, see README "Verifying a run").
+//
 // Usage:
-//   npm install zod @wasmagent/core@X @wasmagent/mcp-firewall@Y @wasmagent/mcp-gateway@Z
-//   node runner/run.mjs          # in a copy of the pack, per README
+//   npm ci                       # in a copy of the pack, per README
+//   node runner/run.mjs
 //   node scripts/build-artifacts.mjs --prefix ./pack-verify
 //
 // Re-running is deterministic apart from generatedAtUtc.
@@ -25,6 +35,29 @@ import { basename, join, relative } from "node:path";
 const PACK_ROOT = new URL("..", import.meta.url).pathname;
 const PACKAGES = ["@wasmagent/core", "@wasmagent/mcp-firewall", "@wasmagent/mcp-gateway"];
 const SKIP_DIRS = new Set(["node_modules", "pack-verify", "repro-run", "runs", ".git"]);
+
+// Published-source identity of the pinned npm packages: the wasmagent-js
+// commit that carried the version bumps (changesets release commit) and the
+// merge that landed it on main (PR #487). Maintained by the pack author;
+// independently verifiable in the wasmagent-js repository history.
+const PUBLISHED_SOURCE = {
+  repo: "WasmAgent/wasmagent-js",
+  releaseCommit: "13bce5e43f4b38730add5c01b0b72699a35be336",
+  releaseCommitMessage: "chore: release packages (core 3.9.0, mcp-firewall 2.3.0, mcp-gateway 0.2.0)",
+  releaseMergeCommit: "25045ef2984ff3fac0ad30f074a3a4cf5d8af4d7",
+  releaseMerge: "PR #487 (changeset-release/main)",
+  note: "The npm tarballs are the root identity (packages{} above); this block records which source commit they correspond to. Verify via the wasmagent-js git history.",
+};
+
+// This pack's own publication identity: the content tag that freezes this
+// exact file set. Governance files outside the frozen set are protected by
+// the repository's git history instead (see README).
+const PACK_IDENTITY = {
+  repo: "WasmAgent/if07c-reproduction",
+  contentTag: "v1.1.0",
+  previousFrozenTag: "v1.0.0",
+  note: "External-tag publication model: the tag freezes this file set; no manifest can or should contain its own final hash.",
+};
 
 function parseArgs(argv) {
   const out = { prefix: join(PACK_ROOT, "pack-verify") };
@@ -46,7 +79,7 @@ function sha256File(path) {
   return createHash("sha256").update(readFileSync(path)).digest("hex");
 }
 
-/** Every pack file under PACK_ROOT except generated/verification dirs. */
+/** Every frozen pack file under PACK_ROOT except generated/verification dirs. */
 function packFiles() {
   const out = [];
   const walk = (dir) => {
@@ -56,7 +89,7 @@ function packFiles() {
       if (statSync(full).isDirectory()) {
         if (SKIP_DIRS.has(entry)) continue;
         walk(full);
-      } else if (entry !== "ARTIFACTS.json" && entry !== "package.json" && entry !== "package-lock.json") {
+      } else if (entry !== "ARTIFACTS.json" && entry !== "SHA256SUMS" && entry !== "results.json") {
         out.push(rel);
       }
     }
@@ -102,14 +135,25 @@ function main() {
     files[rel] = sha256File(join(PACK_ROOT, rel));
   }
 
+  const expected = JSON.parse(readFileSync(join(PACK_ROOT, "expected-results.json"), "utf8"));
+  const caseSet = {
+    id: expected.caseSet?.id ?? "unknown",
+    caseIds: Object.keys(expected.claims ?? {}).sort(),
+    caseCount: Object.keys(expected.claims ?? {}).length,
+    note: "Authoritative case-set identity; per-case kinds live in fixtures/*.json, assertions in expected-results.json.",
+  };
+
   const doc = {
-    format: "if07c-independent-reproduction/artifacts/v1",
+    format: "if07c-independent-reproduction/artifacts/v2",
     generatedAtUtc: new Date().toISOString(),
     toolchain: {
       node: process.versions.node,
       npm: sh("npm", ["--version"]),
     },
+    packIdentity: PACK_IDENTITY,
     packages,
+    publishedSource: PUBLISHED_SOURCE,
+    caseSet,
     files,
     verification: {
       installDirectory: relative(PACK_ROOT, prefix) || ".",
@@ -120,7 +164,16 @@ function main() {
 
   const out = join(PACK_ROOT, "ARTIFACTS.json");
   writeFileSync(out, `${JSON.stringify(doc, null, 2)}\n`);
-  console.log(`wrote ${out} (${Object.keys(files).length} files, ${Object.keys(packages).length} packages)`);
+  console.log(`wrote ${out} (${Object.keys(files).length} files, ${Object.keys(packages).length} packages, case set ${caseSet.id})`);
+
+  const sumsPath = join(PACK_ROOT, "SHA256SUMS");
+  const sumsEntries = [
+    ...Object.entries(files).map(([rel, hash]) => `${hash}  ${rel}`),
+    `${sha256File(out)}  ARTIFACTS.json`,
+  ];
+  sumsEntries.sort((a, b) => a.split("  ")[1].localeCompare(b.split("  ")[1]));
+  writeFileSync(sumsPath, `${sumsEntries.join("\n")}\n`);
+  console.log(`wrote ${sumsPath} (${sumsEntries.length} entries; excludes itself)`);
   return 0;
 }
 

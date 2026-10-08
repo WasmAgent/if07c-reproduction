@@ -1,0 +1,17 @@
+{
+  "id": "D3b",
+  "title": "The same escalation rejected by the operator: the tool never executes and the run ends without a final answer",
+  "kind": "positive",
+  "wiring": "wired",
+  "profileSet": "full-unprofiled",
+  "checkpointerPolicy": "reject-first",
+  "runs": [
+    {
+      "steps": [
+        { "calls": [{ "id": "c1", "name": "unprofiled_echo", "input": { "text": "hi" } }] },
+        { "text": "done" }
+      ]
+    }
+  ],
+  "note": "R06 (reject leg). A response outside the approve word set (\"no\") denies the call: zero executions, a human-review denial error event, and no final_answer — the run terminates at the refused call."
+}

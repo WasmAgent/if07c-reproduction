@@ -1,42 +1,47 @@
-# Independent reproduction ask — IF-07c provenance gate v1
+# Independent reproduction ask — IF-07c provenance gate v1.1.0
 
-You are invited to independently run the **IF-07c reproduction pack v1** on
-the pinned published npm artifacts. This is a narrow ask: please do **not**
-review WasmAgent security generally, and do not audit the implementation.
-Only run the fixed pack and report what you observe.
+You are invited to independently run the **IF-07c reproduction pack v1.1.0**
+on the pinned published npm artifacts. This is a narrow ask: please do
+**not** review WasmAgent security generally, and do not audit the
+implementation. Only run the fixed pack and report what you observe.
 
 ## What you run
 
-The pack in this repository at tag `v1.0.0` (see `ARTIFACTS.json` and the
-release notes for the frozen hashes). It drives three positive claims and
-four negative boundary claims through a scripted agent loop built entirely
-on published `@wasmagent/core`, `@wasmagent/mcp-firewall`, and
+The pack in this repository at tag `v1.1.0` (see `ARTIFACTS.json` and the
+release notes for the frozen hashes; the earlier 7-case set remains frozen
+at `v1.0.0`). It drives nine positive claims and nine negative boundary
+claims through a scripted agent loop and direct gateway-API probes built
+entirely on published `@wasmagent/core`, `@wasmagent/mcp-firewall`, and
 `@wasmagent/mcp-gateway` packages — no monorepo code, no test helpers.
 
 ## Procedure
 
 1. Verify your copy: recompute the SHA256 of every file listed in
-   `ARTIFACTS.json` → `files{}` and compare. **Do not trust `ARTIFACTS.json`
-   alone** — independently fetch npm metadata (`npm view <pkg>@<version>
-   dist.integrity`) and the tarballs, and compare against `packages{}`.
-2. In a clean directory: `npm install zod @wasmagent/core@3.9.0
-   @wasmagent/mcp-firewall@2.3.0 @wasmagent/mcp-gateway@0.2.0` (or the
-   versions recorded in `ARTIFACTS.json`).
+   `ARTIFACTS.json` → `files{}` and compare (`SHA256SUMS` is a convenience
+   index of the same set plus `ARTIFACTS.json` itself). **Do not trust
+   `ARTIFACTS.json` alone** — independently fetch npm metadata
+   (`npm view <pkg>@<version> dist.integrity`) and the tarballs, and compare
+   against `packages{}`.
+2. In a clean directory, copy the pack in and install the locked tree:
+   `npm ci` (exact versions are pinned in `package.json` /
+   `package-lock.json`: core 3.9.0, mcp-firewall 2.3.0, mcp-gateway 0.2.0,
+   zod 3.25.76). Confirm with `npm ls`.
 3. Run `node runner/run.mjs`.
 4. Record everything listed under "Report format" below.
 
 ## Report format (per claim only)
 
-Report exactly these fields for each of C1, C2, C3, N1, N2, N3, N4:
+Report exactly these fields for each of the 18 claims (C1–C4, D1–D3b, L1,
+N1–N4, S1–S3, E1–E2):
 
 - `runner commit` — the commit SHA of this repository you ran
 - `OS / Node version` — your environment
-- `npm-resolved versions` — what npm actually installed (e.g.
-  `npm ls @wasmagent/core`)
+- `npm-resolved versions` — what npm actually installed (`npm ls @wasmagent/core`)
 - `tarball integrity` — the `dist.integrity` you independently fetched
-- `per-claim result` — PASS / FAIL for C1–C3, BOUNDARY-HELD /
-  BOUNDARY-BROKEN for N1–N4, exactly as the runner prints them
-- `raw output` — the complete, unedited runner output
+- `per-claim result` — PASS / FAIL for positive claims, BOUNDARY-HELD /
+  BOUNDARY-BROKEN for negative claims, exactly as the runner prints them
+- `raw output` — the complete, unedited runner output, plus the
+  `results.json` it generated
 
 ## Please do NOT
 
@@ -51,7 +56,8 @@ Report exactly these fields for each of C1, C2, C3, N1, N2, N3, N4:
 ## What a green run does and does not mean
 
 See `CLAIM-BOUNDARY.md` for the full vocabulary. In short: a full green run
-reproduces the pinned claims on the pinned artifacts — it does not establish
-adaptive adversarial completeness, process-wide taint tracking, default-on
-behavior, DLP, production false-positive rates, or any independent security
-certification.
+reproduces the pinned claims and ceilings on the pinned artifacts — it does
+not establish adaptive adversarial completeness, process-wide taint
+tracking, default-on behavior, DLP, protection of same-batch dataflow by
+taint policy, unbounded-run taint integrity, production false-positive
+rates, or any independent security certification.

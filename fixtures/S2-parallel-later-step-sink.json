@@ -1,0 +1,18 @@
+{
+  "id": "S2",
+  "title": "Under the parallel scheduler, a sink submitted in a step AFTER the labeled read completed is denied identically (scheduler-independent threading)",
+  "kind": "positive",
+  "wiring": "wired",
+  "profileSet": "full",
+  "scheduler": "parallel",
+  "runs": [
+    {
+      "steps": [
+        { "calls": [{ "id": "c1", "name": "search_docs", "input": { "key": "k" } }] },
+        { "calls": [{ "id": "c2", "name": "send_report", "input": { "body": { "__derive__": { "from": "SECRET", "transform": "identity" } } } }] },
+        { "text": "done" }
+      ]
+    }
+  ],
+  "note": "R08 (parallel leg). Same script as S1 with scheduler:\"parallel\" — whole-run threading is a property of the run ledger, not of either scheduler mode. Cross-mode: batch-internal concurrency carries no happens-before guarantee and this pack asserts none."
+}
