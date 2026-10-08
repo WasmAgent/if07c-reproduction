@@ -1,6 +1,6 @@
 {
   "format": "if07c-independent-reproduction/artifacts/v2",
-  "generatedAtUtc": "2026-10-08T06:22:57.386Z",
+  "generatedAtUtc": "2026-10-08T06:27:00.278Z",
   "toolchain": {
     "node": "24.16.0",
     "npm": "11.16.0"
@@ -8,8 +8,8 @@
   "gitRef": "HEAD",
   "packIdentity": {
     "repo": "WasmAgent/if07c-reproduction",
-    "contentTag": "v1.1.0",
-    "previousFrozenTag": "v1.0.2",
+    "contentTag": "v1.2.0",
+    "previousFrozenTag": "v1.1.0",
     "note": "External-tag publication model: the tag freezes this file set; no manifest can or should contain its own final hash."
   },
   "packages": {
@@ -43,7 +43,7 @@
     "note": "The npm tarballs are the root identity (packages{} above); this block records which source commit they correspond to."
   },
   "caseSet": {
-    "id": "if07c-repro-case-set/2026-10-08",
+    "id": "if07c-repro-case-set/2026-10-08-v1.2",
     "caseIds": [
       "C1",
       "C2",
@@ -60,23 +60,29 @@
       "N2",
       "N3",
       "N4",
+      "P1",
+      "P2",
+      "P2b",
+      "P3",
+      "P3b",
+      "P4",
       "S1",
       "S2",
       "S3"
     ],
-    "caseCount": 18,
+    "caseCount": 24,
     "note": "Authoritative case-set identity; per-case kinds live in fixtures/*.json, assertions in expected-results.json."
   },
   "files": {
-    "CLAIM-BOUNDARY.md": "3e1fd5216aaa5e073890c02c7a5bc5d78d172dc3cf7db506b3dc9136e757a4c9",
-    "INVITATION.md": "b69897963b75a5a003545b9a3a150f4a283b0e91987700f8bb2e86e5800108e2",
+    "CLAIM-BOUNDARY.md": "6a0e24d25ede7ceb9eb91deb7812493989c7ab1d13a7cd51658111916cae4ca7",
+    "INVITATION.md": "108105f25cfd1d6bb2ca2a2e339dd096e1c06dc684801994261a9d89a64e6532",
     "LICENSE": "d091846ca33eacf24c5b87fbaef8b90b5da08e35221ecfee77eee628bbe910f0",
-    "README.md": "2fbcf4b29869fe5548155a375d9028d65529044e0e38b5011689ced90f9ab3f8",
-    "docs/ASSURANCE-LEDGER.md": "5404ca6fef55276e58851f4b81c02ef8ef2a852977286846f83a27631a7c5efb",
+    "README.md": "ec6f3f44b3e64da5eae006e5034a3b9de047c141e5b03fa4b1846dc2e529b937",
+    "docs/ASSURANCE-LEDGER.md": "2ffd9f8dfc38ef367d7d4f2f9fa005e68b37d5b9b91c7c849148ae1d3bbe290b",
     "docs/V1.0.0-EXTERNAL-FINDINGS.md": "9a0f173ac285ff9e86bb4dabc818218c60180bf8a889a7b5434b139f5169ea34",
     "docs/V1.0.1-PREPUBLISH-GATE-FAILURE.md": "b0d5ac9f8b2a489bc9dbc4ba59eb52137c0b38ae8859d4c391675e41b628990c",
     "docs/V1.0.2-METADATA-CORRECTIONS.md": "55ac362df4186426fbef2a87a578fb9573b32510faf633233967e5db0ba8dfd3",
-    "expected-results.json": "d7fc21a650bf30a89cec58fc25871d7e6cdcb9a9d600b47731051fc467838a01",
+    "expected-results.json": "aaa3510ebfe2d8d6f1987c3bb8e88ff5322ccb0302464d200c626a89cb42d8b5",
     "fixtures/C1-benign-unlabeled.json": "44e491045a5fd4fd5983fa53e6a343cb03743a0e3a15cce77fd164ffee5f9cba",
     "fixtures/C2-labeled-read-to-sink.json": "fd295e751e340211ae05d9aac1b2242841801a982aa9d3c331945ea4250f4ff1",
     "fixtures/C3-labeled-transform-rename-to-sink.json": "b3cec863a7f86a5d5703822b3626b4b336f254ad4e1152a232a7375ad2e4c5a1",
@@ -92,12 +98,18 @@
     "fixtures/N2-no-profile-no-invention.json": "ca59ef59f47e59fb28d8bf00c9666de64c4ac044f1711f4b8103ebcb4acd594c",
     "fixtures/N3-cross-run-ledger-non-survival.json": "86ab1ab96552b35507a4498618d10928094f6d59bb3685be915527be2147b21e",
     "fixtures/N4-model-side-transform-not-established.json": "8a1beecc75384d37faf7c49656dffa2afd395d2612fa572c2e5592234e2d396c",
+    "fixtures/P1-cross-tenant-support-role.json": "f1f3309b42bc5ef50a0619c522fe46ce0bad65ac2179cb1234210f88b1c201db",
+    "fixtures/P2-open-read-controlled-write.json": "7f907c1fe59b7dd833f10f89824cea8d41ff3b984eabdc8f65a6b8e6c4d4785c",
+    "fixtures/P2b-controlled-write-no-grant-twin.json": "b4ab302f643613b138ee759cbc3e352802c023b66635759f860169391dac029a",
+    "fixtures/P3-trusted-boundary-verified.json": "8de5187f42d48412472339a921ae897be19cc2c024bca2b747e77122a3ec8bef",
+    "fixtures/P3b-trusted-boundary-unverified-twin.json": "79ef643fa5799f8d78f7169a8c8e7b57683893d26ebd3d8bb8572f1d79613653",
+    "fixtures/P4-public-vs-internal-route.json": "972962953f4439034429698252ee9846dcb8fdf344c94095981621837d594dc6",
     "fixtures/S1-dag-later-step-sink.json": "f1fd54864f907814bf3cca8641e10f16df56c2a53b4c9d52976236d8cbc8248e",
     "fixtures/S2-parallel-later-step-sink.json": "d10196a66ffe559c734dcd4bc303d23891f4f123bde90485404b682ac54cc6d7",
     "fixtures/S3-same-batch-ref-boundary.json": "8a4a9b907a84379db3b1fddac63029a1989a8234db9bab3dffa036f32ce015b2",
-    "profile.json": "53148597ea8d8bd9050aedbfad168d0cde39d8d7e76605d2dc06b4d864d67cad",
-    "runner/run.mjs": "d7f57dcd572bf7c9c660786103f6f9136995660e10fcccafef53001c71d064ca",
-    "scripts/build-artifacts.mjs": "356e94b13fecb075bec8ee7691d3b5076e3a7e2586a2cba2f6a5a76aa3e35a9a",
+    "profile.json": "b651517ed6ea0a72b7fb5628af050a1348dc3f10946e7c4b1ccad53932766424",
+    "runner/run.mjs": "180b0998c8e3e159bed87de78fd77a7e24144543e507fa4f37d2071141b842ad",
+    "scripts/build-artifacts.mjs": "c1c3edad7926be86cbb5334da371910e3f387cd423e725f4b7ea4bcc52b723e1",
     "scripts/outsider-repro.sh": "62571c827bfdc4c3ee0bc601d9cbaab1a7cdd30ab12957c2f76f8d8233a1fe34",
     "scripts/prepublish-audit.mjs": "8db651b54f2a065d8fcf993f4235bfc82b981323ada5ad67dd05b3fd5092b255"
   },

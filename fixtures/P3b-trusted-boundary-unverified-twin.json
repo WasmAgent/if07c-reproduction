@@ -1,0 +1,34 @@
+{
+  "id": "P3b",
+  "title": "Trusted boundary twin: the same descriptor-only tool on an UNVERIFIED boundary with a deny-on-unprofiled policy is refused",
+  "kind": "positive",
+  "mode": "permission-probe",
+  "profileSet": "route",
+  "probe": {
+    "principal": "boundary-agent-1",
+    "session": "sess-p3b",
+    "gateway": {
+      "serverCardVerified": false,
+      "unprofiledToolPolicy": "deny"
+    },
+    "legs": [
+      {
+        "name": "violating-unverified-boundary",
+        "role": "violating",
+        "request": {
+          "tool": "get_status_page",
+          "args": {
+            "path": "/status"
+          }
+        },
+        "expect": {
+          "decision": "deny",
+          "matchedPolicyIds": [
+            "unprofiled-tool-deny"
+          ]
+        }
+      }
+    ]
+  },
+  "note": "Twin of P3: no operator verification, and the operator's declared policy for profile-less tools is deny. The pair demonstrates that the verified-boundary bypass is the ONLY path around the unprofiled-tool boundary for read-classified tools — remove the operator fact and the same call is refused (rule unprofiled-tool-deny). Documented scope: the unprofiled-tool rule adjudicates heuristically READ_ONLY-classified unprofiled tools; other effect classes are owned by different rules (e.g. the unknown-profile fail-safe), which is why this twin uses a read-classified status tool."
+}

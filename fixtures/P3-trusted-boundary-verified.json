@@ -1,0 +1,21 @@
+{
+  "id": "P3",
+  "title": "Trusted boundary: on an operator-verified server, a descriptor-only tool is usable; the same tool on an unverified boundary is denied outright",
+  "kind": "positive",
+  "mode": "permission-probe",
+  "profileSet": "route",
+  "probe": {
+    "principal": "boundary-agent-1",
+    "session": "sess-p3",
+    "gateway": { "serverCardVerified": true },
+    "legs": [
+      {
+        "name": "legit-verified-boundary",
+        "role": "legit",
+        "request": { "tool": "get_status_page", "args": { "path": "/status" } },
+        "expect": { "decision": "allow", "matchedPolicyIds": [] }
+      }
+    ]
+  },
+  "note": "Trust anchor = operator verification of the server boundary (ServerCard.operatorVerified, a DECLARED operator fact): the descriptor-only tool needs no profile on a verified boundary. The violating twin runs in P3b (separate fixture, because the gateway option differs): identical tool, identical args, unverified boundary + unprofiledToolPolicy deny → hard deny."
+}

@@ -1,0 +1,61 @@
+{
+  "id": "P2",
+  "title": "Tenant-open read is allowed; the capability-gated external write executes only with grant plus argument-scope- and session-bound operator consent (userConsentRef on file)",
+  "kind": "positive",
+  "mode": "permission-probe",
+  "profileSet": "perm",
+  "probe": {
+    "principal": "workspace-editor-3",
+    "session": "sess-p2",
+    "gateway": {
+      "capabilityRegistry": true
+    },
+    "grants": [
+      {
+        "tenant": "repro-srv",
+        "capability": "fs.write_external"
+      }
+    ],
+    "consents": [
+      {
+        "tool": "publish_file",
+        "argScope": {
+          "path": "/reports/q3.md",
+          "content": "quarterly summary"
+        }
+      }
+    ],
+    "legs": [
+      {
+        "name": "legit-open-read",
+        "role": "legit",
+        "request": {
+          "tool": "read_workspace",
+          "args": {
+            "path": "/reports/q3.md"
+          }
+        },
+        "expect": {
+          "decision": "allow",
+          "matchedPolicyIds": []
+        }
+      },
+      {
+        "name": "legit-consented-write",
+        "role": "legit",
+        "request": {
+          "tool": "publish_file",
+          "args": {
+            "path": "/reports/q3.md",
+            "content": "quarterly summary"
+          }
+        },
+        "expect": {
+          "decision": "allow",
+          "userConsentRefPresent": true
+        }
+      }
+    ]
+  },
+  "note": "Reads inside the tenant are open (an allow must NOT be manufactured by denying them). The external write is capability-gated: this fixture's principal holds the declared grant AND operator consent bound to the exact argument scope and session, so the escalated ask is downgraded to allow with a userConsentRef on file. Consent NEVER downgrades a deny, and grants are per-principal: the no-grant twin is P2b, where the same tool is denied outright even though this principal's consent exists."
+}

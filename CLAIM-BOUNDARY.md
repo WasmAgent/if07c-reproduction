@@ -1,6 +1,6 @@
 # Claim boundary — what a green run of this pack proves, and what it does not
 
-This pack executes nine POSITIVE claims and nine NEGATIVE boundary claims
+This pack executes fifteen POSITIVE claims and nine NEGATIVE boundary claims
 against published npm artifacts. Read this file before citing any result.
 
 ## Proves (on the pinned fixtures, with the pinned artifact versions)
@@ -25,6 +25,24 @@ D3a/D3b the same escalation through the supported checkpointer API:
     ends the run without a final answer;
 L1  a tainted run is not a frozen run — benign non-sink tools keep
     executing; only declared deny-sinks are blocked.
+P1  permission intent declared up front: a support principal holding a
+    tenant-scoped capability grant reads the tenant its request operates
+    on (allow, no rules fired); the twin request operating on tenant-a
+    while referencing tenant-b resources is denied by tenant isolation
+    (grants exist for BOTH tenants, so the deny is attributable to
+    isolation, not to a missing grant);
+P2  tenant-open reads stay open; a capability-gated external write
+    executes only with grant PLUS argument-scope- and session-bound
+    operator consent (userConsentRef on file);
+P2b the same write with no grant is denied outright — consent on file
+    for another principal never downgrades anything (consent turns
+    ask_user into allow, never deny into allow);
+P3/P3b the trust anchor is the operator-verified server boundary: a
+    descriptor-only tool is usable on a verified boundary and refused
+    (unprofiled-tool-deny) on an unverified one under a
+    deny-on-unprofiled policy.
+P4  a deliberately public route is allowed by default and an internal
+    route denied by an OPERATOR-SUPPLIED custom rule.
 ```
 
 ## Proves the BOUNDARIES hold (negative group)
@@ -65,6 +83,16 @@ E1  the ledger is bounded (default 512 observations). All-sensitive overflow
 E2  eviction prefers non-sensitive entries: a declared non-sensitive label
     ('internal') evicts before any sensitive entry. Declared labels are
     operator facts, not DLP judgments.
+S-family scope: the P-family pins DECISIONS of the published gateway
+    (allow/deny/ask + matched rule ids + consent reference). Real-execution
+    counterparts for allow decisions are pinned by the agent-level cases
+    (C1, D3a, L1); the permission probes themselves do not execute tools.
+    The unprofiled-tool boundary rule adjudicates heuristically
+    read-classified unprofiled tools only (other effect classes are owned
+    by different rules, e.g. the unknown-profile fail-safe). P4's route
+    policy is operator-supplied and therefore runs with securityProfile
+    "custom", not "hardened" — the published stack has no first-class
+    route allowlist/denylist, which this pair records as an upstream gap.
 ```
 
 ## Does NOT prove
@@ -82,8 +110,12 @@ protection of same-batch $ref dataflow by TAINT POLICY (S3 pins that no
   coverage);
 unbounded-run taint integrity (E1/E2 pin bounded-memory eviction
   semantics: identity tracking degrades for evicted entries);
-production false-positive rate (no real workload is exercised here; L1 is
-  a fixture-level legal negative, not a deployment statistic);
+production false-positive rate (no real workload is exercised here; L1 and
+  the P-family are fixture-level legal negatives, not deployment statistics
+  — the permission probes assert decisions, not measured false-positive
+  rates);
+first-class route policy under the hardened stack (P4's route rule is
+  operator-supplied and flips the gateway to securityProfile "custom");
 independent security certification (a green run by ANY party — including a
   third party — is a reproduction of pinned claims, not an audit).
 ```

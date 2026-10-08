@@ -2,12 +2,21 @@
   "version": 2,
   "description": "Expected outcomes for every fixture in fixtures/. The runner compares observed behavior against THESE assertions only; fixtures carry inputs, expected-results carries the assertions. kind=positive PASS means the security property held; kind=negative BOUNDARY-HELD means the gate behaved exactly as the documented claim ceiling says (it does not do things it never claimed). v2 extends the v1 set (C1–C3, N1–N4, unchanged) with consent/descriptor fail-closed cases (D*), scheduler-mode cases (S*), a legal-negative case (L1), eviction-boundary probes (E1/E2), and a nested-identity case (C4).",
   "caseSet": {
-    "id": "if07c-repro-case-set/2026-10-08",
-    "note": "Stable identifier for this exact fixture set. Any change to fixtures/ or to these expectations is a new case set and a new content version of the pack.",
+    "id": "if07c-repro-case-set/2026-10-08-v1.2",
+    "note": "Stable identifier for this exact fixture set. Any change to fixtures/ or to these expectations is a new case set and a new content version of the pack. v1.2 adds the permission-model pairs P1-P4b (family id 2026-10-08-v1.2); the 18-case v1.1 set is frozen at tag v1.1.0.",
     "mappingToActionPlan": {
-      "R01": "C1", "R02": "C2", "R03": "C3 + C4 + N4", "R04": "D1", "R05": "D2",
-      "R06": "D3a + D3b", "R07": "N3", "R08": "S1 + S2 + S3", "R09": "L1",
-      "ledgerCapacityAndEviction": "E1 + E2", "optInAndNoInventionCeilings": "N1 + N2"
+      "R01": "C1",
+      "R02": "C2",
+      "R03": "C3 + C4 + N4",
+      "R04": "D1",
+      "R05": "D2",
+      "R06": "D3a + D3b",
+      "R07": "N3",
+      "R08": "S1 + S2 + S3",
+      "R09": "L1",
+      "ledgerCapacityAndEviction": "E1 + E2",
+      "optInAndNoInventionCeilings": "N1 + N2",
+      "permissionPairsOWASP44": "P1 + P2 + P2b + P3 + P3b + P4"
     }
   },
   "claims": {
@@ -15,7 +24,12 @@
       "fixture": "fixtures/C1-benign-unlabeled.json",
       "claim": "unlabeled benign flow → no interference",
       "expect": {
-        "executions": { "search_docs": 0, "send_report": 1, "transform_text": 0, "plain_echo": 1 },
+        "executions": {
+          "search_docs": 0,
+          "send_report": 1,
+          "transform_text": 0,
+          "plain_echo": 1
+        },
         "denyRuleIds": [],
         "finalAnswerEmitted": true
       }
@@ -24,8 +38,16 @@
       "fixture": "fixtures/C2-labeled-read-to-sink.json",
       "claim": "labeled read → later deny-sink call → denied automatically (label rule, plus identity rule on the verbatim reuse)",
       "expect": {
-        "executions": { "search_docs": 1, "send_report": 0, "transform_text": 0, "plain_echo": 0 },
-        "denyRuleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"],
+        "executions": {
+          "search_docs": 1,
+          "send_report": 0,
+          "transform_text": 0,
+          "plain_echo": 0
+        },
+        "denyRuleIds": [
+          "sink-tainted-provenance-deny",
+          "sink-tainted-identity-deny"
+        ],
         "finalAnswerEmitted": true
       }
     },
@@ -33,8 +55,16 @@
       "fixture": "fixtures/C3-labeled-transform-rename-to-sink.json",
       "claim": "labeled result transformed inside a labeled tool → renamed forward → still denied via provenance/identity",
       "expect": {
-        "executions": { "search_docs": 1, "send_report": 0, "transform_text": 1, "plain_echo": 0 },
-        "denyRuleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"],
+        "executions": {
+          "search_docs": 1,
+          "send_report": 0,
+          "transform_text": 1,
+          "plain_echo": 0
+        },
+        "denyRuleIds": [
+          "sink-tainted-provenance-deny",
+          "sink-tainted-identity-deny"
+        ],
         "finalAnswerEmitted": true
       }
     },
@@ -42,8 +72,16 @@
       "fixture": "fixtures/C4-nested-verbatim-to-sink.json",
       "claim": "labeled secret forwarded verbatim inside a nested sink argument → denied (identity rule's arg walk reaches nested leaves; label rule via whole-run threading)",
       "expect": {
-        "executions": { "search_docs": 1, "send_report": 0, "transform_text": 0, "plain_echo": 0 },
-        "denyRuleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"],
+        "executions": {
+          "search_docs": 1,
+          "send_report": 0,
+          "transform_text": 0,
+          "plain_echo": 0
+        },
+        "denyRuleIds": [
+          "sink-tainted-provenance-deny",
+          "sink-tainted-identity-deny"
+        ],
         "finalAnswerEmitted": true
       }
     },
@@ -51,8 +89,15 @@
       "fixture": "fixtures/D1-unknown-descriptor.json",
       "claim": "unknown descriptor → fail-closed deny (rule descriptor-unavailable), zero executions, run still terminates normally",
       "expect": {
-        "executions": { "search_docs": 0, "send_report": 0, "transform_text": 0, "plain_echo": 0 },
-        "denyRuleIds": ["descriptor-unavailable"],
+        "executions": {
+          "search_docs": 0,
+          "send_report": 0,
+          "transform_text": 0,
+          "plain_echo": 0
+        },
+        "denyRuleIds": [
+          "descriptor-unavailable"
+        ],
         "finalAnswerEmitted": true
       }
     },
@@ -60,8 +105,16 @@
       "fixture": "fixtures/D2-escalation-no-checkpointer.json",
       "claim": "gateway ask_user escalation with no approval facility → fail-closed deny (rule consent-unavailable), zero executions",
       "expect": {
-        "executions": { "search_docs": 0, "send_report": 0, "transform_text": 0, "plain_echo": 0, "unprofiled_echo": 0 },
-        "denyRuleIds": ["consent-unavailable"],
+        "executions": {
+          "search_docs": 0,
+          "send_report": 0,
+          "transform_text": 0,
+          "plain_echo": 0,
+          "unprofiled_echo": 0
+        },
+        "denyRuleIds": [
+          "consent-unavailable"
+        ],
         "finalAnswerEmitted": true
       }
     },
@@ -69,7 +122,13 @@
       "fixture": "fixtures/D3a-escalation-approved.json",
       "claim": "same escalation with checkpointer wired → operator approval via the supported API executes the call once",
       "expect": {
-        "executions": { "search_docs": 0, "send_report": 0, "transform_text": 0, "plain_echo": 0, "unprofiled_echo": 1 },
+        "executions": {
+          "search_docs": 0,
+          "send_report": 0,
+          "transform_text": 0,
+          "plain_echo": 0,
+          "unprofiled_echo": 1
+        },
         "denyRuleIds": [],
         "finalAnswerEmitted": true,
         "awaitHumanInputCount": 1
@@ -79,7 +138,13 @@
       "fixture": "fixtures/D3b-escalation-rejected.json",
       "claim": "same escalation rejected → zero executions, human-review denial error, run ends without a final answer",
       "expect": {
-        "executions": { "search_docs": 0, "send_report": 0, "transform_text": 0, "plain_echo": 0, "unprofiled_echo": 0 },
+        "executions": {
+          "search_docs": 0,
+          "send_report": 0,
+          "transform_text": 0,
+          "plain_echo": 0,
+          "unprofiled_echo": 0
+        },
         "denyRuleIds": [],
         "finalAnswerEmitted": false,
         "awaitHumanInputCount": 1,
@@ -90,8 +155,16 @@
       "fixture": "fixtures/L1-tainted-run-benign-unimpeded.json",
       "claim": "legal negative: in a tainted run, benign non-sink tools still execute; only the declared deny-sink is blocked (strict sink refusal is the documented contract, not a false positive)",
       "expect": {
-        "executions": { "search_docs": 1, "send_report": 0, "transform_text": 0, "plain_echo": 1 },
-        "denyRuleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"],
+        "executions": {
+          "search_docs": 1,
+          "send_report": 0,
+          "transform_text": 0,
+          "plain_echo": 1
+        },
+        "denyRuleIds": [
+          "sink-tainted-provenance-deny",
+          "sink-tainted-identity-deny"
+        ],
         "finalAnswerEmitted": true
       }
     },
@@ -99,8 +172,16 @@
       "fixture": "fixtures/S1-dag-later-step-sink.json",
       "claim": "DAG scheduler (default, pinned): a sink submitted in a step AFTER the labeled read completed is denied (label + identity)",
       "expect": {
-        "executions": { "search_docs": 1, "send_report": 0, "transform_text": 0, "plain_echo": 0 },
-        "denyRuleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"],
+        "executions": {
+          "search_docs": 1,
+          "send_report": 0,
+          "transform_text": 0,
+          "plain_echo": 0
+        },
+        "denyRuleIds": [
+          "sink-tainted-provenance-deny",
+          "sink-tainted-identity-deny"
+        ],
         "finalAnswerEmitted": true
       }
     },
@@ -108,8 +189,16 @@
       "fixture": "fixtures/S2-parallel-later-step-sink.json",
       "claim": "parallel scheduler: the same later-step script is denied identically — whole-run threading is scheduler-independent; batch-internal concurrency carries no happens-before guarantee and none is asserted",
       "expect": {
-        "executions": { "search_docs": 1, "send_report": 0, "transform_text": 0, "plain_echo": 0 },
-        "denyRuleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"],
+        "executions": {
+          "search_docs": 1,
+          "send_report": 0,
+          "transform_text": 0,
+          "plain_echo": 0
+        },
+        "denyRuleIds": [
+          "sink-tainted-provenance-deny",
+          "sink-tainted-identity-deny"
+        ],
         "finalAnswerEmitted": true
       }
     },
@@ -117,10 +206,21 @@
       "fixture": "fixtures/S3-same-batch-ref-boundary.json",
       "claim": "same-batch $ref dataflow ceiling: no provenance rule fires (the batch's gate evaluation precedes the read's observation), and the $ref substitution passes the read's raw result object which the string sink schema rejects — the sink never executes (fail-safe by typing, not by taint policy)",
       "expect": {
-        "executions": { "search_docs": 1, "send_report": 0, "transform_text": 0, "plain_echo": 0 },
+        "executions": {
+          "search_docs": 1,
+          "send_report": 0,
+          "transform_text": 0,
+          "plain_echo": 0
+        },
         "denyRuleIds": [],
         "finalAnswerEmitted": true,
-        "toolErrors": [{ "callId": "c2", "toolName": "send_report", "code": "execution_error" }]
+        "toolErrors": [
+          {
+            "callId": "c2",
+            "toolName": "send_report",
+            "code": "execution_error"
+          }
+        ]
       }
     },
     "E1": {
@@ -129,8 +229,21 @@
       "expect": {
         "mintedCount": 600,
         "checks": [
-          { "toolName": "send_report", "action": "deny", "ruleIds": ["sink-tainted-provenance-deny"] },
-          { "toolName": "send_report", "action": "deny", "ruleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"] }
+          {
+            "toolName": "send_report",
+            "action": "deny",
+            "ruleIds": [
+              "sink-tainted-provenance-deny"
+            ]
+          },
+          {
+            "toolName": "send_report",
+            "action": "deny",
+            "ruleIds": [
+              "sink-tainted-provenance-deny",
+              "sink-tainted-identity-deny"
+            ]
+          }
         ]
       }
     },
@@ -140,9 +253,129 @@
       "expect": {
         "mintedCount": 516,
         "checks": [
-          { "toolName": "send_report", "action": "deny", "ruleIds": ["sink-tainted-provenance-deny"] },
-          { "toolName": "send_report", "action": "deny", "ruleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"] },
-          { "toolName": "send_report", "action": "deny", "ruleIds": ["sink-tainted-provenance-deny", "sink-tainted-identity-deny"] }
+          {
+            "toolName": "send_report",
+            "action": "deny",
+            "ruleIds": [
+              "sink-tainted-provenance-deny"
+            ]
+          },
+          {
+            "toolName": "send_report",
+            "action": "deny",
+            "ruleIds": [
+              "sink-tainted-provenance-deny",
+              "sink-tainted-identity-deny"
+            ]
+          },
+          {
+            "toolName": "send_report",
+            "action": "deny",
+            "ruleIds": [
+              "sink-tainted-provenance-deny",
+              "sink-tainted-identity-deny"
+            ]
+          }
+        ]
+      }
+    },
+    "P1": {
+      "fixture": "fixtures/P1-cross-tenant-support-role.json",
+      "claim": "permission pair (cross-tenant support role): a granted support principal reads the tenant its request operates on; the twin request operating on tenant-a while referencing tenant-b resources is denied by tenant isolation",
+      "expect": {
+        "legs": [
+          {
+            "name": "legit-cross-tenant-support-read",
+            "decision": "allow",
+            "matchedPolicyIds": []
+          },
+          {
+            "name": "violating-cross-tenant-reference",
+            "decision": "deny",
+            "matchedPolicyIdPrefix": "tenant-isolation:"
+          }
+        ]
+      }
+    },
+    "P2": {
+      "fixture": "fixtures/P2-open-read-controlled-write.json",
+      "claim": "permission pair (open read / controlled write, legit legs): tenant reads are open; the capability-gated external write is allowed only with grant + argument-scope- and session-bound consent (userConsentRef on file)",
+      "expect": {
+        "legs": [
+          {
+            "name": "legit-open-read",
+            "decision": "allow",
+            "matchedPolicyIds": []
+          },
+          {
+            "name": "legit-consented-write",
+            "decision": "allow",
+            "userConsentRefPresent": true
+          }
+        ]
+      }
+    },
+    "P2b": {
+      "fixture": "fixtures/P2b-controlled-write-no-grant-twin.json",
+      "claim": "permission pair (open read / controlled write, violating twin): the same write with no grant is denied regardless of consent existing for another principal (deny jointly attributed to profile-capability-required + profile-authoritative)",
+      "expect": {
+        "legs": [
+          {
+            "name": "violating-write-without-grant",
+            "decision": "deny",
+            "matchedPolicyIds": [
+              "profile-authoritative",
+              "profile-capability-required"
+            ]
+          }
+        ]
+      }
+    },
+    "P3": {
+      "fixture": "fixtures/P3-trusted-boundary-verified.json",
+      "claim": "permission pair (trusted boundary, legit leg): on an operator-verified server boundary, a descriptor-only tool is usable",
+      "expect": {
+        "legs": [
+          {
+            "name": "legit-verified-boundary",
+            "decision": "allow",
+            "matchedPolicyIds": []
+          }
+        ]
+      }
+    },
+    "P3b": {
+      "fixture": "fixtures/P3b-trusted-boundary-unverified-twin.json",
+      "claim": "permission pair (trusted boundary, violating twin): the same tool on an unverified boundary with deny-on-unprofiled policy is refused (unprofiled-tool-deny)",
+      "expect": {
+        "legs": [
+          {
+            "name": "violating-unverified-boundary",
+            "decision": "deny",
+            "matchedPolicyIds": [
+              "unprofiled-tool-deny"
+            ]
+          }
+        ]
+      }
+    },
+    "P4": {
+      "fixture": "fixtures/P4-public-vs-internal-route.json",
+      "claim": "permission pair (route policy): the deliberately public route is allowed by default; the internal route is denied by the operator-supplied custom rule (gateway runs with securityProfile \"custom\" — the published hardened stack has no first-class route policy)",
+      "expect": {
+        "legs": [
+          {
+            "name": "legit-public-route",
+            "decision": "allow",
+            "matchedPolicyIds": []
+          },
+          {
+            "name": "violating-internal-route",
+            "decision": "deny",
+            "matchedPolicyIds": [
+              "internal-route-deny"
+            ]
+          }
         ]
       }
     },
@@ -150,7 +383,12 @@
       "fixture": "fixtures/N1-unwired-agent.json",
       "claim": "unwired agent → provenance gate does not auto-fire",
       "expect": {
-        "executions": { "search_docs": 1, "send_report": 1, "transform_text": 0, "plain_echo": 0 },
+        "executions": {
+          "search_docs": 1,
+          "send_report": 1,
+          "transform_text": 0,
+          "plain_echo": 0
+        },
         "denyRuleIds": [],
         "finalAnswerEmitted": true
       }
@@ -159,7 +397,12 @@
       "fixture": "fixtures/N2-no-profile-no-invention.json",
       "claim": "no resultTaintLabels profile → runtime does not invent secret labels",
       "expect": {
-        "executions": { "search_docs": 1, "send_report": 1, "transform_text": 0, "plain_echo": 0 },
+        "executions": {
+          "search_docs": 1,
+          "send_report": 1,
+          "transform_text": 0,
+          "plain_echo": 0
+        },
         "denyRuleIds": [],
         "finalAnswerEmitted": true
       }
@@ -169,8 +412,26 @@
       "claim": "cross-run reuse → previous run's ledger does not survive",
       "expect": {
         "perRun": [
-          { "executions": { "search_docs": 1, "send_report": 0, "transform_text": 0, "plain_echo": 0 }, "denyRuleIds": [], "finalAnswerEmitted": true },
-          { "executions": { "search_docs": 0, "send_report": 1, "transform_text": 0, "plain_echo": 0 }, "denyRuleIds": [], "finalAnswerEmitted": true }
+          {
+            "executions": {
+              "search_docs": 1,
+              "send_report": 0,
+              "transform_text": 0,
+              "plain_echo": 0
+            },
+            "denyRuleIds": [],
+            "finalAnswerEmitted": true
+          },
+          {
+            "executions": {
+              "search_docs": 0,
+              "send_report": 1,
+              "transform_text": 0,
+              "plain_echo": 0
+            },
+            "denyRuleIds": [],
+            "finalAnswerEmitted": true
+          }
         ]
       }
     },
@@ -178,8 +439,15 @@
       "fixture": "fixtures/N4-model-side-transform-not-established.json",
       "claim": "model-side transform of an in-context secret → the IDENTITY rule does not fire (that detection is NOT_ESTABLISHED); the call is still blocked by the label rule because whole-run threading denies every later deny-sink call in the run",
       "expect": {
-        "executions": { "search_docs": 1, "send_report": 0, "transform_text": 0, "plain_echo": 0 },
-        "denyRuleIds": ["sink-tainted-provenance-deny"],
+        "executions": {
+          "search_docs": 1,
+          "send_report": 0,
+          "transform_text": 0,
+          "plain_echo": 0
+        },
+        "denyRuleIds": [
+          "sink-tainted-provenance-deny"
+        ],
         "finalAnswerEmitted": true
       }
     }
