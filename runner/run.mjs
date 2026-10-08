@@ -30,7 +30,12 @@ import { basename, join } from "node:path";
 import { z } from "zod";
 import { InMemoryCheckpointer, ToolCallingAgent } from "@wasmagent/core";
 import {
+  buildServerCard,
+  buildVettingCacheKey,
+  CapabilityRegistry,
   computeToolSnapshotHash,
+  createRequestIdentity,
+  hashArgScope,
   InMemoryToolSecurityProfileRegistry,
   MCPGateway,
 } from "@wasmagent/mcp-firewall";
@@ -190,6 +195,109 @@ function buildToolset(descriptors) {
       d.name === "unprofiled_echo",
     forward: forwardFor(d.name),
   }));
+}
+
+// ── Permission-probe mode: drive MCPGateway.evaluate directly with full
+// GatewayRequest control (tenant, identity, capability grants, server cards,
+// operator rules, consent) to pin permission-model pairs. Operator intent
+// (grants, rules, consent scopes) is declared in the fixture; the runner is
+// mechanism only. ─────────────────────────────────────────────────────────────
+
+/** Interpret a declarative operator rule from the fixture. */
+function makeOperatorRule(spec) {
+  if (spec.kind === "path-prefix-deny") {
+    return {
+      policyId: spec.policyId,
+      evaluate(_toolName, args) {
+        for (const v of deepStringValuesShallow(args)) {
+          if (v.startsWith(spec.prefix)) return "deny";
+        }
+        return undefined;
+      },
+    };
+  }
+  throw new Error(`unknown operator rule kind: ${spec.kind}`);
+}
+
+/** Collect string leaves of args (bounded, same discipline as the gate walk). */
+function deepStringValuesShallow(value, out = [], depth = 0) {
+  if (typeof value === "string") out.push(value);
+  else if (Array.isArray(value) && depth < 8) for (const v of value) deepStringValuesShallow(v, out, depth + 1);
+  else if (value !== null && typeof value === "object" && depth < 8)
+    for (const v of Object.values(value)) deepStringValuesShallow(v, out, depth + 1);
+  return out;
+}
+
+async function runPermissionProbe({ profileSet, probe }) {
+  const { registry, descriptors } = buildProfiles(profileSet);
+  const descriptorMap = new Map(descriptors.map((d) => [d.name, d]));
+
+  const gwOpts = { profileRegistry: registry };
+  let capabilityRegistry;
+  if (probe.gateway?.capabilityRegistry) {
+    capabilityRegistry = new CapabilityRegistry();
+    gwOpts.capabilityRegistry = capabilityRegistry;
+  }
+  if (probe.gateway?.tenantEnforcement) gwOpts.tenantEnforcement = true;
+  if (probe.gateway?.unprofiledToolPolicy) gwOpts.unprofiledToolPolicy = probe.gateway.unprofiledToolPolicy;
+  if (probe.gateway?.rules) gwOpts.rules = probe.gateway.rules.map(makeOperatorRule);
+  if (probe.gateway?.serverCardVerified !== undefined) {
+    gwOpts.serverCards = [
+      buildServerCard({
+        serverId: profile.serverId,
+        tools: descriptors,
+        operatorVerified: probe.gateway.serverCardVerified,
+      }),
+    ];
+  }
+  const gw = new MCPGateway(gwOpts);
+
+  const identity = createRequestIdentity({
+    principal: probe.principal ?? profile.principal,
+    sessionId: probe.session ?? "perm-probe",
+  });
+
+  for (const g of probe.grants ?? []) {
+    capabilityRegistry.grant({
+      principal: identity.principalHash,
+      tenant: g.tenant,
+      capability: g.capability,
+    });
+  }
+
+  for (const c of probe.consents ?? []) {
+    const tool = descriptorMap.get(c.tool);
+    if (!tool) throw new Error(`consent for unknown tool ${c.tool}`);
+    gw.addConsentRecord({
+      toolName: c.tool,
+      userIdHash: identity.principalHash,
+      toolSnapshotHash: buildVettingCacheKey(tool, profile.serverId),
+      expiresAt: new Date(Date.now() + 60_000).toISOString(),
+      ...(c.argScope !== undefined ? { argScopeDigest: hashArgScope(resolveArgs(c.argScope)) } : {}),
+      ...(c.boundToSession === false ? {} : { boundToSession: identity.sessionId }),
+    });
+  }
+
+  const legs = [];
+  for (const [i, leg] of (probe.legs ?? []).entries()) {
+    const tool = descriptorMap.get(leg.request.tool);
+    if (!tool) throw new Error(`leg ${i}: unknown tool ${leg.request.tool}`);
+    const decision = gw.evaluate({
+      identity,
+      serverId: profile.serverId,
+      tool,
+      args: resolveArgs(leg.request.args ?? {}),
+      ...(leg.request.tenant ? { tenant: leg.request.tenant } : {}),
+    });
+    legs.push({
+      name: leg.name ?? `leg-${i}`,
+      role: leg.role ?? "legit",
+      decision: decision.invocation.decision,
+      matchedPolicyIds: [...decision.invocation.matchedPolicyIds].sort(),
+      userConsentRef: decision.invocation.userConsentRef ?? null,
+    });
+  }
+  return { legs };
 }
 
 // ── Agent mode: run one scripted run() against a (possibly unwired) agent ──
@@ -384,6 +492,50 @@ function compareRunExpectation(exp, actual) {
   return problems;
 }
 
+function comparePermissionExpectation(exp, actual) {
+  const problems = [];
+  const expLegs = exp.legs ?? [];
+  if (expLegs.length !== actual.legs.length) {
+    problems.push(`leg count: expected ${expLegs.length}, observed ${actual.legs.length}`);
+  }
+  for (const [i, legExp] of expLegs.entries()) {
+    const observed = actual.legs[i];
+    if (!observed) {
+      problems.push(`leg ${i}: no observed decision`);
+      continue;
+    }
+    const label = `leg ${i} (${observed.name})`;
+    if (legExp.decision !== observed.decision) {
+      problems.push(`${label}: decision expected ${legExp.decision}, observed ${observed.decision}`);
+    }
+    if (legExp.matchedPolicyIds !== undefined) {
+      const expRules = [...legExp.matchedPolicyIds].sort();
+      if (JSON.stringify(expRules) !== JSON.stringify(observed.matchedPolicyIds)) {
+        problems.push(
+          `${label}: matchedPolicyIds expected [${expRules.join(", ")}], observed [${observed.matchedPolicyIds.join(", ")}]`
+        );
+      }
+    }
+    if (legExp.matchedPolicyIdPrefix !== undefined) {
+      if (
+        observed.matchedPolicyIds.length !== 1 ||
+        !observed.matchedPolicyIds[0].startsWith(legExp.matchedPolicyIdPrefix)
+      ) {
+        problems.push(
+          `${label}: expected exactly one policy id with prefix "${legExp.matchedPolicyIdPrefix}", observed [${observed.matchedPolicyIds.join(", ")}]`
+        );
+      }
+    }
+    if (legExp.userConsentRefPresent !== undefined) {
+      const present = observed.userConsentRef !== null;
+      if (!!legExp.userConsentRefPresent !== present) {
+        problems.push(`${label}: userConsentRefPresent expected ${legExp.userConsentRefPresent}, observed ${present}`);
+      }
+    }
+  }
+  return problems;
+}
+
 function compareProbeExpectation(exp, actual) {
   const problems = [];
   if (exp.mintedCount !== undefined && exp.mintedCount !== actual.mintedCount) {
@@ -444,6 +596,7 @@ const resultsOut = {
     "@wasmagent/mcp-gateway": pkgVersion("@wasmagent/mcp-gateway"),
   },
   cases: [],
+  permissionStats: { gateHits: 0, confirmedViolations: 0, legitBlocked: 0, allowedDecisions: 0 },
 };
 
 for (const { file, fixture } of fixtures) {
@@ -471,6 +624,17 @@ for (const { file, fixture } of fixtures) {
       observed.push(actual);
       caseRecord.runs.push(actual);
       problems.push(...compareProbeExpectation(exp.expect, actual));
+    } else if (fixture.mode === "permission-probe") {
+      const actual = await runPermissionProbe({ profileSet: fixture.profileSet, probe: fixture.probe });
+      observed.push(actual);
+      caseRecord.runs.push(actual);
+      problems.push(...comparePermissionExpectation(exp.expect, actual));
+      for (const leg of actual.legs) {
+        if (leg.matchedPolicyIds.length > 0) resultsOut.permissionStats.gateHits++;
+        if (leg.role === "violating" && leg.decision === "deny") resultsOut.permissionStats.confirmedViolations++;
+        if (leg.role === "legit" && leg.decision !== "allow") resultsOut.permissionStats.legitBlocked++;
+        if (leg.role === "legit" && leg.decision === "allow") resultsOut.permissionStats.allowedDecisions++;
+      }
     } else {
       for (let i = 0; i < fixture.runs.length; i++) {
         const run = fixture.runs[i];

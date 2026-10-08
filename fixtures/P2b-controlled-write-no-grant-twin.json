@@ -1,0 +1,46 @@
+{
+  "id": "P2b",
+  "title": "Open read / controlled write twin: the same capability-gated external write with NO grant is denied outright — consent on file for another principal never helps",
+  "kind": "positive",
+  "mode": "permission-probe",
+  "profileSet": "perm",
+  "probe": {
+    "principal": "intruder-9",
+    "session": "sess-p2b",
+    "gateway": {
+      "capabilityRegistry": true
+    },
+    "grants": [],
+    "consents": [
+      {
+        "tool": "publish_file",
+        "argScope": {
+          "path": "/reports/q3.md",
+          "content": "quarterly summary"
+        }
+      }
+    ],
+    "legs": [
+      {
+        "name": "violating-write-without-grant",
+        "role": "violating",
+        "request": {
+          "tool": "publish_file",
+          "args": {
+            "path": "/reports/q4-draft.md",
+            "content": "unauthorized publish"
+          }
+        },
+        "expect": {
+          "decision": "deny",
+          "matchedPolicyIds": [
+            "profile-authoritative",
+            "profile-capability-required"
+          ]
+        }
+      }
+    ],
+    "note": "Even though a consent record exists for publish_file (P2's principal, different arg scope and session), THIS principal holds no fs.write_external grant: the capability rule denies the high-risk write regardless of anyone's consent (consent downgrades ask_user, never a deny). Expect the deny to be attributable to the capability requirement; other concurrently matched rules are frozen from the observed run."
+  },
+  "note": "Even though a consent record exists for publish_file (P2's principal, different arg scope and session), THIS principal holds no fs.write_external grant: the capability rule denies the high-risk write regardless of anyone's consent (consent downgrades ask_user, never a deny). Observed and frozen: the deny is jointly attributed to profile-capability-required (missing grant) and profile-authoritative (write_external escalation)."
+}

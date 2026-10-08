@@ -1,8 +1,8 @@
-# IF-07c independent reproduction pack (v1.1.0)
+# IF-07c independent reproduction pack (v1.2.0)
 
 Anyone can run this pack against **published npm artifacts** — no wasmagent-js
 monorepo code, no test helpers, no internal assertion implementation. It
-executes nine POSITIVE security claims and nine NEGATIVE boundary claims,
+executes fifteen POSITIVE security claims and nine NEGATIVE boundary claims,
 and prints one verdict per claim (deliberately **no** aggregate
 "secure/insecure" conclusion — see `CLAIM-BOUNDARY.md`).
 
@@ -20,6 +20,19 @@ D3a same escalation, approved via the checkpointer API → executes (R06)
 D3b same escalation, rejected → zero executions, run ends        (R06)
 L1  legal negative: in a tainted run benign non-sink tools still
     execute; only the declared deny-sink is blocked              (R09)
+P1  permission pair: granted cross-tenant support read allowed;
+    cross-tenant reference denied by tenant isolation            (OWASP#44)
+P2  permission pair: tenant-open read allowed; capability-gated
+    write executes only with grant + scoped consent              (OWASP#44)
+P2b twin: same write with NO grant denied even though consent
+    exists for another principal                                 (OWASP#44)
+P3  permission pair: descriptor-only tool usable on an operator-
+    VERIFIED server boundary                                     (OWASP#44)
+P3b twin: same tool refused on an unverified boundary with a
+    deny-on-unprofiled policy                                    (OWASP#44)
+P4  permission pair: deliberately public route allowed; internal
+    route denied by the operator's custom rule (gateway then runs
+    with securityProfile "custom")                               (OWASP#44)
 
 NEGATIVE / boundary ceilings (BOUNDARY-HELD/BOUNDARY-BROKEN)
 N1  unwired agent → gate does not auto-fire                      (R-ceiling)
@@ -63,7 +76,9 @@ node runner/run.mjs        # per-claim verdicts + results.json; exit 0 = all mat
 
 The runner writes `results.json` (path overridable via `IF07C_RESULTS_PATH`)
 containing the observed decisions, per-tool execution counts, deny rule IDs,
-human-approval events, and every problem line. **Deny cases assert zero
+human-approval events, every problem line, and a `permissionStats` block for
+the P-family (gate hits, confirmed violations, legit-but-blocked — which must
+be zero — and allowed decisions). **Deny cases assert zero
 side-effect counts** — a deny text without a zero execution count does not
 pass, and benign cases assert real executions so an all-deny run cannot look
 green.
@@ -126,7 +141,13 @@ CodeAgent loop out of scope; no production false-positive data; independent
 security certification is not established by this or any pack. New in v1.1.0:
 identity tracking is bounded-memory and its eviction behavior is pinned as an
 executable ceiling (E1/E2), and same-batch `$ref` dataflow is documented as
-outside the whole-run threading protection (S3).
+outside the whole-run threading protection (S3). New in v1.2.0: the
+permission-model pairs (P1–P4b) pin operator-declared permission intent —
+capability grants, tenant isolation, consent scoping, verified boundaries —
+at the published-gateway decision level; the v1.2.0 derived expectations for
+P2/P2b and P3b were refuted during development (grants are fixture-scoped;
+the unprofiled-tool rule adjudicates only read-classified tools) and
+re-frozen from observed behavior plus the published dist.
 
 ## Frozen set vs governance files
 

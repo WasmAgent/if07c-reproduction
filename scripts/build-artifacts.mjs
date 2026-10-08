@@ -54,8 +54,8 @@ const PUBLISHED_SOURCE = {
 // the repository's git history instead (see README).
 const PACK_IDENTITY = {
   repo: "WasmAgent/if07c-reproduction",
-  contentTag: "v1.1.0",
-  previousFrozenTag: "v1.0.0",
+  contentTag: "v1.2.0",
+  previousFrozenTag: "v1.1.0",
   note: "External-tag publication model: the tag freezes this file set; no manifest can or should contain its own final hash.",
 };
 

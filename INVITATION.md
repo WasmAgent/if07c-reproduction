@@ -1,15 +1,15 @@
 # Independent reproduction ask — IF-07c provenance gate v1.1.0
 
-You are invited to independently run the **IF-07c reproduction pack v1.1.0**
+You are invited to independently run the **IF-07c reproduction pack v1.2.0**
 on the pinned published npm artifacts. This is a narrow ask: please do
 **not** review WasmAgent security generally, and do not audit the
 implementation. Only run the fixed pack and report what you observe.
 
 ## What you run
 
-The pack in this repository at tag `v1.1.0` (see `ARTIFACTS.json` and the
-release notes for the frozen hashes; the earlier 7-case set remains frozen
-at `v1.0.0`). It drives nine positive claims and nine negative boundary
+The pack in this repository at tag `v1.2.0` (see `ARTIFACTS.json` and the
+release notes for the frozen hashes; earlier sets remain frozen
+at `v1.0.0` (7 cases) and `v1.1.0` (18 cases)). It drives fifteen positive claims and nine negative boundary
 claims through a scripted agent loop and direct gateway-API probes built
 entirely on published `@wasmagent/core`, `@wasmagent/mcp-firewall`, and
 `@wasmagent/mcp-gateway` packages — no monorepo code, no test helpers.
@@ -31,8 +31,8 @@ entirely on published `@wasmagent/core`, `@wasmagent/mcp-firewall`, and
 
 ## Report format (per claim only)
 
-Report exactly these fields for each of the 18 claims (C1–C4, D1–D3b, L1,
-N1–N4, S1–S3, E1–E2):
+Report exactly these fields for each of the 24 claims (C1–C4, D1–D3b, L1,
+N1–N4, S1–S3, E1–E2, P1–P4b):
 
 - `runner commit` — the commit SHA of this repository you ran
 - `OS / Node version` — your environment
