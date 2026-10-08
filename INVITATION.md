@@ -1,6 +1,6 @@
 # Independent reproduction ask — IF-07c provenance gate v1.1.0
 
-You are invited to independently run the **IF-07c reproduction pack v1.2.0**
+You are invited to independently run the **IF-07c reproduction pack v1.2.1**
 on the pinned published npm artifacts. This is a narrow ask: please do
 **not** review WasmAgent security generally, and do not audit the
 implementation. Only run the fixed pack and report what you observe.
@@ -21,22 +21,16 @@ entirely on published `@wasmagent/core`, `@wasmagent/mcp-firewall`, and
    `ARTIFACTS.json` alone** — independently fetch npm metadata
    (`npm view <pkg>@<version> dist.integrity`) and the tarballs, and compare
    against `packages{}`.
-2. In a clean directory, install exact pinned versions:
-   ```bash
-   npm install \
-     zod@4.6.5 \
-     @wasmagent/core@3.9.0 \
-     @wasmagent/mcp-firewall@2.3.0 \
-     @wasmagent/mcp-gateway@0.2.0
-   ```
-   (or the versions recorded in `ARTIFACTS.json` → `packages{}`).
+2. In a clean directory, copy the pack in and install the locked tree:
+   `npm ci` (exact versions pinned in `package.json` / `package-lock.json`;
+   the same versions are recorded in `ARTIFACTS.json` → `packages{}`).
 3. Run `node runner/run.mjs`.
 4. Record everything listed under "Report format" below.
 
 ## Report format (per claim only)
 
-Report exactly these fields for each of the 24 claims (C1–C4, D1–D3b, L1,
-N1–N4, S1–S3, E1–E2, P1–P4b):
+Report exactly these fields for each of the 24 claims (17 positive: C1–C4, D1–D3b, L1, S1–S2, P1–P4b;
+7 negative: N1–N4, S3, E1–E2):
 
 - `runner commit` — the commit SHA of this repository you ran
 - `OS / Node version` — your environment
@@ -45,7 +39,7 @@ N1–N4, S1–S3, E1–E2, P1–P4b):
 - `per-claim result` — PASS / FAIL for positive claims, BOUNDARY-HELD /
   BOUNDARY-BROKEN for negative claims, exactly as the runner prints them
 - `raw output` — the complete, unedited runner output, plus the
-  `results.json` it generated
+  `results.json` it generated and a `sha256sum -c SHA256SUMS` transcript
 
 ## Please do NOT
 

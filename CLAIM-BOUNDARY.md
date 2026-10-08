@@ -1,6 +1,6 @@
 # Claim boundary — what a green run of this pack proves, and what it does not
 
-This pack executes fifteen POSITIVE claims and nine NEGATIVE boundary claims
+This pack executes seventeen POSITIVE claims and seven NEGATIVE boundary claims
 against published npm artifacts. Read this file before citing any result.
 
 ## Proves (on the pinned fixtures, with the pinned artifact versions)

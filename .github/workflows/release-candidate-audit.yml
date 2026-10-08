@@ -124,9 +124,6 @@ jobs:
                   return 'FAIL'
               return 'FAIL' if any('  FAIL  ' in l for l in lines) else 'PASS'
 
-          def parse_claim(text, claim_id, expected):
-              return expected if f'  PASS  verdict: {claim_id} {expected}' in text else 'FAIL'
-
           try:
               audit = open('audit-output.txt').read()
           except Exception:
@@ -149,16 +146,44 @@ jobs:
               'dependency_closure': parse_section(audit, 'B'),
               'registry_refetch': parse_registry(audit),
               'tarball_hashes': parse_tarball(audit),
-              'runner_claims': {
-                  'C1': parse_claim(audit, 'C1', 'PASS'),
-                  'C2': parse_claim(audit, 'C2', 'PASS'),
-                  'C3': parse_claim(audit, 'C3', 'PASS'),
-                  'N1': parse_claim(audit, 'N1', 'BOUNDARY-HELD'),
-                  'N2': parse_claim(audit, 'N2', 'BOUNDARY-HELD'),
-                  'N3': parse_claim(audit, 'N3', 'BOUNDARY-HELD'),
-                  'N4': parse_claim(audit, 'N4', 'BOUNDARY-HELD'),
-              },
               'negative_controls': parse_section(audit, 'G'),
+          }
+
+          # Runner claims are DERIVED from the candidate's
+          # expected-results.json + fixture kinds (kind positive → PASS,
+          # negative → BOUNDARY-HELD) and must show EXACT coverage in the
+          # audit output: every expected verdict present and correct, none
+          # missing, none duplicated, nothing extra. Replaces the hardcoded
+          # 7-claim list.
+          claims = {}
+          try:
+              expected = json.load(open('expected-results.json'))
+              for cid, c in (expected.get('claims') or {}).items():
+                  kind = json.load(open(c['fixture'])).get('kind')
+                  claims[cid] = 'BOUNDARY-HELD' if kind == 'negative' else 'PASS'
+          except Exception as e:
+              print(f'claim derivation failed: {e}')
+
+          observed = re.findall(r'^  PASS  verdict: (\S+) (\S+)$', audit, re.MULTILINE)
+          observed_ids = [cid for cid, _ in observed]
+          dup_ids = sorted({cid for cid in observed_ids if observed_ids.count(cid) > 1})
+          missing = sorted(set(claims) - set(observed_ids))
+          mismatched = sorted(cid for cid, v in claims.items() if (cid, v) not in observed)
+          extra = sorted(set(observed_ids) - set(claims))
+
+          d['runner_claims'] = {
+              cid: ('PASS' if (cid, v) in observed and cid not in dup_ids else 'FAIL')
+              for cid, v in sorted(claims.items())
+          }
+          d['runner_claims_coverage'] = {
+              'expected_count': len(claims),
+              'observed_count': len(observed_ids),
+              'duplicate_ids': dup_ids,
+              'missing': missing,
+              'mismatched': mismatched,
+              'extra': extra,
+              'exact': (not missing and not mismatched and not extra and not dup_ids
+                        and len(claims) > 0),
           }
           json.dump(d, open('release-candidate-verdict.json', 'w'), indent=2)
           print(json.dumps(d, indent=2))

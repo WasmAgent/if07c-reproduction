@@ -1,8 +1,8 @@
-# IF-07c independent reproduction pack (v1.2.0)
+# IF-07c independent reproduction pack (v1.2.1)
 
 Anyone can run this pack against **published npm artifacts** — no wasmagent-js
 monorepo code, no test helpers, no internal assertion implementation. It
-executes fifteen POSITIVE security claims and nine NEGATIVE boundary claims,
+executes seventeen POSITIVE security claims and seven NEGATIVE boundary claims,
 and prints one verdict per claim (deliberately **no** aggregate
 "secure/insecure" conclusion — see `CLAIM-BOUNDARY.md`).
 
@@ -65,21 +65,20 @@ The `R0x` tags map this set onto the 2026-10-08 action-plan case table
 ## Run it (third-party procedure)
 
 ```bash
-# 1. clean project, pinned artifact versions
-mkdir if07c-repro && cd if07c-repro && npm init -y
-npm install \
-  zod@4.6.5 \
-  @wasmagent/core@3.9.0 \
-  @wasmagent/mcp-firewall@2.3.0 \
-  @wasmagent/mcp-gateway@0.2.0
+# 1. clean project, locked dependency tree (package.json pins
+#    zod@4.6.5, @wasmagent/core@3.9.0, @wasmagent/mcp-firewall@2.3.0,
+#    @wasmagent/mcp-gateway@0.2.0; package-lock.json pins transitives)
+mkdir if07c-repro && cd if07c-repro
 
 # 2. copy the pack in (fixtures/, runner/, scripts/, profile.json,
-#    expected-results.json, CLAIM-BOUNDARY.md)
+#    expected-results.json, CLAIM-BOUNDARY.md, package.json,
+#    package-lock.json, SHA256SUMS) and install the locked tree
+npm ci
 
 # 3. execute
 node runner/run.mjs        # per-claim verdicts + results.json; exit 0 = all matched
 
-# 4. (maintainer) re-freeze ARTIFACTS.json after any pack edit
+# 4. (maintainer) re-freeze ARTIFACTS.json + SHA256SUMS after any pack edit
 node scripts/build-artifacts.mjs --prefix .
 ```
 
@@ -131,7 +130,9 @@ fixtures/*.json               inputs only (call scripts / probe definitions)
 expected-results.json         the single source of assertions (+ case-set identity)
 profile.json                  operator-authoritative labels/sinks declarations (v2)
 CLAIM-BOUNDARY.md             proves / does-not-prove / verdict vocabulary
-scripts/build-artifacts.mjs   regenerates ARTIFACTS.json (hashes, tarballs, identity)
+package.json / package-lock.json  exact dependency pins — install with `npm ci`
+SHA256SUMS                    flat hash index (frozen set + ARTIFACTS.json; excludes itself)
+scripts/build-artifacts.mjs   regenerates ARTIFACTS.json + SHA256SUMS (hashes, tarballs, identity)
 scripts/prepublish-audit.mjs  maintainer pre-release closure audit
 scripts/outsider-repro.sh     maintainer clean-room outsider rehearsal
 docs/V1.0.0-EXTERNAL-FINDINGS.md  frozen record of v1.0.0 external findings
@@ -158,9 +159,10 @@ tools) and re-frozen from observed behavior plus the published dist.
 
 `ARTIFACTS.json` freezes the pack **as of its content tag**. All files listed
 under Layout above are part of the frozen input set. The v1.0.x frozen sets
-remain frozen at tags `v1.0.0` / `v1.0.1` / `v1.0.2`; this v1.1.0 set is a
-superset with its own tag (created via the release-candidate-audit gate).
-When in doubt, verify a run against the tag matching the case set you ran.
+remain frozen at tags `v1.0.0` / `v1.0.1` / `v1.0.2`. The v1.2.0 set (24
+claims) is frozen at tag `v1.2.0`; this v1.2.1 revision gets its own tag via
+the release-candidate-audit gate. When in doubt, verify a run against the tag
+matching the case set you ran.
 
 ## v1.0.0 defect record
 
@@ -178,3 +180,15 @@ The 2026-10-08 expansion first ran with a source-derived expectation for S3
 schema). The refuted expectation, the observed behavior, and the re-derived
 ceiling are preserved in `runs/` — expectations were re-derived from observed
 artifact behavior, never relaxed to force a pass.
+
+## v1.2.1 revision record
+
+Review-round fixes on top of v1.2.0 (v1.2.0 tag preserved unchanged):
+`outsider-repro.sh` failure propagation (every embedded check block now exits
+nonzero on any failed item and is counted into the rehearsal verdict) plus
+negative controls for wrong integrity / download failure / version mismatch;
+`package.json`, `package-lock.json`, and `SHA256SUMS` added to the public tree
+with the install procedure unified on `npm ci`; case-count identities
+corrected to 17 positive + 7 negative (S1/S2 are positive claims);
+`release-candidate-audit` runner-claim verdicts now derived from the case set
+with an exact-coverage assertion (no missing, no duplicates, nothing extra).
