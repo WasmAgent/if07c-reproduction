@@ -1,4 +1,4 @@
-# IF-07c independent reproduction pack (v1.4.0)
+# IF-07c independent reproduction pack (v1.4.2)
 
 Anyone can run this pack against **published npm artifacts** — no wasmagent-js
 monorepo code, no test helpers, no internal assertion implementation. It
@@ -171,7 +171,7 @@ artifact.
 `ARTIFACTS.json` freezes the pack **as of its content tag**. All files listed
 under Layout above are part of the frozen input set. The v1.0.x frozen sets
 remain frozen at tags `v1.0.0` / `v1.0.1` / `v1.0.2`. The v1.2.0 set (24
-claims) is frozen at tag `v1.2.0`; this v1.2.1 revision gets its own tag via
+claims) is frozen at tag `v1.2.0`; later revisions carry their own tags via
 the release-candidate-audit gate. When in doubt, verify a run against the tag
 matching the case set you ran.
 
