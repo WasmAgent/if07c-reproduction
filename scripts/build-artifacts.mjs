@@ -34,11 +34,14 @@ const SKIP_DIRS = new Set(["node_modules", "pack-verify", "repro-run", "runs", "
 // the pack author; independently verifiable in the wasmagent-js git history.
 const PUBLISHED_SOURCE = {
   repo: "WasmAgent/wasmagent-js",
-  releaseCommit: "13bce5e43f4b38730add5c01b0b72699a35be336",
-  releaseCommitMessage: "chore: release packages (core 3.9.0, mcp-firewall 2.3.0, mcp-gateway 0.2.0)",
-  releaseMergeCommit: "25045ef2984ff3fac0ad30f074a3a4cf5d8af4d7",
-  releaseMerge: "PR #487 (changeset-release/main)",
-  note: "The npm tarballs are the root identity (packages{} above); this block records which source commit they correspond to.",
+  releaseCommit: "d3685a687c3ef5f2e8871a766d79a9a6266d5c28",
+  releaseCommitMessage: "chore: Version Packages — @wasmagent/core 3.10.0 (dispatch-time re-authorization, RFC #505)",
+  releaseMergeCommit: "d3685a687c3ef5f2e8871a766d79a9a6266d5c28",
+  releaseMerge: "PR #508 (changeset-release/main)",
+  fixCommit: "0c925877d9214be157bc05d666ba297ba50614d1",
+  fixPullRequest: "PR #507 (fix/505-dispatch-time-reauthorization)",
+  claimedCoreVersion: "3.10.0",
+  note: "The npm tarballs are the root identity (packages{} above); this block records which source commit they correspond to. The generation-time guard below fails the build if the manifest's core version diverges from claimedCoreVersion.",
 };
 
 // This pack's own publication identity: the content tag that freezes this
@@ -46,8 +49,8 @@ const PUBLISHED_SOURCE = {
 // the human maintainer only after the release-candidate-audit gate passes.
 const PACK_IDENTITY = {
   repo: "WasmAgent/if07c-reproduction",
-  contentTag: "v1.4.0",
-  previousFrozenTag: "v1.3.0",
+  contentTag: "v1.4.1",
+  previousFrozenTag: "v1.4.0",
   note: "External-tag publication model: the tag freezes this file set; no manifest can or should contain its own final hash.",
 };
 
@@ -146,6 +149,16 @@ function main() {
     archiveTmp = mkdtempSync(join(tmpdir(), "repro-gitarchive-"));
     hashRoot = materializeGitArchive(gitRef, archiveTmp);
     console.log(`  archive extracted to ${hashRoot}`);
+  }
+
+  // #provenance guard: fail loudly if the manifest's core version diverges
+  // from the version this PUBLISHED_SOURCE block claims (prevents stale
+  // provenance metadata from shipping — the 2026-10-08 review finding).
+  const claimedCore = PUBLISHED_SOURCE.claimedCoreVersion;
+  const manifestCore = packages["@wasmagent/core"]?.version;
+  if (manifestCore !== claimedCore) {
+    console.error(`error: PUBLISHED_SOURCE.claimedCoreVersion (${claimedCore}) does not match the installed/manifest @wasmagent/core version (${manifestCore}). Update PUBLISHED_SOURCE to the release that actually shipped.`);
+    return 2;
   }
 
   const files = {};

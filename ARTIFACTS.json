@@ -1,7 +1,7 @@
 {
   "format": "if07c-independent-reproduction/artifacts/v2",
-  "version": "1.4.0",
-  "generatedAtUtc": "2026-10-08T11:16:17.126Z",
+  "version": "1.4.1",
+  "generatedAtUtc": "2026-10-09T03:24:57.839Z",
   "toolchain": {
     "node": "24.16.0",
     "npm": "11.16.0"
@@ -9,8 +9,8 @@
   "gitRef": "HEAD",
   "packIdentity": {
     "repo": "WasmAgent/if07c-reproduction",
-    "contentTag": "v1.4.0",
-    "previousFrozenTag": "v1.3.0",
+    "contentTag": "v1.4.1",
+    "previousFrozenTag": "v1.4.0",
     "note": "External-tag publication model: the tag freezes this file set; no manifest can or should contain its own final hash."
   },
   "packages": {
@@ -37,11 +37,14 @@
   },
   "publishedSource": {
     "repo": "WasmAgent/wasmagent-js",
-    "releaseCommit": "13bce5e43f4b38730add5c01b0b72699a35be336",
-    "releaseCommitMessage": "chore: release packages (core 3.9.0, mcp-firewall 2.3.0, mcp-gateway 0.2.0)",
-    "releaseMergeCommit": "25045ef2984ff3fac0ad30f074a3a4cf5d8af4d7",
-    "releaseMerge": "PR #487 (changeset-release/main)",
-    "note": "The npm tarballs are the root identity (packages{} above); this block records which source commit they correspond to."
+    "releaseCommit": "d3685a687c3ef5f2e8871a766d79a9a6266d5c28",
+    "releaseCommitMessage": "chore: Version Packages — @wasmagent/core 3.10.0 (dispatch-time re-authorization, RFC #505)",
+    "releaseMergeCommit": "d3685a687c3ef5f2e8871a766d79a9a6266d5c28",
+    "releaseMerge": "PR #508 (changeset-release/main)",
+    "fixCommit": "0c925877d9214be157bc05d666ba297ba50614d1",
+    "fixPullRequest": "PR #507 (fix/505-dispatch-time-reauthorization)",
+    "claimedCoreVersion": "3.10.0",
+    "note": "The npm tarballs are the root identity (packages{} above); this block records which source commit they correspond to. The generation-time guard below fails the build if the manifest's core version diverges from claimedCoreVersion."
   },
   "caseSet": {
     "id": "if07c-repro-case-set/2026-10-08-v1.4",
@@ -110,16 +113,16 @@
     "fixtures/S2-parallel-later-step-sink.json": "d10196a66ffe559c734dcd4bc303d23891f4f123bde90485404b682ac54cc6d7",
     "fixtures/S3-same-batch-ref-boundary.json": "cf16ea4505b2abe2e30ccbac316c6eaea174726e50b4947c78b037d56716d11c",
     "fixtures/S4-same-batch-ref-object-sink.json": "755b71fdba244a9d4af229eabd3e9361d5552af62d0a12a65d5445371873a220",
-    "package-lock.json": "8983955cbedded042d6fe247cd4e84f0ddca63d370ae4fbb2fe1317dcb992754",
-    "package.json": "becbbcb19132093cca654b8549f28ce507d2428aa32edbb733d54e7df3b7d5e8",
+    "package-lock.json": "e24ade228a94f6c1dd29b9329bf9c3ea17dd3c7f52911075958576a2138a71ae",
+    "package.json": "6ed7b84cf2d765fb0232a385438eca33a63f5bf9446c9ac030958e57d5bb7490",
     "profile.json": "fc7c586bbbf317c5726f8c6b5fff70b97fd6bcabcec61630b1d3bfef514a6151",
     "runner/run.mjs": "852faaaf82eea146906ce7b12cf123c23469a2804b1e34826ddba36e6bf646a1",
-    "scripts/build-artifacts.mjs": "213accfda7b8fcf309a18720dbd2382f5e8088c14313ff4259432b8326cb8aa0",
+    "scripts/build-artifacts.mjs": "573372aa9dbfa5cd401cf7ae3d17e9b8db8234ee0cf5e59430ab00597f4cd17d",
     "scripts/outsider-repro.sh": "31c7a6123874525a4898375e075814078084db1ca06f82a35d9c43366545e150",
     "scripts/prepublish-audit.mjs": "4c6b5fa118b53260d52caacfc3b7aa32c177a6d50cd5711c77cddcd83e4f4ea4"
   },
   "verification": {
-    "installDirectory": "../../../tmp/if07c-v14",
+    "installDirectory": "../../../../tmp/if07c-v141",
     "runnerCommand": "node runner/run.mjs",
     "note": "A third party re-running this pack must compare the files{} hashes against their copy, then re-verify packages{} against the registry (npm view dist.integrity / tarball sha256) before trusting a run record."
   }

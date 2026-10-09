@@ -1,6 +1,6 @@
 {
   "name": "if07c-reproduction-pack",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "private": true,
   "description": "IF-07c independent reproduction pack: pinned published-artifact reproduction of the provenance-gate claims. Not published to npm — install with `npm ci` for the exact locked tree.",
   "type": "module",
