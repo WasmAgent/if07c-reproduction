@@ -33,8 +33,11 @@
 | v1.2.0 outsider rehearsal failure propagation | FIXED in v1.2.1 — embedded check blocks now exit nonzero on any failed item; negative controls added (wrong integrity / download failure / version mismatch) |
 | v1.2.1 delivery completeness | package.json + package-lock.json + SHA256SUMS added to the frozen set; install procedure unified on `npm ci` |
 | v1.2.1 release-candidate verdicts | derived from the case set with exact-coverage assertion (no missing, no duplicates, nothing extra) |
-| v1.2.1 | PENDING RELEASE GATE — this revision; tag only after the release-candidate-audit workflow passes on the candidate |
-| v1.3.0 S4 object-sink same-batch leak | PINNED AS EXECUTABLE DEFECT — measured on 2026-10-08 (secret reached a declared network_send sink, no policy events); fix tracked by wasmagent-js RFC #505; assertion MUST flip to deny when a fixed version ships |
+| v1.2.1 | RELEASED — gate run 37750529858 passed; maintainer tagged v1.2.1 at 70eb1cc |
+| v1.3.0 S4 object-sink same-batch leak | PINNED AS EXECUTABLE DEFECT (v1.3.0 tag preserved) — measured 2026-10-08: secret reached a declared network_send sink with no policy events. FIXED in core 3.10.0 via wasmagent-js #507 (RFC #505); S4 assertion flipped to provenance deny in v1.4.0/v1.4.1 |
+| v1.4.0 S4/S3 post-fix flip | RELEASED — gate run 37770362337 passed; maintainer tagged v1.4.0 at e8c4d3a; 25/25 green on core 3.10.0 |
+| v1.4.1 release-provenance correction | RELEASED / SECURITY FIX VERIFIED — gate run 37879695020 passed; maintainer tagged v1.4.1 at 70eb1cc; publishedSource records release commit d3685a68 (PR #508) incl. fix commit 0c925877 (PR #507); generation-time guard added (manifest core version must equal claimedCoreVersion) |
+| v1.4.2 governance/docs revision | docs-only (README version identity + ledger status rows); behavior, fixtures, and case set unchanged (if07c-repro-case-set/2026-10-08-v1.4). Scope note: independent security certification, adaptive-attack completeness, default-on safety, and cross-process/global taint tracking remain NOT ESTABLISHED by this pack |
 | premature tags (pre-gate v1.1.0/v1.2.0) | REMOVED with maintainer bypass — re-tagging only after the release-candidate gate |
 | v1.0.1 publication closure | NOT ESTABLISHED — rehearsal failed; release sequencing defect |
 | v1.0.1 independent reproduction | NOT YET ESTABLISHED |

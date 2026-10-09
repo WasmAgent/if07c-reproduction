@@ -1,7 +1,7 @@
 {
   "format": "if07c-independent-reproduction/artifacts/v2",
-  "version": "1.4.1",
-  "generatedAtUtc": "2026-10-09T03:24:57.839Z",
+  "version": "1.4.2",
+  "generatedAtUtc": "2026-10-09T05:05:41.392Z",
   "toolchain": {
     "node": "24.16.0",
     "npm": "11.16.0"
@@ -9,8 +9,8 @@
   "gitRef": "HEAD",
   "packIdentity": {
     "repo": "WasmAgent/if07c-reproduction",
-    "contentTag": "v1.4.1",
-    "previousFrozenTag": "v1.4.0",
+    "contentTag": "v1.4.2",
+    "previousFrozenTag": "v1.4.1",
     "note": "External-tag publication model: the tag freezes this file set; no manifest can or should contain its own final hash."
   },
   "packages": {
@@ -82,8 +82,8 @@
     "CLAIM-BOUNDARY.md": "82d5ce9b1c9b6b8a4374265c9433c1819197c5cd5ade8c7fee30aafe61f27822",
     "INVITATION.md": "7705d81117348381f2e1a4fccbde4c38ad2e5349cfa816e0b427e9b942c3c8cf",
     "LICENSE": "d091846ca33eacf24c5b87fbaef8b90b5da08e35221ecfee77eee628bbe910f0",
-    "README.md": "fc964b122412f6300dde86758f3b8f79fe0decfe466ea5a5ca493c461fba3f9b",
-    "docs/ASSURANCE-LEDGER.md": "c1bb041f2d8a22939782c701a2f3879095e31d24297c4c396f5d965d2ae6b476",
+    "README.md": "336285f17bbfa0817fc652adb186206dda6192be84b0520626bf97ec19115d17",
+    "docs/ASSURANCE-LEDGER.md": "accb9b552ffbfe2521c3dc1ef21fb647259b7164b1e2a601eb5e61d154f069df",
     "docs/V1.0.0-EXTERNAL-FINDINGS.md": "9a0f173ac285ff9e86bb4dabc818218c60180bf8a889a7b5434b139f5169ea34",
     "docs/V1.0.1-PREPUBLISH-GATE-FAILURE.md": "b0d5ac9f8b2a489bc9dbc4ba59eb52137c0b38ae8859d4c391675e41b628990c",
     "docs/V1.0.2-METADATA-CORRECTIONS.md": "55ac362df4186426fbef2a87a578fb9573b32510faf633233967e5db0ba8dfd3",
@@ -114,10 +114,10 @@
     "fixtures/S3-same-batch-ref-boundary.json": "cf16ea4505b2abe2e30ccbac316c6eaea174726e50b4947c78b037d56716d11c",
     "fixtures/S4-same-batch-ref-object-sink.json": "755b71fdba244a9d4af229eabd3e9361d5552af62d0a12a65d5445371873a220",
     "package-lock.json": "e24ade228a94f6c1dd29b9329bf9c3ea17dd3c7f52911075958576a2138a71ae",
-    "package.json": "6ed7b84cf2d765fb0232a385438eca33a63f5bf9446c9ac030958e57d5bb7490",
+    "package.json": "fdb8271ac2998ea87e3cb3fd59052eec690dba400ee2b773fbe26acee8f948f2",
     "profile.json": "fc7c586bbbf317c5726f8c6b5fff70b97fd6bcabcec61630b1d3bfef514a6151",
     "runner/run.mjs": "852faaaf82eea146906ce7b12cf123c23469a2804b1e34826ddba36e6bf646a1",
-    "scripts/build-artifacts.mjs": "573372aa9dbfa5cd401cf7ae3d17e9b8db8234ee0cf5e59430ab00597f4cd17d",
+    "scripts/build-artifacts.mjs": "9d3dcbe7a1758f57417fc10e0862710d9b500ccec5b2e931f3a7676eea11342c",
     "scripts/outsider-repro.sh": "31c7a6123874525a4898375e075814078084db1ca06f82a35d9c43366545e150",
     "scripts/prepublish-audit.mjs": "4c6b5fa118b53260d52caacfc3b7aa32c177a6d50cd5711c77cddcd83e4f4ea4"
   },

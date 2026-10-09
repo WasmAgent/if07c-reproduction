@@ -49,8 +49,8 @@ const PUBLISHED_SOURCE = {
 // the human maintainer only after the release-candidate-audit gate passes.
 const PACK_IDENTITY = {
   repo: "WasmAgent/if07c-reproduction",
-  contentTag: "v1.4.1",
-  previousFrozenTag: "v1.4.0",
+  contentTag: "v1.4.2",
+  previousFrozenTag: "v1.4.1",
   note: "External-tag publication model: the tag freezes this file set; no manifest can or should contain its own final hash.",
 };
 
